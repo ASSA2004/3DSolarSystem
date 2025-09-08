@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>3D Solar System</title>
+        <style>
+            body { margin: 0; }
+            canvas { display: block; }
+        </style>
+    </head>
+    <body>
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+                    "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+                }
+            }
+        </script>
+        <script type="module">
+            import * as THREE from 'three';
+            import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+           // --- SCENE SETUP ---
+            const scene = new THREE.Scene(); 
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+            
+            // --- RENDERER ---
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // --- LIGHTING ---
+            const pointLight = new THREE.PointLight(0xffffff, 3, 300);
+            scene.add(pointLight);
+
+            // --- OBJECTS ---
+
+            // SUN
+            const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
+            const sunMaterial = new THREE.MeshStandardMaterial({
+                emissive: 0xffff00,
+                emissiveIntensity: 5,
+            });
+            const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+            scene.add(sun);
+
+            // MERCURY
+            const mercuryGeometry = new THREE.SphereGeometry(0.8, 32, 32); // Smallest planet
+            const mercuryMaterial = new THREE.MeshStandardMaterial({ color: 0x808080, roughness: 0.7 }); // Grey color
+            const mercury = new THREE.Mesh(mercuryGeometry, mercuryMaterial);
+            sun.add(mercury);
+            mercury.position.x = 8;
+
+            // VENUS
+            const venusGeometry = new THREE.SphereGeometry(1.9, 32, 32);
+            const venusMaterial = new THREE.MeshStandardMaterial({ color: 0xFFE4B5, roughness: 0.8 });
+            const venus = new THREE.Mesh(venusGeometry, venusMaterial);
+            sun.add(venus);
+            venus.position.x = 11;
+            // EARTH
+            const earthGeometry = new THREE.SphereGeometry(2, 32, 32);
+            const earthMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, roughness: 0.8 });
+            const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+            sun.add(earth);
+            earth.position.x = 15;
+
+            // MOON
+            const moonGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+            const moonMaterial = new THREE.MeshStandardMaterial({ color: 0xAAAAAA, roughness: 0.9 });
+            const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+            earth.add(moon);
+            moon.position.x = 3;
+            
+            // MARS
+            const marsGeometry = new THREE.SphereGeometry(1.5, 32, 32); 
+            const marsMaterial = new THREE.MeshStandardMaterial({ color: 0xFF6347, roughness: 0.9 }); 
+            const mars = new THREE.Mesh(marsGeometry, marsMaterial);
+            sun.add(mars); // Add it to the SUN, not the Earth
+            mars.position.x = 22; 
+            
+            // JUPITER
+            const jupiterGeometry = new THREE.SphereGeometry(4, 32, 32); 
+            const jupiterMaterial = new THREE.MeshStandardMaterial({ color: 0xD2B48C, roughness: 0.7 }); 
+            const jupiter = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
+            sun.add(jupiter);
+            jupiter.position.x = 35;
+
+            // SATURN
+            const saturnGeometry = new THREE.SphereGeometry(3.5, 32, 32); 
+            const saturnMaterial = new THREE.MeshStandardMaterial({ color: 0xF4A460, roughness: 0.8 }); 
+            const saturn = new THREE.Mesh(saturnGeometry, saturnMaterial);
+            sun.add(saturn);
+            saturn.position.x = 48;
+            const ringGeometry = new THREE.TorusGeometry(6, 0.8, 2, 100);
+            const ringMaterial = new THREE.MeshStandardMaterial({ color: 0xFFFACD, roughness: 0.9 }); 
+            const saturnRing = new THREE.Mesh(ringGeometry, ringMaterial);
+            saturn.add(saturnRing);
+
+            // URANUS
+            const uranusGeometry = new THREE.SphereGeometry(2.5, 32, 32);
+            const uranusMaterial = new THREE.MeshStandardMaterial({ color: 0xAFEEEE, roughness: 0.8 }); 
+            const uranus = new THREE.Mesh(uranusGeometry, uranusMaterial);
+            sun.add(uranus);
+            uranus.position.x = 60;
+
+
+            // NEPTUNE
+            const neptuneGeometry = new THREE.SphereGeometry(2.4, 32, 32);
+            const neptuneMaterial = new THREE.MeshStandardMaterial({ color: 0x4169E1, roughness: 0.8 }); 
+            const neptune = new THREE.Mesh(neptuneGeometry, neptuneMaterial);
+            sun.add(neptune);
+            neptune.position.x = 70;
+            
+            
+            // --- CONTROLS ---
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+
+            // --- ANIMATION LOOP ---
+            function animate() {
+            requestAnimationFrame(animate);
+
+            sun.rotation.y += 0.002;
+            mercury.rotation.y += 0.01;
+            venus.rotation.y += 0.005;
+            earth.rotation.y += 0.01;
+            mars.rotation.y += 0.008;
+            jupiter.rotation.y += 0.004;
+            saturn.rotation.y += 0.006;  
+            uranus.rotation.y += 0.005;   
+            neptune.rotation.y += 0.003;
+    
+    
+            controls.update();
+            renderer.render(scene, camera);
+            }
+
+            animate();
+            
+        </script>
+    </body>
+</html>
