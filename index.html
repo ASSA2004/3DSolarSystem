@@ -32,6 +32,24 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
+            // Stars
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 5000; // Number of stars
+            const positions = new Float32Array(starsCount * 3); // x, y, z for each star
+            for (let i = 0; i < starsCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 2000; 
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 2000; 
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 2000; 
+            }
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const starsMaterial = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.5,       
+            sizeAttenuation: true 
+            });
+            const starfield = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(starfield);
+
             // --- LIGHTING ---
             const pointLight = new THREE.PointLight(0xffffff, 3, 300);
             scene.add(pointLight);
