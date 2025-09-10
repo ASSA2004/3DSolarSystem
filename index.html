@@ -1,163 +1,488 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>3D Solar System</title>
-        <style>
-            body { margin: 0; }
-            canvas { display: block; }
-        </style>
-    </head>
-    <body>
-        <script type="importmap">
-            {
-                "imports": {
-                    "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
-                    "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
-                }
-            }
-        </script>
-        <script type="module">
-            import * as THREE from 'three';
-            import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-           // --- SCENE SETUP ---
-            const scene = new THREE.Scene(); 
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 30;
-            
-            // --- RENDERER ---
-            const renderer = new THREE.WebGLRenderer();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
-
-            // Stars
-            const starsGeometry = new THREE.BufferGeometry();
-            const starsCount = 5000; // Number of stars
-            const positions = new Float32Array(starsCount * 3); // x, y, z for each star
-            for (let i = 0; i < starsCount; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 2000; 
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 2000; 
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 2000; 
-            }
-            starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const starsMaterial = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: 0.5,       
-            sizeAttenuation: true 
-            });
-            const starfield = new THREE.Points(starsGeometry, starsMaterial);
-            scene.add(starfield);
-
-            // --- LIGHTING ---
-            const pointLight = new THREE.PointLight(0xffffff, 3, 300);
-            scene.add(pointLight);
-
-            // --- OBJECTS ---
-
-            // SUN
-            const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
-            const sunMaterial = new THREE.MeshStandardMaterial({
-                emissive: 0xffff00,
-                emissiveIntensity: 5,
-            });
-            const sun = new THREE.Mesh(sunGeometry, sunMaterial);
-            scene.add(sun);
-
-            // MERCURY
-            const mercuryGeometry = new THREE.SphereGeometry(0.8, 32, 32); // Smallest planet
-            const mercuryMaterial = new THREE.MeshStandardMaterial({ color: 0x808080, roughness: 0.7 }); // Grey color
-            const mercury = new THREE.Mesh(mercuryGeometry, mercuryMaterial);
-            sun.add(mercury);
-            mercury.position.x = 8;
-
-            // VENUS
-            const venusGeometry = new THREE.SphereGeometry(1.9, 32, 32);
-            const venusMaterial = new THREE.MeshStandardMaterial({ color: 0xFFE4B5, roughness: 0.8 });
-            const venus = new THREE.Mesh(venusGeometry, venusMaterial);
-            sun.add(venus);
-            venus.position.x = 11;
-            // EARTH
-            const earthGeometry = new THREE.SphereGeometry(2, 32, 32);
-            const earthMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, roughness: 0.8 });
-            const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-            sun.add(earth);
-            earth.position.x = 15;
-
-            // MOON
-            const moonGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-            const moonMaterial = new THREE.MeshStandardMaterial({ color: 0xAAAAAA, roughness: 0.9 });
-            const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-            earth.add(moon);
-            moon.position.x = 3;
-            
-            // MARS
-            const marsGeometry = new THREE.SphereGeometry(1.5, 32, 32); 
-            const marsMaterial = new THREE.MeshStandardMaterial({ color: 0xFF6347, roughness: 0.9 }); 
-            const mars = new THREE.Mesh(marsGeometry, marsMaterial);
-            sun.add(mars); // Add it to the SUN, not the Earth
-            mars.position.x = 22; 
-            
-            // JUPITER
-            const jupiterGeometry = new THREE.SphereGeometry(4, 32, 32); 
-            const jupiterMaterial = new THREE.MeshStandardMaterial({ color: 0xD2B48C, roughness: 0.7 }); 
-            const jupiter = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
-            sun.add(jupiter);
-            jupiter.position.x = 35;
-
-            // SATURN
-            const saturnGeometry = new THREE.SphereGeometry(3.5, 32, 32); 
-            const saturnMaterial = new THREE.MeshStandardMaterial({ color: 0xF4A460, roughness: 0.8 }); 
-            const saturn = new THREE.Mesh(saturnGeometry, saturnMaterial);
-            sun.add(saturn);
-            saturn.position.x = 48;
-            const ringGeometry = new THREE.TorusGeometry(6, 0.8, 2, 100);
-            const ringMaterial = new THREE.MeshStandardMaterial({ color: 0xFFFACD, roughness: 0.9 }); 
-            const saturnRing = new THREE.Mesh(ringGeometry, ringMaterial);
-            saturn.add(saturnRing);
-
-            // URANUS
-            const uranusGeometry = new THREE.SphereGeometry(2.5, 32, 32);
-            const uranusMaterial = new THREE.MeshStandardMaterial({ color: 0xAFEEEE, roughness: 0.8 }); 
-            const uranus = new THREE.Mesh(uranusGeometry, uranusMaterial);
-            sun.add(uranus);
-            uranus.position.x = 60;
-
-
-            // NEPTUNE
-            const neptuneGeometry = new THREE.SphereGeometry(2.4, 32, 32);
-            const neptuneMaterial = new THREE.MeshStandardMaterial({ color: 0x4169E1, roughness: 0.8 }); 
-            const neptune = new THREE.Mesh(neptuneGeometry, neptuneMaterial);
-            sun.add(neptune);
-            neptune.position.x = 70;
-            
-            
-            // --- CONTROLS ---
-            const controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-
-            // --- ANIMATION LOOP ---
-            function animate() {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Solar System</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@300;400&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Basic Reset & Body Styling */
+        body {
+            margin: 0;
+            font-family: 'Open Sans', sans-serif;
+            color: #E0E0E0;
+            background-color: #0d1117;
+            /* Dark background for space theme */
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+        h1,
+        h2,
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #FFFFFF;
+        }
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(135deg, #1a2a3a 0%, #0d1117 100%);
+            color: #FFFFFF;
+            text-align: center;
+            padding: 100px 20px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero h1 {
+            font-size: 4.5em;
+            margin-bottom: 0.2em;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        .hero p {
+            font-size: 1.4em;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            color: #BBBBBB;
+        }
+        /* --- Main Content Container --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        /* --- Planet Section Styling --- */
+        .planet-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 80px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .planet-section:last-child {
+            border-bottom: none;
+        }
+        .planet-section:nth-child(even) {
+            flex-direction: column-reverse;
+        }
+        .planet-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .planet-header h2 {
+            font-size: 3.5em;
+            margin-bottom: 0.1em;
+            color: #FFD700;
+        }
+        .planet-header .facts {
+            font-size: 1.1em;
+            color: #AAAAAA;
+        }
+        .planet-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .planet-image {
+            flex: 1 1 400px;
+            min-width: 300px;
+            max-width: 450px;
+            text-align: center;
+        }
+        .planet-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+        .planet-description {
+            flex: 2 1 500px;
+            max-width: 700px;
+            font-size: 1.15em;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        /* --- NEW: 3D Container and Trigger Styling --- */
+        #threejs-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100;
+            visibility: hidden;
+            opacity: 0;
+            background-color: #000;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+        }
+        #threejs-container.active {
+            visibility: visible;
+            /* Make visible when active */
+            opacity: 1;
+        }
+        #activation-trigger {
+            height: 300px;
+            /* An invisible area at the bottom to trigger the 3D view */
+            text-align: center;
+            color: #555;
+            padding-top: 100px;
+            font-size: 1.2em;
+        }
+        #instructions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 300px;
+            color: white;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: right;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 110;
+            pointer-events: none;
+        }
+        #toggleControl {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Journey Through Our Solar System</h1>
+            <p>Unveiling the wonders of planets, moons, and the vast cosmic dance around our Sun.</p>
+        </div>
+    </section>
+    <div class="container">
+        <section id="sun" class="planet-section">
+            <div class="planet-header">
+                <h2>The Sun</h2>
+                <p class="facts">Star Type: Yellow Dwarf | Diameter: 1.39 Million km | Temperature: 5,778 K (surface)
+                </p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Sun.png" alt="3D rendering of the Sun">
+                </div>
+                <div class="planet-description">
+                    <p>The Sun is the star at the center of our solar system and by far the most important source of
+                        energy for life on Earth. It is a nearly perfect sphere of hot plasma, with internal convective
+                        motion that generates a magnetic field via a dynamo process. It is the most massive object in
+                        the solar system, comprising about 99.86% of the total mass. The energy produced by the Sun's
+                        core, through nuclear fusion, is what powers all life, weather patterns, and the very existence
+                        of our planetary family.</p>
+                </div>
+            </div>
+        </section>
+        <section id="mercury" class="planet-section">
+            <div class="planet-header">
+                <h2>Mercury</h2>
+                <p class="facts">Diameter: 4,879 km | Distance from Sun: 57.9 Million km | Day Length: 58 Earth days</p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Mercury.png" alt="3D rendering of Mercury">
+                </div>
+                <div class="planet-description">
+                    <p>Mercury is the smallest planet in our solar system and the closest to the Sun. It is a rocky
+                        planet, heavily cratered, resembling Earth's Moon. Its almost nonexistent atmosphere means it
+                        experiences extreme temperature variations, from scorching hot during the day to freezing cold
+                        at night. Mercury orbits the Sun faster than any other planet, completing a revolution every 88
+                        Earth days.</p>
+                </div>
+            </div>
+        </section>
+        <section id="venus" class="planet-section">
+            <div class="planet-header">
+                <h2>Venus</h2>
+                <p class="facts">Diameter: 12,104 km | Distance from Sun: 108.2 Million km | Day Length: 243 Earth days
+                </p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Venus.png" alt="3D rendering of Venus">
+                </div>
+                <div class="planet-description">
+                    <p>Venus is the second planet from the Sun and is often called Earth's "sister planet" due to its
+                        similar size and mass. However, its environment is dramatically different: a thick, toxic
+                        atmosphere of carbon dioxide and sulfuric acid clouds traps heat in a runaway greenhouse effect,
+                        making it the hottest planet in our solar system. Venus rotates very slowly and in the opposite
+                        direction to most planets.</p>
+                </div>
+            </div>
+        </section>
+        <section id="earth" class="planet-section">
+            <div class="planet-header">
+                <h2>Earth</h2>
+                <p class="facts">Diameter: 12,742 km | Distance from Sun: 149.6 Million km | Day Length: 24 hours</p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Earth.png" alt="3D rendering of Earth">
+                </div>
+                <div class="planet-description">
+                    <p>Earth is the third planet from the Sun and the only astronomical object known to harbor life. Its
+                        unique combination of liquid water on the surface, a protective atmosphere, and a stable
+                        temperature range has allowed complex ecosystems to flourish. Earth's vibrant blue oceans,
+                        swirling white clouds, and diverse landmasses make it a beacon of life in the cosmos.</p>
+                </div>
+            </div>
+        </section>
+        <section id="mars" class="planet-section">
+            <div class="planet-header">
+                <h2>Mars</h2>
+                <p class="facts">Diameter: 6,779 km | Distance from Sun: 227.9 Million km | Day Length: 24.6 hours</p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Mars.png" alt="3D rendering of Mars">
+                </div>
+                <div class="planet-description">
+                    <p>Mars, the fourth planet from the Sun, is a cold, desert world. It is known as the "Red Planet"
+                        due to iron minerals in its soil oxidizing, or rusting, and coloring the surface. Scientists
+                        believe that billions of years ago, Mars was much wetter and warmer, with a thicker atmosphere.
+                        Evidence of ancient rivers, lakes, and oceans suggests it could have supported microbial life in
+                        its past.</p>
+                </div>
+            </div>
+        </section>
+        <section id="jupiter" class="planet-section">
+            <div class="planet-header">
+                <h2>Jupiter</h2>
+                <p class="facts">Diameter: 139,820 km | Distance from Sun: 778.5 Million km | Day Length: 9.9 hours</p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Jupiter.png" alt="3D rendering of Jupiter">
+                </div>
+                <div class="planet-description">
+                    <p>Jupiter is the largest planet in our solar system, a gas giant more than twice as massive as all
+                        the other planets combined. It is famous for its Great Red Spot, a colossal storm that has raged
+                        for centuries. Jupiter has a strong magnetic field and a complex system of rings, though they
+                        are much fainter than Saturn's. It plays a crucial role in shaping the orbits of smaller bodies
+                        in the outer solar system.</p>
+                </div>
+            </div>
+        </section>
+        <section id="saturn" class="planet-section">
+            <div class="planet-header">
+                <h2>Saturn</h2>
+                <p class="facts">Diameter: 116,460 km | Distance from Sun: 1.4 Billion km | Day Length: 10.7 hours</p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Saturn.png" alt="3D rendering of Saturn">
+                </div>
+                <div class="planet-description">
+                    <p>Saturn, the sixth planet from the Sun, is renowned for its spectacular system of rings. These
+                        rings are made of billions of small chunks of ice and rock. Like Jupiter, Saturn is a gas giant,
+                        composed primarily of hydrogen and helium. Its density is less than that of water, meaning if
+                        there were a bathtub big enough, Saturn would float!</p>
+                </div>
+            </div>
+        </section>
+        <section id="uranus" class="planet-section">
+            <div class="planet-header">
+                <h2>Uranus</h2>
+                <p class="facts">Diameter: 50,724 km | Distance from Sun: 2.9 Billion km | Day Length: 17.2 hours</p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Uranus.png" alt="3D rendering of Uranus">
+                </div>
+                <div class="planet-description">
+                    <p>Uranus is the seventh planet from the Sun and an ice giant. It has a unique feature: it rotates
+                        on its side, nearly perpendicular to its orbit, possibly due to a massive collision early in its
+                        history. This tilt gives it extreme seasons. Its atmosphere is composed of hydrogen, helium, and
+                        methane, which gives it its characteristic blue-green color.</p>
+                </div>
+            </div>
+        </section>
+        <section id="neptune" class="planet-section">
+            <div class="planet-header">
+                <h2>Neptune</h2>
+                <p class="facts">Diameter: 49,244 km | Distance from Sun: 4.5 Billion km | Day Length: 16.1 hours</p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-image">
+                    <img src="images/Neptune.png" alt="3D rendering of Neptune">
+                </div>
+                <div class="planet-description">
+                    <p>Neptune is the eighth and farthest known planet from the Sun, another ice giant. It is a dark,
+                        cold, and incredibly windy world. It was the first planet located through mathematical
+                        calculation rather than by direct observation. Neptune experiences dramatic weather, including
+                        the strongest winds in the solar system, which can reach speeds of up to 2,100 km/h (1,300 mph).
+                    </p>
+                </div>
+            </div>
+        </section>
+        <div id="activation-trigger">
+            <p>You have reached the end. The 3D Explorer is now active.</p>
+        </div>
+    </div>
+    <div id="threejs-container">
+        <div id="instructions">
+            <p><strong>CONTROLS</strong></p>
+            <p>
+                Orbit Mode: Drag = Look, Scroll = Zoom<br>
+                WASD Mode: W/S = Forward/Back, A/D = Left/Right, R/F = Up/Down<br>
+                ESC = Exit 3D View
+            </p>
+        </div>
+    </div>
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.150.1/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/" } }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { FlyControls } from 'three/addons/controls/FlyControls.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        // --- PART 1: THREE.JS SCENE SETUP ---
+        const threeJsContainer = document.getElementById('threejs-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(-20, 15, 70);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.1;
+        threeJsContainer.appendChild(renderer.domElement);
+        // This is the full procedural solar system code
+        const starsGeometry = new THREE.BufferGeometry();
+        const starsCount = 5000;
+        const positions = new Float32Array(starsCount * 3);
+        for (let i = 0; i < starsCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 2000;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 2000;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 2000;
+        }
+        starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7, sizeAttenuation: true });
+        const starfield = new THREE.Points(starsGeometry, starsMaterial);
+        scene.add(starfield);
+        const pointLight = new THREE.PointLight(0xffffff, 3, 1000);
+        scene.add(pointLight);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+        scene.add(ambientLight);
+        const sun = new THREE.Mesh(new THREE.SphereGeometry(5, 64, 64), new THREE.MeshStandardMaterial({ emissive: 0xFFFF00, emissiveIntensity: 2 }));
+        scene.add(sun);
+        const planetData = [{ name: 'mercury', size: 0.8, color: 0xAAAAAA, distance: 8 }, { name: 'venus', size: 1.9, color: 0xFFE4B5, distance: 12 }, { name: 'earth', size: 2, color: 0x4682B4, distance: 17 }, { name: 'mars', size: 1.5, color: 0xFF6347, distance: 24 }, { name: 'jupiter', size: 4, color: 0xD2B48C, distance: 45 }, { name: 'saturn', size: 3.5, color: 0xF4A460, distance: 70 }, { name: 'uranus', size: 2.5, color: 0xAFEEEE, distance: 95 }, { name: 'neptune', size: 2.4, color: 0x4169E1, distance: 120 }];
+        const planets = {};
+        planetData.forEach(p => { const planet = new THREE.Mesh(new THREE.SphereGeometry(p.size, 32, 32), new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.9 })); const pivot = new THREE.Object3D(); scene.add(pivot); pivot.add(planet); planet.position.x = p.distance; const orbit = new THREE.Mesh(new THREE.TorusGeometry(p.distance, 0.05, 16, 100), new THREE.MeshBasicMaterial({ color: 0x333333 })); orbit.rotation.x = -0.5 * Math.PI; scene.add(orbit); planets[p.name] = { mesh: planet, pivot: pivot }; });
+        const moon = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), new THREE.MeshStandardMaterial({ color: 0xD3D3D3, roughness: 0.9 }));
+        const moonPivot = new THREE.Object3D();
+        planets.earth.mesh.add(moonPivot); moonPivot.add(moon); moon.position.x = 3;
+        const moonOrbit = new THREE.Mesh(new THREE.TorusGeometry(3, 0.02, 16, 100), new THREE.MeshBasicMaterial({ color: 0x555555 }));
+        moonOrbit.rotation.x = -0.5 * Math.PI; planets.earth.mesh.add(moonOrbit);
+        const saturnRing = new THREE.Mesh(new THREE.TorusGeometry(6, 0.8, 2, 100), new THREE.MeshStandardMaterial({ color: 0xFFFACD, side: THREE.DoubleSide, roughness: 0.9 }));
+        planets.saturn.mesh.add(saturnRing); saturnRing.rotation.x = -0.5 * Math.PI;
+        // Orbit Controls (mouse/touch)
+        const orbitControls = new OrbitControls(camera, renderer.domElement);
+        orbitControls.enableDamping = true;
+        orbitControls.dampingFactor = 0.05;
+        // Fly Controls (WASD)
+        const flyControls = new FlyControls(camera, renderer.domElement);
+        flyControls.movementSpeed = 100;
+        flyControls.rollSpeed = Math.PI / 12;
+        flyControls.autoForward = false;
+        flyControls.dragToLook = true;
+        flyControls.enabled = false; 
+        // Toggle between them
+        let usingOrbit = true;
+        const toggleBtn = document.createElement("button");
+        toggleBtn.id = "toggleControl";
+        toggleBtn.textContent = "Switch to WASD Controls";
+        document.getElementById("threejs-container").appendChild(toggleBtn);
+        toggleBtn.addEventListener("click", () => {
+            usingOrbit = !usingOrbit;
+            orbitControls.enabled = usingOrbit;
+            flyControls.enabled = !usingOrbit;
+            toggleBtn.textContent = usingOrbit ? "Switch to WASD Controls" : "Switch to Orbit Controls";
+        });
+        const clock = new THREE.Clock();
+        function animate() {
             requestAnimationFrame(animate);
-
-            sun.rotation.y += 0.002;
-            mercury.rotation.y += 0.01;
-            venus.rotation.y += 0.005;
-            earth.rotation.y += 0.01;
-            mars.rotation.y += 0.008;
-            jupiter.rotation.y += 0.004;
-            saturn.rotation.y += 0.006;  
-            uranus.rotation.y += 0.005;   
-            neptune.rotation.y += 0.003;
-    
-    
-            controls.update();
-            renderer.render(scene, camera);
+            const delta = clock.getDelta();
+            if (usingOrbit) {
+                orbitControls.update();
+            } else {
+                flyControls.update(delta);
             }
-
-            animate();
-            
-        </script>
-    </body>
+            sun.rotation.y += 0.001;
+            const baseOrbitSpeed = 0.5;
+            planets.mercury.pivot.rotation.y += baseOrbitSpeed * 4.15 * delta;
+            planets.venus.pivot.rotation.y += baseOrbitSpeed * 1.62 * delta;
+            planets.earth.pivot.rotation.y += baseOrbitSpeed * 1.0 * delta;
+            planets.mars.pivot.rotation.y += baseOrbitSpeed * 0.53 * delta;
+            planets.jupiter.pivot.rotation.y += baseOrbitSpeed * 0.08 * delta;
+            planets.saturn.pivot.rotation.y += baseOrbitSpeed * 0.03 * delta;
+            planets.uranus.pivot.rotation.y += baseOrbitSpeed * 0.01 * delta;
+            planets.neptune.pivot.rotation.y += baseOrbitSpeed * 0.006 * delta;
+            moonPivot.rotation.y += 2 * delta;
+            renderer.render(scene, camera);
+        }
+        animate();
+        // --- PART 2: WEBSITE INTERACTIVITY LOGIC ---
+        const activationTrigger = document.getElementById('activation-trigger');
+        let is3DActive = false;
+        function activate3D() {
+            if (!is3DActive) {
+                threeJsContainer.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Hide main scrollbar
+                is3DActive = true;
+            }
+        }
+        function deactivate3D() {
+            if (is3DActive) {
+                threeJsContainer.classList.remove('active');
+                document.body.style.overflow = 'auto'; // Restore main scrollbar
+                is3DActive = false;
+            }
+        }
+        // This observer watches the trigger div at the bottom of the page
+        const triggerObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Scrolled down to the trigger: ACTIVATE 3D
+                    activate3D();
+                } else if (entry.boundingClientRect.top > 0 && is3DActive) {
+                    // Scrolled back up past the trigger: DEACTIVATE 3D
+                    deactivate3D();
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+        triggerObserver.observe(activationTrigger);
+        // Deactivate on 'Escape' key press
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                deactivate3D();
+            }
+        });
+        // Handle window resizing
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
 </html>
