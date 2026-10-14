@@ -83,7 +83,7 @@ button { color: inherit; background: none; }
 .progress-track { height: 6px; overflow: hidden; border-radius: 99px; background: #1b2442; }
 .progress-track span { display: block; height: 100%; width: 0; background: var(--gold); transition: width .2s; }
 .loading-card p:last-child { margin-top: .7rem; color: var(--muted); font-size: .8rem; }
-.planet-card, .tour-panel, .quiz-panel, .help-panel { right: 1rem; top: 5.4rem; width: min(390px, calc(100% - 2rem)); padding: 1.2rem; border-radius: 1.2rem; }
+.planet-card, .tour-panel, .quiz-panel, .help-panel { right: 1rem; top: 5.4rem; width: min(390px, calc(100% - 2rem)); max-height: calc(100vh - 7rem); overflow-y: auto; overscroll-behavior: contain; pointer-events: auto; padding: 1.2rem; border-radius: 1.2rem; }
 .welcome-panel { left: 50%; top: 50%; width: min(460px, calc(100% - 2rem)); padding: 1.5rem; border-radius: 1.25rem; transform: translate(-50%, -50%); }
 .welcome-panel h2 { margin: .35rem 0 .8rem; color: var(--gold); font-size: 2rem; }
 .welcome-panel > p:not(.eyebrow) { color: var(--muted-bright); font-size: .92rem; }
@@ -92,7 +92,7 @@ button { color: inherit; background: none; }
 .welcome-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: 1.2rem 0; }
 .welcome-steps span { padding: .65rem; border: 1px solid var(--line); border-radius: .7rem; color: var(--muted-bright); font-size: .72rem; }
 .welcome-steps b { display: block; margin-bottom: .25rem; color: var(--cyan); font: 700 .65rem Montserrat,sans-serif; }
-.compare-panel { right: 1rem; top: 5.4rem; width: min(520px, calc(100% - 2rem)); padding: 1.2rem; border-radius: 1.2rem; }
+.compare-panel { right: 1rem; top: 5.4rem; width: min(520px, calc(100% - 2rem)); max-height: calc(100vh - 7rem); overflow-y: auto; overscroll-behavior: contain; pointer-events: auto; padding: 1.2rem; border-radius: 1.2rem; }
 .compare-selects { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: 1rem 0; }
 .compare-selects select { width: 100%; padding: .6rem; border: 1px solid var(--line); border-radius: .6rem; background: #0b1024; color: var(--ink); }
 .planet-card h2, .tour-panel h2, .quiz-panel h2, .help-panel h2 { margin: .35rem 0 .8rem; font-size: 1.65rem; color: var(--gold); }
@@ -137,6 +137,7 @@ kbd { padding: .15rem .35rem; border: 1px solid var(--line); border-radius: .3re
   .control-toggle { left: .75rem; bottom: .75rem; }
   .explorer-tools { right: .75rem; bottom: .75rem; }
   .explorer-tools .button { padding-inline: .7rem; }
+  .planet-card, .tour-panel, .quiz-panel, .help-panel, .compare-panel { top: 4.8rem; max-height: calc(100vh - 5.7rem); padding: 1rem; }
 }
 @media (min-width: 1000px) {
   .space-ui { padding: 1.25rem 1.5rem; }

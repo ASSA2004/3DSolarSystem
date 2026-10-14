@@ -1,5 +1,5 @@
 import { PLANETS } from "./data/planets.js";
-import { SolarScene } from "./scene.js?v=5";
+import { SolarScene } from "./scene.js?v=6";
 import { TimeController } from "./timeController.js";
 import { renderSections, createUI } from "./ui.js";
 import { Tour } from "./tour.js";

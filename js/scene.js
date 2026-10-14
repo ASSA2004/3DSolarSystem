@@ -26,6 +26,10 @@ export class SolarScene {
     this.raycaster = new THREE.Raycaster(); this.pointer = new THREE.Vector2(); this.planets = new Map(); this.moons = [];
     this.clock = new THREE.Clock();
     this.setup();
+    this.pointerDown = null;
+    this.renderer.domElement.addEventListener("pointerdown", event => {
+      this.pointerDown = { x: event.clientX, y: event.clientY };
+    });
     this.renderer.domElement.addEventListener("pointerup", event => this.handlePointer(event));
     addEventListener("resize", () => this.resize());
   }
@@ -85,9 +89,60 @@ export class SolarScene {
     });
     this.moons.forEach(moon => moon.pivot.rotation.y = moon.phase + days / (moon.speed * 1.5));
   }
-  handlePointer(event) { if (!this.active) return; this.pointer.x = (event.clientX / innerWidth) * 2 - 1; this.pointer.y = -(event.clientY / innerHeight) * 2 + 1; this.raycaster.setFromCamera(this.pointer, this.camera); const hits = this.raycaster.intersectObjects([...this.planets.values()].map(p => p.mesh).concat(this.moons.map(m => m.mesh))); if (!hits.length) return; const id = hits[0].object.userData.planetId; const planet = getPlanet(id) || { ...getPlanet(id === "moon" ? "earth" : "jupiter"), name: id[0].toUpperCase() + id.slice(1), description: "A natural satellite in the solar system." }; this.onSelect(planet, hits[0].object); this.flyTo(id === "moon" ? "earth" : id); }
-  flyTo(id) { const object = id === "sun" ? { mesh: this.sun, data: getPlanet("sun") } : this.planets.get(id); if (!object) return; const target = new THREE.Vector3(); object.mesh.getWorldPosition(target); const direction = this.camera.position.clone().sub(target).normalize(); const end = target.clone().add(direction.multiplyScalar(object.data.size * 5 + 12)); this.cameraTween = { from: this.camera.position.clone(), to: end, target, elapsed: 0, duration: .9 }; }
-  updateTween(delta) { if (!this.cameraTween) return; const tween = this.cameraTween; tween.elapsed += delta; const t = clamp(tween.elapsed / tween.duration, 0, 1), eased = 1 - Math.pow(1 - t, 3); this.camera.position.lerpVectors(tween.from, tween.to, eased); this.controls.orbit.target.lerp(tween.target, eased); if (t === 1) this.cameraTween = null; }
+  handlePointer(event) {
+    if (!this.active || !this.pointerDown) return;
+    const moved = Math.hypot(event.clientX - this.pointerDown.x, event.clientY - this.pointerDown.y);
+    this.pointerDown = null;
+    if (moved > 8) return;
+    const bounds = this.renderer.domElement.getBoundingClientRect();
+    this.pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
+    this.pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
+    this.raycaster.setFromCamera(this.pointer, this.camera);
+    const targets = [...this.planets.values()].map(p => p.mesh).concat(this.moons.map(m => m.mesh));
+    const hits = this.raycaster.intersectObjects(targets);
+    if (!hits.length) return;
+    const id = hits[0].object.userData.planetId;
+    const planet = getPlanet(id) || {
+      ...getPlanet(id === "moon" ? "earth" : "jupiter"),
+      name: id[0].toUpperCase() + id.slice(1),
+      description: "A natural satellite in the solar system."
+    };
+    this.onSelect(planet, hits[0].object);
+    this.flyTo(id === "moon" ? "earth" : id);
+  }
+  getSceneObject(id) {
+    return id === "sun" ? { mesh: this.sun, data: getPlanet("sun") } : this.planets.get(id);
+  }
+  flyTo(id) {
+    const object = this.getSceneObject(id);
+    if (!object) return;
+    const target = new THREE.Vector3();
+    object.mesh.getWorldPosition(target);
+    const direction = this.camera.position.clone().sub(target).normalize();
+    if (!direction.lengthSq()) direction.set(0, .2, 1).normalize();
+    this.cameraTween = {
+      id,
+      object,
+      from: this.camera.position.clone(),
+      offset: direction.multiplyScalar(object.data.size * 5 + 12),
+      startTarget: target.clone(),
+      elapsed: 0,
+      duration: .9
+    };
+  }
+  updateTween(delta) {
+    if (!this.cameraTween) return;
+    const tween = this.cameraTween;
+    tween.elapsed += delta;
+    const t = clamp(tween.elapsed / tween.duration, 0, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const target = new THREE.Vector3();
+    tween.object.mesh.getWorldPosition(target);
+    const end = target.clone().add(tween.offset);
+    this.camera.position.lerpVectors(tween.from, end, eased);
+    this.controls.orbit.target.lerp(target, Math.min(1, delta * 8));
+    if (t === 1) this.cameraTween = null;
+  }
   setLabels(visible) { this.labelsVisible = visible; this.planets.forEach(p => p.label.visible = visible); }
   setScale(trueDistance) { this.trueDistance = trueDistance; const factor = trueDistance ? 2.55 : 1; this.planets.forEach(p => { p.mesh.position.x = p.data.orbit * factor; p.orbit.scale.setScalar(factor); }); }
   resize() { this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix(); this.renderer.setSize(innerWidth, innerHeight); this.labelRenderer.setSize(innerWidth, innerHeight); }
