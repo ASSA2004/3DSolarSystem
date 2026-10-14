@@ -60,14 +60,20 @@
       </div>
       <div class="space-ui__bottom">
         <div class="scale-badge">Sizes and distances are compressed for visibility <span id="scale-label">Compressed view</span></div>
-        <div class="time-panel">
-          <button id="time-play" class="button button--small" aria-label="Pause simulation">Pause</button>
-          <button id="time-reset" class="button button--small button--ghost" aria-label="Reset simulation time">Reset</button>
-          <label for="time-speed">Simulation speed <output id="time-speed-value">1 hour/sec</output></label>
-          <input id="time-speed" type="range" min="1" max="8760" value="1" step="1" aria-label="Simulation speed in hours per second">
-          <label class="day-editor" for="time-day">Jump to day <input id="time-day" type="number" min="0" max="1000000" step="1" value="0" inputmode="numeric" aria-label="Simulation day"></label>
-          <button id="time-apply" class="button button--small button--ghost" aria-label="Set simulation day">Set day</button>
-          <output id="elapsed-time">Day 0 · Year 0</output>
+        <div id="time-dock" class="time-dock">
+          <button id="time-toggle" class="time-toggle" aria-expanded="false" aria-controls="time-panel">
+            <span class="time-toggle__status"><span class="time-toggle__dot"></span><span id="time-toggle-label">Day 0</span></span>
+            <span class="time-toggle__action">Time controls <span aria-hidden="true">⌄</span></span>
+          </button>
+          <div id="time-panel" class="time-panel" hidden>
+            <button id="time-play" class="button button--small" aria-label="Pause simulation">Pause</button>
+            <button id="time-reset" class="button button--small button--ghost" aria-label="Reset simulation time">Reset</button>
+            <label for="time-speed">Simulation speed <output id="time-speed-value">1 hour/sec</output></label>
+            <input id="time-speed" type="range" min="1" max="8760" value="1" step="1" aria-label="Simulation speed in hours per second">
+            <label class="day-editor" for="time-day">Jump to day <input id="time-day" type="number" min="0" max="1000000" step="1" value="0" inputmode="numeric" aria-label="Simulation day"></label>
+            <button id="time-apply" class="button button--small button--ghost" aria-label="Set simulation day">Set day</button>
+            <output id="elapsed-time">Day 0 · 0 days</output>
+          </div>
         </div>
       </div>
     </div>
@@ -93,6 +99,13 @@
       <p class="eyebrow">Your first orbit</p>
       <h2>Explore at a glance</h2>
       <p>Drag to orbit, scroll to zoom, and click any world for its story. The guide stays available while planets move, so you can learn without pausing the simulation.</p>
+      <label class="difficulty-picker" for="difficulty-level">Learning level
+        <select id="difficulty-level" aria-label="Choose learning level">
+          <option value="explorer">Explorer · Around 10 years</option>
+          <option value="student">Student · Around 15 years</option>
+          <option value="advanced">Advanced · Deep dive</option>
+        </select>
+      </label>
       <div class="welcome-steps"><span><b>01</b> Look around</span><span><b>02</b> Select a planet</span><span><b>03</b> Change time</span></div>
       <button class="button button--primary" data-start-exploring>Start exploring</button>
     </div>

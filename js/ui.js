@@ -1,4 +1,5 @@
 import { PLANETS } from "./data/planets.js";
+import { getDifficulty } from "./data/learning.js";
 
 const $ = selector => document.querySelector(selector);
 export function renderSections() {
@@ -16,12 +17,14 @@ export function renderSections() {
 const formatSpeed = hours => hours >= 8760 ? "1 year/sec" : hours >= 24 ? `${Math.round(hours / 24)} day${hours >= 48 ? "s" : ""}/sec` : `${hours} hour${hours === 1 ? "" : "s"}/sec`;
 const formatYears = days => days >= 365 ? `${(days / 365.25).toFixed(days >= 3650 ? 0 : 1)} years` : `${Math.floor(days)} days`;
 
-export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, onQuiz, onCompare, onToggleControl, onTimeToggle, onTimeSpeed, onTimeReset, onTimeDay }) {
+export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, onQuiz, onCompare, onToggleControl, onTimeToggle, onTimeSpeed, onTimeReset, onTimeDay, onDifficulty }) {
   const card = $("#planet-card");
   const timePlay = $("#time-play");
   const timeReset = $("#time-reset");
   const timeDay = $("#time-day");
   const timeApply = $("#time-apply");
+  const timeDock = $("#time-dock");
+  const timeToggle = $("#time-toggle");
   PLANETS.forEach(planet => {
     // Planet meshes dispatch their id through the scene callback.
   });
@@ -42,9 +45,17 @@ export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, 
     timePlay.setAttribute("aria-label", running ? "Pause simulation" : "Play simulation");
   });
   timeReset.addEventListener("click", onTimeReset);
+  timeToggle.addEventListener("click", () => {
+    const expanded = !timeDock.classList.contains("is-expanded");
+    timeDock.classList.toggle("is-expanded", expanded);
+    timeToggle.setAttribute("aria-expanded", String(expanded));
+    timeToggle.querySelector(".time-toggle__action").innerHTML = expanded ? "Hide controls <span aria-hidden=\"true\">⌃</span>" : "Time controls <span aria-hidden=\"true\">⌄</span>";
+    $("#time-panel").hidden = !expanded;
+  });
   const applyDay = () => onTimeDay(timeDay.value);
   timeApply.addEventListener("click", applyDay);
   timeDay.addEventListener("keydown", event => { if (event.key === "Enter") applyDay(); });
+  $("#difficulty-level").addEventListener("change", event => onDifficulty(event.target.value));
   $("#time-speed").addEventListener("input", event => {
     onTimeSpeed(event.target.value);
     $("#time-speed-value").textContent = formatSpeed(Number(event.target.value));
@@ -67,12 +78,19 @@ export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, 
     setElapsed(days) {
       const wholeDay = Math.floor(days);
       $("#elapsed-time").textContent = `Day ${wholeDay.toLocaleString()} · ${formatYears(days)}`;
+      $("#time-toggle-label").textContent = `Day ${wholeDay.toLocaleString()}`;
       if (document.activeElement !== timeDay) timeDay.value = wholeDay;
       const cardDay = card.querySelector("[data-card-day]");
       if (cardDay) cardDay.textContent = `Day ${wholeDay.toLocaleString()}`;
     },
     setScaleLabel(trueDistance) { $("#scale-label").textContent = trueDistance ? "True-distance view" : "Compressed view"; $("#scale-button").textContent = trueDistance ? "Compressed view" : "True distances"; },
     showHelp() { $("#help-panel").hidden = false; },
+    setDifficulty(id) {
+      const level = getDifficulty(id);
+      $("#difficulty-level").value = level.id;
+      $("#welcome-panel h2").textContent = level.copy.guideTitle;
+      $("#welcome-panel > p:not(.eyebrow)").textContent = level.copy.guideBody;
+    },
     showTour(html) { const panel = $("#tour-panel"); panel.innerHTML = html; panel.hidden = false; return panel; },
     showQuiz(html) { const panel = $("#quiz-panel"); panel.innerHTML = html; panel.hidden = false; return panel; },
     showCompare() {

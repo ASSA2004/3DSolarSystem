@@ -4,8 +4,10 @@ import { TimeController } from "./timeController.js";
 import { renderSections, createUI } from "./ui.js";
 import { Tour } from "./tour.js";
 import { Quiz } from "./quiz.js";
+import { createProgressStore } from "./progress.js";
 
 renderSections();
+const progressStore = createProgressStore();
 const container = document.querySelector("#threejs-container");
 const progress = document.querySelector("#loading-progress");
 const loadingLabel = document.querySelector("#loading-label");
@@ -24,8 +26,10 @@ const ui = createUI({
   onTimeToggle: () => time.toggle(),
   onTimeSpeed: value => time.setSpeed(value),
   onTimeReset: () => time.reset(),
-  onTimeDay: value => time.setDays(value)
+  onTimeDay: value => time.setDays(value),
+  onDifficulty: value => { progressStore.setDifficulty(value); ui.setDifficulty(value); }
 });
+ui.setDifficulty(progressStore.get().difficulty);
 const tour = new Tour({ flyTo: id => scene.flyTo(id), ui });
 const quiz = new Quiz(ui, () => {});
 scene = new SolarScene({ mount: document.querySelector("#scene-mount"), onLoad: value => { progress.style.width = `${value}%`; loadingLabel.textContent = `${value}%`; if (value >= 100) document.querySelector("#loading-screen").classList.add("is-ready"); }, onSelect: planet => { ui.showPlanet(planet); quiz.handlePlanet(planet); } });

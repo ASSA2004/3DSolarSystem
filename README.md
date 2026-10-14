@@ -19,6 +19,7 @@ An education-first, scroll-to-explore solar system built with vanilla JavaScript
 - Quiz mode, hints, score screen and keyboard shortcuts
 - Planet comparison panel for diameter, day length, distance and orbital period
 - Responsive UI, reduced-motion support and ARIA labels
+- Explorer, Student and Advanced learning levels with safe local progress storage
 
 ## Tech stack
 
@@ -36,6 +37,7 @@ HTML, CSS, ES modules, Three.js r150.1 via import map, CSS2DRenderer, Web Speech
 | Pause time | Pause button or Space |
 | Reset simulation | Reset button |
 | Jump to a date | Enter a day number and press Enter or Set day |
+| Open time controls | Time controls bar |
 | Toggle labels | Labels button or L |
 | Start tour | Start tour button or T |
 | Exit explorer | Exit button or Escape |
@@ -80,6 +82,9 @@ The scale toggle changes the distance multiplier on the orbit pivots and rings w
 │   ├── tour.js
 │   ├── quiz.js
 │   └── data/planets.js
+├── docs/LEARNING_DESIGN.md
+├── ATTRIBUTION.md
+├── CHANGELOG.md
 ├── images/
 └── textures/
 ```
