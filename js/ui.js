@@ -64,9 +64,16 @@ export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, 
   document.querySelector("[data-close-welcome]").addEventListener("click", () => $("#welcome-panel").hidden = true);
   document.querySelector("[data-start-exploring]").addEventListener("click", () => $("#welcome-panel").hidden = true);
   const hidePanels = (...panels) => panels.forEach(panel => { if (panel) panel.hidden = true; });
+  const collapseTimeControls = () => {
+    timeDock.classList.remove("is-expanded");
+    timeToggle.setAttribute("aria-expanded", "false");
+    timeToggle.querySelector(".time-toggle__action").innerHTML = "Time controls <span aria-hidden=\"true\">⌄</span>";
+    $("#time-panel").hidden = true;
+  };
   return {
     showPlanet(planet) {
       hidePanels($("#tour-panel"), $("#quiz-panel"), $("#compare-panel"), $("#help-panel"), $("#welcome-panel"));
+      collapseTimeControls();
       card.hidden = false;
       card.innerHTML = `<button class="close-button" data-close-card aria-label="Close planet information">×</button>
         <p class="eyebrow">Planet profile · <span data-card-day>Day 0</span></p><h2>${planet.name}</h2><p>${planet.description}</p>
@@ -88,6 +95,7 @@ export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, 
     setScaleLabel(trueDistance) { $("#scale-label").textContent = trueDistance ? "True-distance view" : "Compressed view"; $("#scale-button").textContent = trueDistance ? "Compressed view" : "True distances"; },
     showHelp() {
       hidePanels(card, $("#tour-panel"), $("#quiz-panel"), $("#compare-panel"), $("#welcome-panel"));
+      collapseTimeControls();
       $("#help-panel").hidden = false;
     },
     setDifficulty(id) {
@@ -98,6 +106,7 @@ export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, 
     },
     showTour(html) {
       hidePanels(card, $("#quiz-panel"), $("#compare-panel"), $("#help-panel"), $("#welcome-panel"));
+      collapseTimeControls();
       const panel = $("#tour-panel");
       panel.innerHTML = html;
       panel.hidden = false;
@@ -105,6 +114,7 @@ export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, 
     },
     showQuiz(html) {
       hidePanels(card, $("#tour-panel"), $("#compare-panel"), $("#help-panel"), $("#welcome-panel"));
+      collapseTimeControls();
       const panel = $("#quiz-panel");
       panel.innerHTML = html;
       panel.hidden = false;
@@ -112,6 +122,7 @@ export function createUI({ onSelect, onLabels, onScale, onHelp, onExit, onTour, 
     },
     showCompare() {
       hidePanels(card, $("#tour-panel"), $("#quiz-panel"), $("#help-panel"), $("#welcome-panel"));
+      collapseTimeControls();
       const panel = $("#compare-panel");
       const options = PLANETS.filter(planet => planet.id !== "sun").map(planet => `<option value="${planet.id}">${planet.name}</option>`).join("");
       panel.innerHTML = `<button class="close-button" data-close-compare aria-label="Close comparison">×</button><p class="eyebrow">Compare worlds</p><h2>Two worlds, side by side</h2><div class="compare-selects"><label>World A<select data-compare-a>${options}</select></label><label>World B<select data-compare-b>${options}</select></label></div><div data-compare-result></div>`;

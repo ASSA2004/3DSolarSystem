@@ -119,25 +119,116 @@ kbd { padding: .15rem .35rem; border: 1px solid var(--line); border-radius: .3re
   .planet-visual { min-height: 240px; }
   .planet-copy { max-width: none; }
   .planet-description { font-size: 1rem; }
-  .space-ui { padding: .75rem; }
-  .space-ui { bottom: 4.6rem; }
-  .space-ui__top { align-items: flex-start; }
-  .space-actions { max-width: 68%; gap: .35rem; }
-  .icon-button { padding: .48rem .58rem; font-size: .68rem; }
-  .space-ui__bottom { flex-direction: column; align-items: stretch; gap: .5rem; }
+  .space-ui {
+    inset: 0 0 calc(4.6rem + env(safe-area-inset-bottom));
+    padding: .65rem .75rem;
+  }
+  .space-ui__top { flex-direction: column; align-items: stretch; gap: .55rem; }
+  .brand-chip { align-self: flex-start; }
+  .space-actions {
+    width: 100%;
+    max-width: none;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: .15rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .space-actions::-webkit-scrollbar { display: none; }
+  .icon-button { flex: 0 0 auto; min-height: 2.65rem; padding: .58rem .72rem; font-size: .68rem; }
+  .space-ui__bottom { flex-direction: column; align-items: stretch; gap: .3rem; }
   .time-dock { min-width: 0; width: 100%; }
   .scale-badge { text-align: center; }
-  .time-panel { grid-template-columns: auto auto 1fr; }
+  .time-panel {
+    grid-template-columns: auto auto;
+    max-height: min(24svh, 10rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .time-panel::-webkit-scrollbar { display: none; }
   .time-panel label { white-space: nowrap; }
   .time-panel input { grid-column: 1 / -1; width: 100%; }
   .time-panel output { grid-column: 1 / -1; }
-  .day-editor { grid-column: 1 / -1; justify-content: space-between; }
+  .day-editor { grid-column: 1; justify-content: space-between; }
   .day-editor input { flex: 1; width: auto; }
+  #time-apply { grid-column: 2; align-self: end; }
+  #elapsed-time { grid-column: 1 / -1; }
+  .time-dock.is-expanded .time-panel {
+    padding: .55rem .65rem;
+    border-radius: .8rem;
+  }
   .instructions { display: none; }
-  .control-toggle { left: .75rem; bottom: .75rem; }
-  .explorer-tools { right: .75rem; bottom: .75rem; }
+  .control-toggle { left: .75rem; bottom: calc(.75rem + env(safe-area-inset-bottom)); min-height: 2.65rem; }
+  .explorer-tools { right: .75rem; bottom: calc(.75rem + env(safe-area-inset-bottom)); }
   .explorer-tools .button { padding-inline: .7rem; }
-  .planet-card, .tour-panel, .quiz-panel, .help-panel, .compare-panel { top: 4.8rem; max-height: calc(100vh - 5.7rem); padding: 1rem; }
+  .planet-card, .tour-panel, .quiz-panel, .help-panel, .compare-panel {
+    top: auto;
+    bottom: calc(10.8rem + env(safe-area-inset-bottom));
+    left: 50%;
+    right: auto;
+    width: min(400px, calc(100% - 2rem));
+    max-height: min(34svh, 17rem);
+    padding: .7rem .8rem;
+    border-radius: 1rem;
+    transform: translateX(-50%);
+    background: rgba(9, 16, 42, .48);
+    border-color: rgba(145, 173, 255, .14);
+    box-shadow: 0 14px 42px rgba(0, 0, 0, .22);
+    backdrop-filter: blur(10px);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .planet-card::-webkit-scrollbar, .tour-panel::-webkit-scrollbar, .quiz-panel::-webkit-scrollbar,
+  .help-panel::-webkit-scrollbar, .compare-panel::-webkit-scrollbar { display: none; }
+  .planet-card h2, .tour-panel h2, .quiz-panel h2, .help-panel h2 {
+    margin: .2rem 0 .5rem;
+    font-size: 1.15rem;
+  }
+  .tour-panel p, .quiz-panel p, .help-panel p { line-height: 1.4; }
+  .tour-panel__actions, .quiz-options { gap: .35rem; margin-top: .7rem; }
+  .tour-panel__actions .button, .quiz-options .button {
+    min-height: 2rem;
+    padding: .34rem .5rem;
+    font-size: .68rem;
+    background: rgba(118, 228, 247, .02);
+    border-color: rgba(145, 173, 255, .16);
+  }
+  .tour-panel__actions .button:hover, .quiz-options .button:hover {
+    background: rgba(118, 228, 247, .11);
+  }
+  .planet-card__guide { margin: .7rem 0; padding: .6rem; }
+  .planet-card__facts { margin: .7rem 0; }
+  .close-button { min-width: 2.2rem; min-height: 2.2rem; font-size: 1.3rem; }
+  .welcome-panel {
+    width: calc(100% - 1.5rem);
+    max-height: calc(100svh - 1.5rem);
+    overflow-y: auto;
+    padding: 1.15rem;
+  }
+  .tour-panel, .quiz-panel, .help-panel, .compare-panel {
+    width: min(380px, calc(100% - 2rem));
+  }
+  .tour-panel__actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .tour-panel__actions .button { width: 100%; min-height: 2.7rem; }
+  .close-button { min-width: 2.7rem; min-height: 2.7rem; }
+}
+@media (max-width: 420px) {
+  .space-ui { padding-inline: .55rem; }
+  .brand-chip { font-size: .68rem; }
+  .scale-badge { padding: .48rem .6rem; font-size: .66rem; }
+  .scale-badge span { display: block; margin: .15rem 0 0; }
+  .time-toggle { min-height: 2.8rem; padding-inline: .7rem; }
+  .time-panel { gap: .5rem; padding: .65rem; }
+  .planet-card h2, .tour-panel h2, .quiz-panel h2, .help-panel h2 { font-size: 1.4rem; }
+  .planet-card__facts { gap: .4rem; }
+  .planet-card__facts div { padding: .48rem; }
+  .planet-card__facts strong { font-size: .75rem; }
+  .tour-panel p, .quiz-panel p, .help-panel p { font-size: .78rem; }
+  .tour-panel__actions { gap: .35rem; }
+  .explorer-tools { gap: .35rem; }
+  .explorer-tools .button, .control-toggle { font-size: .7rem; padding-inline: .62rem; }
+  .compare-selects { grid-template-columns: 1fr; }
 }
 @media (min-width: 1000px) {
   .space-ui { padding: 1.25rem 1.5rem; }
