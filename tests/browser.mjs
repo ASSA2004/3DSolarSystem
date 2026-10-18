@@ -129,7 +129,9 @@ try {
   await page.waitForTimeout(300);
   check(
     "Video chapters update caption and heading",
-    (await page.locator("#chapter-title").textContent()).includes("blue home"),
+    (await page.locator("#chapter-title").textContent()).includes(
+      "Earth: our home",
+    ),
   );
   const videoAt = await page.locator("#film-time").textContent();
   await page.waitForTimeout(350);

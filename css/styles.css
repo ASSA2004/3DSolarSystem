@@ -2906,3 +2906,71 @@ kbd {
     display: none;
   }
 }
+
+/* Classroom reading and controls */
+.lite-offer {
+  position: fixed;
+  z-index: 150;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(480px, calc(100% - 32px));
+  padding: 20px;
+  border: 1px solid #7b6953;
+  border-radius: 16px;
+  background: #17202b;
+  box-shadow: 0 12px 60px #0009;
+}
+.lite-offer p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.lite-offer .text-button {
+  margin: 10px 0 0;
+  min-height: 44px;
+}
+.eyebrow,
+.card-number,
+.header-note,
+.data-note,
+.source-link,
+.scene-hint,
+.planet-label,
+.planet-nav-item,
+.settings-row,
+.help-grid,
+.profile-fact,
+.profile-stat {
+  font-size: max(12px, 0.8rem);
+}
+.inspector p,
+#dialog-content p,
+.experience-card p,
+.quiz-answer {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.icon-button,
+.text-button,
+.planet-nav-item,
+.detail-tab,
+.quiz-answer {
+  min-height: 44px;
+}
+:focus-visible {
+  outline: 3px solid #f3d0a5;
+  outline-offset: 4px;
+}
+@media (max-width: 650px) {
+  .header-note {
+    display: none;
+  }
+  .planet-nav-item {
+    min-width: 60px;
+  }
+  .mode-switch button {
+    min-height: 44px;
+    font-size: 12px;
+  }
+}

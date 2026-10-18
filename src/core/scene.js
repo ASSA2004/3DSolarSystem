@@ -1,3 +1,4 @@
+import { FrameSampler } from "./quality.js";
 import * as THREE from "three";
 import {
   CSS2DRenderer,
@@ -9,8 +10,20 @@ import { orbitalAngle, TAU } from "../utils/physics.ts";
 import { createControls } from "./controls.js";
 
 export class SolarScene {
-  constructor({ mount, onProgress, onSelect, onFailure, reducedMotion }) {
+  constructor({
+    mount,
+    onProgress,
+    onSelect,
+    onFailure,
+    reducedMotion,
+    quality = "auto",
+    onSlow = () => {},
+  }) {
     this.mount = mount;
+    this.onSlow = onSlow;
+    this.sampler = new FrameSampler();
+    this.dirty = true;
+    this.abort = new AbortController();
     this.onSelect = onSelect;
     this.onFailure = onFailure;
     this.reducedMotion = reducedMotion;
@@ -34,7 +47,7 @@ export class SolarScene {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.25;
-    this.setQuality("auto");
+    this.setQuality(quality);
     mount.append(this.renderer.domElement);
     this.renderer.domElement.setAttribute(
       "aria-label",
@@ -49,12 +62,31 @@ export class SolarScene {
     });
     mount.append(this.labels.domElement);
     this.controls = createControls(this.camera, this.renderer.domElement);
+    this.controls.addEventListener("change", () => {
+      this.dirty = true;
+    });
+    this.visibility = () => {
+      cancelAnimationFrame(this.raf);
+      this.sampler.reset();
+      if (!document.hidden && this.active) {
+        this.previous = performance.now();
+        this.raf = requestAnimationFrame(this.frame);
+      }
+    };
+    document.addEventListener("visibilitychange", this.visibility, {
+      signal: this.abort.signal,
+    });
     this.raycaster = new THREE.Raycaster();
     this.lastTarget = new THREE.Vector3();
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(mount);
     this.renderer.domElement.addEventListener("pointerdown", (e) => {
+      if (!e.isPrimary) {
+        this.pointerStart = null;
+        return;
+      }
       this.pointerStart = {
+        pointerId: e.pointerId,
         x: e.clientX,
         y: e.clientY,
         time: performance.now(),
@@ -87,16 +119,19 @@ export class SolarScene {
     this.frame = this.frame.bind(this);
   }
   texture(file) {
-    if (!this.textureCache.has(file)) {
-      const texture = this.loader.load(textureURL(file));
+    const key = this.quality + file;
+    if (!this.textureCache.has(key)) {
+      const texture = this.loader.load(
+        textureURL(file, this.quality === "low"),
+      );
       texture.colorSpace = THREE.SRGBColorSpace;
       texture.anisotropy = Math.min(
         8,
         this.renderer.capabilities.getMaxAnisotropy(),
       );
-      this.textureCache.set(file, texture);
+      this.textureCache.set(key, texture);
     }
-    return this.textureCache.get(file);
+    return this.textureCache.get(key);
   }
   setup() {
     this.scene.add(new THREE.AmbientLight(0xc6d8ef, 0.9));
@@ -106,7 +141,7 @@ export class SolarScene {
     this.camera.add(fill);
     this.scene.add(this.camera);
     const starVertices = [];
-    for (let i = 0; i < 2200; i++) {
+    for (let i = 0; i < 600; i++) {
       const angle = Math.random() * TAU,
         z = Math.random() * 2 - 1,
         r = 850 + Math.random() * 250;
@@ -149,7 +184,11 @@ export class SolarScene {
               roughness: 1,
             });
       const mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(data.size, 48, 32),
+        new THREE.SphereGeometry(
+          data.size,
+          this.quality === "low" ? 20 : 40,
+          this.quality === "low" ? 12 : 24,
+        ),
         material,
       );
       mesh.userData.bodyId = data.id;
@@ -188,7 +227,10 @@ export class SolarScene {
       }
       this.bodies.set(data.id, { data, anchor, tilt, mesh, label, orbit });
       if (data.id === "sun") this.addGlow(mesh);
-      if (["earth", "venus", "uranus", "neptune"].includes(data.id))
+      if (
+        this.quality !== "low" &&
+        ["earth", "venus", "uranus", "neptune"].includes(data.id)
+      )
         this.addAtmosphere(mesh, data);
       if (data.id === "saturn") {
         const g = new THREE.RingGeometry(
@@ -216,15 +258,6 @@ export class SolarScene {
         tilt.add(ring);
       }
     }
-    this.addMoon("Moon", "earth", 0.27, 3.3, 27.3217, 0);
-    [
-      ["Io", 0.18, 5.3, 1.769],
-      ["Europa", 0.16, 6.3, 3.551],
-      ["Ganymede", 0.26, 7.5, 7.155],
-      ["Callisto", 0.24, 9, 16.689],
-    ].forEach((m, i) =>
-      this.addMoon(m[0], "jupiter", m[1], m[2], m[3], i * 1.5),
-    );
     const belt = new THREE.InstancedMesh(
       new THREE.IcosahedronGeometry(0.085, 0),
       new THREE.MeshStandardMaterial({
@@ -248,6 +281,7 @@ export class SolarScene {
       dummy.updateMatrix();
       belt.setMatrixAt(i, dummy.matrix);
     }
+    belt.count = this.quality === "low" ? 0 : 1100;
     this.belt = belt;
     this.scene.add(belt);
   }
@@ -288,6 +322,18 @@ export class SolarScene {
     glow.scale.set(30, 30, 1);
     mesh.add(glow);
   }
+  loadMoons() {
+    if (this.moons.length || this.quality === "low") return;
+    this.addMoon("Moon", "earth", 0.27, 3.3, 27.3217, 0);
+    [
+      ["Io", 0.18, 5.3, 1.769],
+      ["Europa", 0.16, 6.3, 3.551],
+      ["Ganymede", 0.26, 7.5, 7.155],
+      ["Callisto", 0.24, 9, 16.689],
+    ].forEach((m, i) =>
+      this.addMoon(m[0], "jupiter", m[1], m[2], m[3], i * 1.5),
+    );
+  }
   addMoon(name, parent, size, distance, period, phase) {
     const mesh = new THREE.Mesh(
       new THREE.SphereGeometry(size, 20, 16),
@@ -301,6 +347,7 @@ export class SolarScene {
     this.moons.push({ mesh, distance, period, phase });
   }
   tickSimulation(days) {
+    if (this.days !== days) this.dirty = true;
     this.days = days;
     for (const { data, anchor, mesh } of this.bodies.values()) {
       const angle = orbitalAngle(data, days),
@@ -337,19 +384,25 @@ export class SolarScene {
   }
   frame(now) {
     if (!this.active) return;
-    const delta = Math.min((now - this.previous) / 1000, 0.1);
+    const delta = Math.max(0, (now - this.previous) / 1000);
     this.previous = now;
     if (!document.hidden) {
       this.onFrame?.(delta);
-      this.updateCamera(delta);
+      if (this.sampler.sample(delta) && this.quality !== "low") this.onSlow();
+      this.updateCamera(Math.min(delta, 0.1));
       this.controls.update();
-      this.renderer.render(this.scene, this.camera);
-      this.labels.render(this.scene, this.camera);
+      if (this.dirty || this.tween || this.cinematicPlaying) {
+        this.renderer.render(this.scene, this.camera);
+        this.labels.render(this.scene, this.camera);
+        this.dirty = false;
+      }
     }
-    this.raf = requestAnimationFrame(this.frame);
+    if (!document.hidden) this.raf = requestAnimationFrame(this.frame);
   }
   focus(id, immediate = false) {
     this.selected = id;
+    this.dirty = true;
+    if (id === "earth" || id === "jupiter") this.loadMoons();
     const object = this.bodies.get(id);
     const target = object
       ? object.anchor.position.clone()
@@ -432,6 +485,7 @@ export class SolarScene {
     const start = this.pointerStart;
     if (
       !start ||
+      event.pointerId !== start.pointerId ||
       Math.hypot(event.clientX - start.x, event.clientY - start.y) > 7 ||
       performance.now() - start.time > 600 ||
       this.mode === "video"
@@ -480,7 +534,23 @@ export class SolarScene {
     this.focus(this.selected);
   }
   setQuality(quality) {
+    const changed = this.quality !== quality;
     this.quality = quality;
+    this.dirty = true;
+    if (changed) {
+      for (const b of this.bodies.values()) {
+        b.mesh.geometry.dispose();
+        b.mesh.geometry = new THREE.SphereGeometry(
+          b.data.size,
+          quality === "low" ? 20 : 40,
+          quality === "low" ? 12 : 24,
+        );
+        b.mesh.material.map = this.texture(b.data.texture);
+        for (const child of b.mesh.children) child.visible = quality !== "low";
+      }
+      for (const moon of this.moons) moon.mesh.visible = quality !== "low";
+      if (this.belt) this.belt.count = quality === "low" ? 0 : 1100;
+    }
     this.renderer.setPixelRatio(
       quality === "low"
         ? 1
@@ -520,10 +590,11 @@ export class SolarScene {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
     this.labels.setSize(width, height);
-    if (this.bodies.size && this.controls) this.focus(this.selected, true);
+    this.dirty = true;
   }
   dispose() {
     this.stop();
+    this.abort.abort();
     this.resizeObserver.disconnect();
     this.controls.dispose();
     this.scene.traverse((object) => {

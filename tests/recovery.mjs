@@ -69,7 +69,9 @@ try {
   await failed.close();
 
   const missing = await browser.newPage();
-  await missing.route("**/textures/2k_mars.jpg", (route) => route.abort());
+  await missing.route("**/textures/standard/2k_mars.webp", (route) =>
+    route.abort(),
+  );
   await missing.goto("http://127.0.0.1:5173/");
   await missing.locator('.hero [data-open="normal"]').click();
   await missing.locator("#loading").waitFor({ state: "hidden" });

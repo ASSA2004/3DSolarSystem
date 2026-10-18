@@ -8,7 +8,7 @@ export const modes = [
     title: "Normal view",
     short: "Explore",
     icon: "globe",
-    text: "Your own little corner of the cosmos. Orbit, zoom, and find a new perspective.",
+    text: "Choose a planet. Drag to look around it. Zoom in to see its surface.",
     action: "Start exploring",
   },
   {
@@ -16,15 +16,15 @@ export const modes = [
     title: "Details view",
     short: "Discover",
     icon: "book",
-    text: "Go beyond the beautiful. Make sense of the distances, the days, and everything in between.",
-    action: "Open the field guide",
+    text: "Find out how planets move. Compare their sizes and measure the space between them.",
+    action: "Learn about the planets",
   },
   {
     id: "video",
     title: "Video view",
     short: "Watch",
     icon: "film",
-    text: "Take the scenic route. A cinematic, chapter-by-chapter journey from our star to Neptune.",
+    text: "Watch a guided tour from the Sun to Neptune. Pause or replay any part.",
     action: "Watch the journey",
   },
 ];
@@ -44,18 +44,18 @@ export function homeHTML() {
   return (
     '<div id="home"><header class="home-header"><a href="#home" class="brand" aria-label="Orbit home">' +
     logo +
-    '</a><span class="header-note">A SOLAR OBSERVATORY</span><button class="text-button" data-open="normal">Enter the observatory ' +
+    '</a><span class="header-note">LEARN ABOUT OUR SOLAR SYSTEM</span><button class="text-button" data-open="normal">Explore the planets ' +
     icon("arrow") +
     "</button></header>" +
-    '<main id="main"><section class="hero"><div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> A LITTLE PERSPECTIVE CHANGES EVERYTHING</p><h1>There’s a whole<br>universe <em>out there.</em></h1><p class="hero-description">Start with our extraordinary neighbourhood.<br>Eight worlds. One star. Endless ways to explore.</p><div class="hero-actions"><button class="button primary" data-open="normal">Explore the solar system ' +
+    '<main id="main"><section class="hero"><div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> SCIENCE FOR CLASSES 6–8</p><h1>Meet our<br><em>solar system.</em></h1><p class="hero-description">The Sun is a star. Eight planets travel around it.<br>Choose a planet to begin.</p><div class="hero-actions"><button class="button primary" data-open="normal">Explore the solar system ' +
     icon("arrow") +
     '</button><button class="text-button" data-open="video">' +
     icon("play") +
-    ' Watch the journey</button></div><div class="hero-footnote"><span class="tiny-orbit"></span> Made for the curious. No spacesuit required.</div></div>' +
+    ' Watch the journey</button></div><div class="hero-footnote"><span class="tiny-orbit"></span> Free for students and teachers. No account needed.</div></div>' +
     '<div class="hero-art" aria-label="An illustration of Earth surrounded by orbital paths" role="img"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="hero-orbit orbit-three"></div><div class="earth-glow"></div><img class="hero-earth" src="' +
     illustration("earth") +
     '" alt="" fetchpriority="high"><span class="art-cross cross-one">+</span><span class="art-cross cross-two">+</span><div class="earth-caption"><span class="caption-line"></span><span><b>EARTH</b><small>Our place in the universe</small></span></div><div class="coordinates"><span>01 AU FROM THE SUN</span><span>23.44° AXIAL TILT</span></div><div class="moon-dot"></div><span class="moon-caption">THE MOON</span></div></section>' +
-    '<section class="experience-section" aria-labelledby="experience-heading"><div class="section-heading"><p class="eyebrow">CHOOSE YOUR PERSPECTIVE</p><h2 id="experience-heading">One solar system. <span>Three ways in.</span></h2><span class="section-index">01 — 03</span></div><div class="experience-grid">' +
+    '<section class="experience-section" aria-labelledby="experience-heading"><div class="section-heading"><p class="eyebrow">HOW WOULD YOU LIKE TO LEARN?</p><h2 id="experience-heading">Explore, learn, <span>or watch.</span></h2><span class="section-index">01 — 03</span></div><div class="experience-grid">' +
     modes
       .map(
         (mode, i) =>
@@ -77,7 +77,7 @@ export function homeHTML() {
           "</span></button>",
       )
       .join("") +
-    '</div></section><section class="worlds-strip"><span class="eyebrow">MEET THE NEIGHBOURS</span><div>' +
+    '</div></section><section class="worlds-strip"><span class="eyebrow">CHOOSE A PLANET</span><div>' +
     BODIES.slice(1)
       .map(
         (p) =>
@@ -91,7 +91,7 @@ export function homeHTML() {
       )
       .join("") +
     "</div></section></main>" +
-    '<footer class="home-footer"><span>Built for a sense of wonder.</span><span>An illustrative model · <button class="text-button" data-action="about">About the science ' +
+    '<footer class="home-footer"><span>A free, non-profit learning tool.</span><span>An illustrative model · <button class="text-button" data-action="about">About the science ' +
     icon("info") +
     "</button></span></footer></div>"
   );
@@ -376,13 +376,13 @@ function compareHTML(a, b) {
 }
 export function helpHTML(quality, motion, scale) {
   return (
-    '<p class="eyebrow">MAKE YOURSELF AT HOME</p><h2 id="dialog-title">Your observatory.</h2><p>Explore at your own pace. The same solar system carries through all three views.</p><div class="help-grid"><span>Orbit the camera</span><b>Drag / one finger</b><span>Zoom in or out</span><b>Scroll / pinch / + −</b><span>Pan the camera</span><b>Right-drag / two fingers</b><span>Pause or resume</span><kbd>Space</kbd><span>Show planet labels</span><kbd>L</kbd><span>Return to overview</span><kbd>O</kbd><span>Close panel / return home</span><kbd>Escape</kbd></div><div class="settings-row"><label for="quality">Rendering quality</label><select id="quality"><option value="auto"' +
+    '<p class="eyebrow">CONTROLS AND SETTINGS</p><h2 id="dialog-title">Make it easier to use</h2><p>Explore at your own pace. The same solar system carries through all three views.</p><div class="help-grid"><span>Orbit the camera</span><b>Drag / one finger</b><span>Zoom in or out</span><b>Scroll / pinch / + −</b><span>Pan the camera</span><b>Right-drag / two fingers</b><span>Pause or resume</span><kbd>Space</kbd><span>Show planet labels</span><kbd>L</kbd><span>Return to overview</span><kbd>O</kbd><span>Close panel / return home</span><kbd>Escape</kbd></div><div class="settings-row"><label for="quality">Rendering quality</label><select id="quality"><option value="auto"' +
     (quality === "auto" ? " selected" : "") +
-    '>Adaptive</option><option value="high"' +
+    '>Standard</option><option value="high"' +
     (quality === "high" ? " selected" : "") +
     '>High</option><option value="low"' +
     (quality === "low" ? " selected" : "") +
-    '>Battery saver</option></select></div><label class="settings-row">Reduce camera motion<input id="reduce-motion" type="checkbox"' +
+    '>Lite Mode</option></select></div><label class="settings-row">Reduce camera motion<input id="reduce-motion" type="checkbox"' +
     (motion ? " checked" : "") +
     '></label><div class="settings-actions"><button class="button secondary" data-action="scale" aria-pressed="' +
     String(scale) +
@@ -393,7 +393,7 @@ export function helpHTML(quality, motion, scale) {
 }
 export function aboutHTML() {
   return (
-    '<p class="eyebrow">A NOTE ON PERSPECTIVE</p><h2 id="dialog-title">Beautiful. And transparent.</h2><p>Orbit is an educational model of the Sun and eight planets, with Earth’s Moon and four illustrative Jovian moons.</p><h3>What the simulation shows</h3><p>Shared elapsed time drives planet rotation and circular orbits. Planetary tilt is independent of orbital position. Moon orbits are independent of the parent’s spin.</p><h3>What is simplified</h3><p>Day zero uses illustrative starting angles, not a real date. Orbits are circular and coplanar. Overview distances are compressed. Proportional mode uses mean Sun distances in AU, but body sizes remain enlarged. Surface colors and lighting favor legibility; the Jovian moons share a lunar texture.</p><h3>Learning from the numbers</h3><p>Distances and light times are calculated from this model. Temperature and gravity are rounded reference values; giant planets have no solid surface. A sidereal rotation and a solar day are different measures.</p><a class="source-link" href="' +
+    '<p class="eyebrow">ABOUT THIS LEARNING TOOL</p><h2 id="dialog-title">Learn what this model shows</h2><p>Orbit is a free, non-profit educational model of the Sun and eight planets, with Earth’s Moon and four illustrative Jovian moons.</p><h3>What the simulation shows</h3><p>Shared elapsed time drives planet rotation and circular orbits. Planetary tilt is independent of orbital position. Moon orbits are independent of the parent’s spin.</p><h3>What is simplified</h3><p>Day zero uses illustrative starting angles, not a real date. Orbits are circular and coplanar. Overview distances are compressed. Proportional mode uses mean Sun distances in AU, but body sizes remain enlarged. Surface colors and lighting favor legibility; the Jovian moons share a lunar texture.</p><h3>Learning from the numbers</h3><p>Distances and light times are calculated from this model. Temperature and gravity are rounded reference values; giant planets have no solid surface. A sidereal rotation and a solar day are different measures.</p><a class="source-link" href="' +
     SCIENCE_SOURCE +
     '" target="_blank" rel="noopener">NASA planetary fact sheets ' +
     icon("arrow") +

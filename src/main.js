@@ -1,3 +1,5 @@
+import { readSetting, saveSetting } from "./utils/storage.js";
+import { recommendLite } from "./core/quality.js";
 import { bodyById } from "./data/catalog.js";
 import { TimeController } from "./core/timeController.js";
 import { Tour } from "./modes/tour.js";
@@ -28,13 +30,25 @@ const state = {
   selected: null,
   tab: "profile",
   compare: "mars",
-  quality: "auto",
+  quality: ["auto", "low", "high"].includes(readSetting("quality"))
+    ? readSetting("quality")
+    : "auto",
   reduced: matchMedia("(prefers-reduced-motion: reduce)").matches,
   labels: true,
   scale: false,
   captions: true,
   open: false,
 };
+app.insertAdjacentHTML(
+  "beforeend",
+  `<aside id="lite-offer" class="lite-offer" hidden aria-label="Graphics suggestion"><p><strong>Need smoother movement?</strong><br>Lite Mode uses simpler graphics. All planet facts remain available.</p><button class="button primary" data-action="lite">Use Lite Mode</button><button class="text-button" data-action="dismiss-lite">Keep current graphics</button></aside>`,
+);
+let liteDismissed = false;
+function offerLite() {
+  if (!liteDismissed && state.quality !== "low")
+    $("#lite-offer").hidden = false;
+}
+if (recommendLite() && !readSetting("quality")) offerLite();
 let scene,
   scenePromise,
   lastOpener,
@@ -46,15 +60,15 @@ const announce = (text) => {
   $("#announcer").textContent = text;
 };
 const chapterTitles = [
-  "The light at the center.",
-  "Close to the fire.",
-  "Beauty under pressure.",
-  "A small, blue home.",
-  "Stories in the dust.",
-  "A world of its own.",
-  "The art of a ring.",
-  "A different kind of world.",
-  "Beyond the familiar.",
+  "The Sun: our star",
+  "Mercury: closest to the Sun",
+  "Venus: the hottest planet",
+  "Earth: our home",
+  "Mars: the red planet",
+  "Jupiter: the largest planet",
+  "Saturn: a planet with rings",
+  "Uranus: a tilted planet",
+  "Neptune: farthest from the Sun",
 ];
 const tour = new Tour(
   (body, index) => {
@@ -147,12 +161,13 @@ async function ensureScene() {
     const { SolarScene } = await import("./core/scene.js");
     scene = new SolarScene({
       mount: $("#scene-mount"),
+      quality: state.quality,
+      onSlow: offerLite,
       reducedMotion: state.reduced,
       onProgress: (value) => {
         if (!loadingError) {
           $("#load-progress").value = value;
-          $("#load-message").textContent =
-            "Gathering the worlds · " + value + "%";
+          $("#load-message").textContent = "Loading planets · " + value + "%";
         }
       },
       onSelect: (id) => selectPlanet(id),
@@ -399,6 +414,17 @@ app.addEventListener("click", async (event) => {
     return;
   }
   switch (d.action) {
+    case "lite":
+      state.quality = "low";
+      saveSetting("quality", "low");
+      scene?.setQuality("low");
+      $("#lite-offer").hidden = true;
+      announce("Lite Mode is on.");
+      break;
+    case "dismiss-lite":
+      liteDismissed = true;
+      $("#lite-offer").hidden = true;
+      break;
     case "home":
       home();
       break;
@@ -535,6 +561,7 @@ app.addEventListener("change", (event) => {
   }
   if (target.id === "quality") {
     state.quality = target.value;
+    saveSetting("quality", state.quality);
     scene?.setQuality(state.quality);
   }
   if (target.id === "reduce-motion") {
