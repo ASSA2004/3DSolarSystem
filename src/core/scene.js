@@ -3,9 +3,9 @@ import {
   CSS2DRenderer,
   CSS2DObject,
 } from "three/addons/renderers/CSS2DRenderer.js";
-import { BODIES, bodyById } from "./data/catalog.js";
-import { textureURL } from "./assets.js";
-import { orbitalAngle, TAU } from "./physics.ts";
+import { BODIES } from "../data/catalog.js";
+import { textureURL } from "../utils/assets.js";
+import { orbitalAngle, TAU } from "../utils/physics.ts";
 import { createControls } from "./controls.js";
 
 export class SolarScene {

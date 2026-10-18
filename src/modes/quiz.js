@@ -1,5 +1,5 @@
-import { QUIZ_QUESTIONS } from "./data/planets.js";
-import { icon } from "./icons.js";
+import { QUIZ_QUESTIONS } from "../data/planets.js";
+import { icon } from "../ui/icons.js";
 export class Quiz {
   constructor() {
     this.reset();

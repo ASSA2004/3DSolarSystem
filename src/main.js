@@ -1,8 +1,8 @@
-import { BODIES, bodyById } from "./data/catalog.js";
-import { TimeController } from "./timeController.js";
-import { Tour } from "./tour.js";
-import { Quiz } from "./quiz.js";
-import { icon } from "./icons.js";
+import { bodyById } from "./data/catalog.js";
+import { TimeController } from "./core/timeController.js";
+import { Tour } from "./modes/tour.js";
+import { Quiz } from "./modes/quiz.js";
+import { icon } from "./ui/icons.js";
 import {
   homeHTML,
   shellHTML,
@@ -10,8 +10,13 @@ import {
   helpHTML,
   aboutHTML,
   fmt,
-} from "./ui.js";
-import { separationAu, lightMinutes, orbitProgress, AU_KM } from "./physics.ts";
+} from "./ui/templates.js";
+import {
+  separationAu,
+  lightMinutes,
+  orbitProgress,
+  AU_KM,
+} from "./utils/physics.ts";
 
 const $ = (selector) => document.querySelector(selector);
 const app = $("#app");
@@ -139,7 +144,7 @@ async function ensureScene() {
   $("#loading").hidden = false;
   loadingError = false;
   scenePromise = (async () => {
-    const { SolarScene } = await import("./scene.js");
+    const { SolarScene } = await import("./core/scene.js");
     scene = new SolarScene({
       mount: $("#scene-mount"),
       reducedMotion: state.reduced,

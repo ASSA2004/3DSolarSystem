@@ -1,4 +1,4 @@
-import { BODIES } from "./data/catalog.js";
+import { BODIES } from "../data/catalog.js";
 export const CHAPTER_DURATION = 22;
 export class Tour {
   constructor(onChapter, onFinish) {

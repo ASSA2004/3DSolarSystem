@@ -1,7 +1,7 @@
-import { BODIES, bodyById, SCIENCE_SOURCE } from "./data/catalog.js";
-import { illustration } from "./assets.js";
+import { BODIES, bodyById, SCIENCE_SOURCE } from "../data/catalog.js";
+import { illustration } from "../utils/assets.js";
 import { icon } from "./icons.js";
-import { orbitalSpeed } from "./physics.ts";
+import { orbitalSpeed } from "../utils/physics.ts";
 export const modes = [
   {
     id: "normal",

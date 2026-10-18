@@ -1,4 +1,4 @@
-import { validDays } from "./physics.ts";
+import { validDays } from "../utils/physics.ts";
 export class TimeController {
   constructor() {
     this.running = true;

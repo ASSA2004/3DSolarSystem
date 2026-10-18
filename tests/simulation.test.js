@@ -1,4 +1,4 @@
-import test from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
 import {
   AU_KM,
@@ -9,12 +9,12 @@ import {
   positionAu,
   separationAu,
   validDays,
-} from "../js/physics.ts";
-import { TimeController } from "../js/timeController.js";
-import { Quiz } from "../js/quiz.js";
-import { Tour } from "../js/tour.js";
-import { BODIES, bodyById } from "../js/data/catalog.js";
-import { QUIZ_QUESTIONS } from "../js/data/planets.js";
+} from "../src/utils/physics.ts";
+import { TimeController } from "../src/core/timeController.js";
+import { Quiz } from "../src/modes/quiz.js";
+import { Tour } from "../src/modes/tour.js";
+import { BODIES, bodyById } from "../src/data/catalog.js";
+import { QUIZ_QUESTIONS } from "../src/data/planets.js";
 
 const close = (a, b, tolerance = 1e-8) =>
   assert.ok(Math.abs(a - b) < tolerance, a + " ≈ " + b);
