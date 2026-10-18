@@ -1,20 +1,86 @@
 import { QUIZ_QUESTIONS } from "./data/planets.js";
+import { icon } from "./icons.js";
 export class Quiz {
-  constructor(ui, onPlanetAnswer) { this.ui = ui; this.onPlanetAnswer = onPlanetAnswer; this.index = 0; this.score = 0; }
-  start() { this.active = true; this.index = 0; this.score = 0; this.render(); }
-  render() {
-    if (this.index >= QUIZ_QUESTIONS.length) {
-      const panel = this.ui.showQuiz(`<p class="eyebrow">Mission complete</p><h2>${this.score}/${QUIZ_QUESTIONS.length} correct</h2><p>${this.score >= 6 ? "Excellent orbital knowledge." : "Nice start — run the tour and try again."}</p><div class="tour-panel__actions"><button class="button button--small" data-quiz-restart>Try again</button><button class="button button--small button--ghost" data-quiz-close>Close</button></div>`);
-      panel.querySelector("[data-quiz-restart]").addEventListener("click", () => this.start());
-      panel.querySelector("[data-quiz-close]").addEventListener("click", () => { this.active = false; panel.hidden = true; });
-      return;
-    }
-    const item = QUIZ_QUESTIONS[this.index];
-    const panel = this.ui.showQuiz(`<button class="close-button" data-quiz-close aria-label="Close quiz">×</button><p class="eyebrow">Quiz · ${this.index + 1}/${QUIZ_QUESTIONS.length}</p><h2>${item.question}</h2><p>Choose an answer or click the matching planet in the scene.</p><div class="quiz-options">${item.options.map(option => `<button class="button button--ghost" data-answer="${option}">${option}</button>`).join("")}</div><p class="eyebrow" style="margin-top:1rem">Hint: ${item.hint}</p>`);
-    panel.querySelectorAll("[data-answer]").forEach(button => button.addEventListener("click", () => this.answer(button.dataset.answer)));
-    panel.querySelector("[data-quiz-close]").addEventListener("click", () => { this.active = false; panel.hidden = true; });
-    this.onPlanetAnswer = planet => this.answer(planet.name.replace("The ", ""));
+  constructor() {
+    this.reset();
   }
-  answer(value) { if (value === QUIZ_QUESTIONS[this.index].answer) this.score++; this.index++; this.render(); }
-  handlePlanet(planet) { if (this.active && planet) this.answer(planet.name.replace("The ", "")); }
+  reset() {
+    this.index = 0;
+    this.score = 0;
+    this.feedback = null;
+    this.active = true;
+  }
+  answer(value) {
+    if (!this.active || this.feedback || this.index >= QUIZ_QUESTIONS.length)
+      return;
+    const question = QUIZ_QUESTIONS[this.index];
+    const correct = value === question.answer;
+    if (correct) this.score++;
+    this.feedback = { correct, answer: question.answer, hint: question.hint };
+  }
+  next() {
+    if (!this.feedback) return;
+    this.index++;
+    this.feedback = null;
+    if (this.index >= QUIZ_QUESTIONS.length) this.active = false;
+  }
+  html() {
+    if (!this.active)
+      return (
+        '<p class="eyebrow">CURIOSITY LOOKS GOOD ON YOU</p><h2 id="dialog-title">Journey complete.</h2><div class="quiz-score">' +
+        this.score +
+        "<span> / " +
+        QUIZ_QUESTIONS.length +
+        "</span></div><p>" +
+        (this.score >= 6
+          ? "You know your way around the neighbourhood."
+          : "Every answer is a starting point for another discovery.") +
+        '</p><button class="button primary" data-action="quiz-restart">Explore the questions again ' +
+        icon("reset") +
+        "</button>"
+      );
+    const q = QUIZ_QUESTIONS[this.index];
+    return (
+      '<p class="eyebrow">KNOW YOUR NEIGHBOURHOOD · ' +
+      (this.index + 1) +
+      " / " +
+      QUIZ_QUESTIONS.length +
+      '</p><h2 id="dialog-title">' +
+      q.question +
+      '</h2><div class="quiz-answers">' +
+      q.options
+        .map(
+          (option, i) =>
+            '<button class="quiz-answer' +
+            (this.feedback && option === q.answer ? " correct" : "") +
+            '" data-answer="' +
+            option +
+            '"' +
+            (this.feedback ? " disabled" : "") +
+            "><span>0" +
+            (i + 1) +
+            "</span>" +
+            option +
+            "</button>",
+        )
+        .join("") +
+      "</div>" +
+      (this.feedback
+        ? '<div class="quiz-feedback" role="status"><strong>' +
+          (this.feedback.correct
+            ? "Exactly right."
+            : "A new thing to know: " + this.feedback.answer + ".") +
+          "</strong><p>" +
+          q.hint +
+          '</p></div><button class="button primary" data-action="quiz-next">' +
+          (this.index === QUIZ_QUESTIONS.length - 1
+            ? "See your result"
+            : "Next question") +
+          icon("arrow") +
+          "</button>"
+        : "<details><summary>A little hint</summary><p>" +
+          q.hint +
+          "</p></details>")
+    );
+  }
 }

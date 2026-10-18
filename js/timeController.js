@@ -1,23 +1,32 @@
+import { validDays } from "./physics.ts";
 export class TimeController {
-  constructor(onTick) {
-    this.onTick = onTick;
+  constructor() {
     this.running = true;
-    this.speed = 1;
+    this.speed = 24;
     this.elapsedDays = 0;
   }
-  setSpeed(value) { this.speed = Number(value); }
+  setSpeed(value) {
+    const n = Number(value);
+    if (Number.isFinite(n) && n >= 1 && n <= 8760) this.speed = n;
+  }
   setDays(value) {
-    const days = Number(value);
-    if (!Number.isFinite(days) || days < 0) return this.elapsedDays;
-    this.elapsedDays = Math.min(days, 1000000);
-    this.onTick(this.elapsedDays, this.speed);
-    return this.elapsedDays;
+    const n = validDays(value);
+    if (n === null) return false;
+    this.elapsedDays = n;
+    return true;
   }
-  toggle() { this.running = !this.running; return this.running; }
-  update(deltaSeconds) {
-    if (!this.running) return;
-    this.elapsedDays += (deltaSeconds * this.speed) / 24;
-    this.onTick(this.elapsedDays, this.speed);
+  toggle() {
+    this.running = !this.running;
+    return this.running;
   }
-  reset() { this.setDays(0); }
+  update(delta) {
+    if (this.running)
+      this.elapsedDays = Math.min(
+        1000000,
+        this.elapsedDays + (delta * this.speed) / 24,
+      );
+  }
+  reset() {
+    this.elapsedDays = 0;
+  }
 }

@@ -1,19 +1,88 @@
-import { PLANETS } from "./data/planets.js";
+import { BODIES } from "./data/catalog.js";
+export const CHAPTER_DURATION = 22;
 export class Tour {
-  constructor({ flyTo, ui }) { this.flyTo = flyTo; this.ui = ui; this.index = 0; this.active = false; }
-  start() { this.active = true; this.index = 0; this.render(); }
-  render() {
-    const planet = PLANETS[this.index];
-    this.flyTo(planet.id);
-    const panel = this.ui.showTour(`<button class="close-button" data-close-tour aria-label="Close tour">×</button><p class="eyebrow">Guided tour · ${this.index + 1}/${PLANETS.length}</p><h2>${planet.name}</h2><p>${planet.tour}</p><div class="tour-panel__actions"><button class="button button--small button--ghost" data-tour-prev>Previous</button><button class="button button--small" data-tour-next>${this.index === PLANETS.length - 1 ? "Finish" : "Next"}</button><button class="button button--small button--ghost" data-tour-skip>Skip tour</button><button class="button button--small button--ghost" data-tour-speak>🔊 Narrate</button></div>`);
-    panel.querySelector("[data-tour-prev]").disabled = this.index === 0;
-    panel.querySelector("[data-tour-prev]").addEventListener("click", () => { if (this.index) { this.index--; this.render(); }});
-    panel.querySelector("[data-tour-next]").addEventListener("click", () => { if (this.index === PLANETS.length - 1) this.stop(); else { this.index++; this.render(); }});
-    panel.querySelector("[data-tour-skip]").addEventListener("click", () => this.stop());
-    panel.querySelector("[data-close-tour]").addEventListener("click", () => this.stop());
-    panel.querySelector("[data-tour-speak]").addEventListener("click", () => {
-      if ("speechSynthesis" in window) { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(`${planet.name}. ${planet.tour}`)); }
-    });
+  constructor(onChapter, onFinish) {
+    this.onChapter = onChapter;
+    this.onFinish = onFinish;
+    this.elapsed = 0;
+    this.playing = false;
+    this.narrating = false;
+    this.lastIndex = -1;
   }
-  stop() { this.active = false; document.querySelector("#tour-panel").hidden = true; if ("speechSynthesis" in window) speechSynthesis.cancel(); }
+  get duration() {
+    return BODIES.length * CHAPTER_DURATION;
+  }
+  get index() {
+    return Math.min(
+      BODIES.length - 1,
+      Math.floor(this.elapsed / CHAPTER_DURATION),
+    );
+  }
+  start() {
+    if (this.elapsed >= this.duration) this.elapsed = 0;
+    this.playing = true;
+    const unchanged = this.lastIndex === this.index;
+    this.syncChapter();
+    if (unchanged && this.narrating) this.speak();
+  }
+  update(delta) {
+    if (!this.playing) return;
+    this.elapsed = Math.min(this.duration, this.elapsed + delta);
+    this.syncChapter();
+    if (this.elapsed >= this.duration) {
+      this.playing = false;
+      this.cancelSpeech();
+      this.onFinish();
+    }
+  }
+  syncChapter(force = false) {
+    if (force || this.index !== this.lastIndex) {
+      this.lastIndex = this.index;
+      this.onChapter(BODIES[this.index], this.index);
+      if (this.narrating && this.playing) this.speak();
+    }
+  }
+  toggle() {
+    if (this.playing) {
+      this.playing = false;
+      this.cancelSpeech();
+    } else this.start();
+    return this.playing;
+  }
+  seek(seconds) {
+    this.elapsed = Math.max(0, Math.min(this.duration, Number(seconds) || 0));
+    this.cancelSpeech();
+    this.syncChapter(true);
+    if (this.elapsed === this.duration) {
+      this.playing = false;
+      this.onFinish();
+    }
+  }
+  chapter(index) {
+    this.seek(
+      Math.max(0, Math.min(BODIES.length - 1, index)) * CHAPTER_DURATION,
+    );
+  }
+  setNarration(value) {
+    this.narrating = value;
+    if (value && this.playing) this.speak();
+    else this.cancelSpeech();
+  }
+  speak() {
+    if (!("speechSynthesis" in window)) return;
+    this.cancelSpeech();
+    const body = BODIES[this.index];
+    const utterance = new SpeechSynthesisUtterance(
+      body.name + ". " + body.tour,
+    );
+    utterance.rate = 0.95;
+    speechSynthesis.speak(utterance);
+  }
+  cancelSpeech() {
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
+  }
+  stop() {
+    this.playing = false;
+    this.cancelSpeech();
+  }
 }

@@ -1,100 +1,88 @@
-# 3D Solar System
+# Orbit — A solar observatory
 
-An education-first, scroll-to-explore solar system built with vanilla JavaScript and Three.js. Read the field guide, reach the signature moment, and step into a textured 3D model where planets orbit, rotate, label themselves and teach you how scale and time change the story.
+A redesigned, responsive solar-system experience with three connected views. Built with vanilla ES modules, Three.js, Vite, and a typed simulation-math module.
 
-> **Demo:** `[Add demo GIF here]` · **Live link:** `[Add GitHub Pages or Vercel URL here]`
+## Start locally
 
-## Features
+Requires Node.js 22.14 or later.
 
-- Scroll-generated planet sections from one source of truth
-- Textured Sun, planets and Moon with a loading manager and progress screen
-- Click-to-learn cards with accurate astronomical facts
-- Axial tilt, retrograde Venus, self-rotation and real orbital periods
-- CSS labels, touch-friendly controls, OrbitControls and FlyControls
-- Simulation clock with pause, 1 day/sec to 1 year/sec speed and elapsed counter
-- Guided Sun-to-Neptune tour with optional Web Speech narration
-- Compressed/true-distance scale toggle
-- Earth’s Moon plus Jupiter’s Galilean moons
-- 2,200-object instanced asteroid belt
-- Quiz mode, hints, score screen and keyboard shortcuts
-- Planet comparison panel for diameter, day length, distance and orbital period
-- Responsive UI, reduced-motion support and ARIA labels
+```sh
+npm install
+npm run dev
+```
 
-## Tech stack
+Open the local address printed by Vite (normally http://127.0.0.1:5173). Run commands from this directory, which contains package.json.
 
-HTML, CSS, ES modules, Three.js r150.1 via import map, CSS2DRenderer, Web Speech API and static image assets. No build step or framework is required.
+## Three views
+
+- **Normal view:** select any world from the planet navigator or its scene label, orbit and pan the camera, zoom, pause/resume time, adjust speed, and return to the full system.
+- **Details view:** educational field notes, mean diameter, axial tilt, gravity, temperature, atmosphere, sidereal rotation versus solar day, exact day jumps, orbital progress, live model-distance and light-time calculations, and two-body comparisons.
+- **Video view:** a live 3D cinematic journey with nine chapters, automatic progression, play/pause, chapter selection, timeline seeking, captions, optional device speech narration, and replay. This is rendered in the app; it does not generate or export a video file.
+
+The same elapsed simulation time carries between views. Normal and Details views share the chosen simulation speed. The film advances the model at one simulated hour per real second for readable motion, independently of the speed preset. Opening a dialog pauses playback; closing it restores the previous running state.
+
+On mobile, tap the handle above a planet profile to expand its bottom sheet. Proportional-distance and quiz controls are also available in the settings dialog.
 
 ## Controls
 
-| Action | Control |
-| --- | --- |
-| Orbit | Drag / touch |
-| Zoom | Mouse wheel / pinch |
-| Select a world | Click or tap a planet |
-| Fly mode | Switch to WASD |
-| Fly movement | W/A/S/D, R/F |
-| Pause time | Pause button or Space |
-| Reset simulation | Reset button |
-| Jump to a date | Enter a day number and press Enter or Set day |
-| Toggle labels | Labels button or L |
-| Start tour | Start tour button or T |
-| Exit explorer | Exit button or Escape |
+| Action         | Control                                            |
+| -------------- | -------------------------------------------------- |
+| Orbit camera   | Drag / one finger                                  |
+| Zoom           | Wheel / pinch / + and − buttons                    |
+| Pan            | Right-drag / two fingers                           |
+| Choose a world | Planet navigator, scene label, or click a planet   |
+| Pause/resume   | Playback button or Space outside editable controls |
+| Toggle labels  | Label button or L                                  |
+| Full system    | Overview button or O                               |
+| Exit / close   | Escape (closes a dialog or expanded sheet first)   |
+| Preferences    | Settings button: quality and reduced camera motion |
 
-## Run locally
+Free-flight WASD has been replaced by consistent orbit, pan, zoom, and planet focusing.
 
-```bash
-python -m http.server 8000
+## Scientific model
+
+This is an **illustrative educational model, not an ephemeris**.
+
+- Planet positions use circular, coplanar orbits at their mean Sun distances. Day zero has illustrative starting phases and does not represent a calendar date.
+- Overview spacing and planet sizes are compressed. Proportional-distance mode uses AU ratios; body sizes remain enlarged.
+- Axial tilt is applied independently from orbital position. A tilt greater than 90 degrees already yields retrograde rotation, so the spin is not reversed twice.
+- Moon motion is independent of the parent planet's spin. The Moon and four Galilean moons use approximate orbital periods; visual sizes and spacing are illustrative. The Jovian moons share the project's Moon texture.
+- Asteroid motion follows the same simulation clock, including pause, reset, and day jumps.
+- Distance is the Euclidean separation between the model's AU coordinates. One AU is 149,597,870.7 km; light time uses 299,792.458 km/s.
+- Gravity and temperature are rounded reference values. Giant-planet measurements refer to atmospheric reference levels, not solid ground.
+- Enhanced color, atmospheric rims, and fill lighting improve legibility. The Venus texture depicts its surface without clouds.
+- Scientific reference links are available inside the field notes and model explanation. Existing project images and textures are retained; their original licensing should be checked before redistributing the assets.
+
+References: [NASA planetary fact sheets](https://nssdc.gsfc.nasa.gov/planetary/factsheet/), [NASA Solar System](https://science.nasa.gov/solar-system/), and linked NASA pages for individual worlds.
+
+## Build and verification
+
+```sh
+npm test
+npm run build
+npm run test:browser
 ```
 
-Open `http://localhost:8000` in a modern browser. Because ES modules and textures are loaded from relative URLs, use a local static server rather than opening `index.html` directly.
+- Unit tests cover orbital periodicity, radius and distance invariants, units, time input, quiz completion, and video playback boundaries.
+- Browser tests require the local dev server and an installed Chrome browser. They check desktop and mobile flows, calculations, quiz feedback, video seeking/replay, and viewport overflow. Screenshots and results are saved in the ignored .qa directory.
+- Set PREVIEW_URL to test another server; set BROWSER_CHANNEL to msedge to use installed Microsoft Edge.
+- npm run build checks the TypeScript math module and creates a deployable dist directory. Use npm run preview to inspect that production build.
+- The 3D engine is lazy-loaded when entering the observatory. Texture errors are surfaced; WebGL initialization/context failures show a recovery screen. Rendering pauses in a background tab; cinematic playback stays paused when returning.
 
-## Deploy to GitHub Pages
+## Deploy
 
-1. Push the repository to GitHub.
-2. Open **Settings → Pages**.
-3. Select **Deploy from a branch**, choose `main` and `/ (root)`.
-4. Save and use the generated Pages URL.
+Deploy **dist/** to any static host. The relative Vite base supports a GitHub Pages project subdirectory. No backend, accounts, or API keys are required.
 
-Vercel works the same way: import the repository and use the project root with no build command.
+## Source layout
 
-## How it works
-
-Each planet is attached to an `Object3D` pivot. The pivot rotates around the Sun for the orbit while a tilted child object carries the textured sphere and its own rotation. This keeps orbital and axial motion independent and makes the model easy to extend with moons and rings.
-
-The `TimeController` owns one simulation clock measured in Earth days. The user selects a precise simulation speed in hours per real second, so the default advances evenly by one simulated hour every second. A day field can jump directly to any valid simulation day. Every orbit derives its angle from `days / orbitalPeriodDays × 2π` (wrapped to one revolution), while each spin derives from its own rotation period. Therefore Earth reaches a half orbit at 182.625 days, and completes one orbit at 365.25 days; the same rule applies to every planet’s real period. Pausing, jumping and resetting affect the complete system consistently.
-
-The scale toggle changes the distance multiplier on the orbit pivots and rings while preserving readable planet sizes. The compressed view is designed for overview; the true-distance view makes the vast gaps between worlds perceptible.
-
-## Folder structure
-
-```text
-.
-├── index.html
-├── css/styles.css
-├── js/
-│   ├── main.js
-│   ├── scene.js
-│   ├── controls.js
-│   ├── timeController.js
-│   ├── ui.js
-│   ├── tour.js
-│   ├── quiz.js
-│   └── data/planets.js
-├── images/
-└── textures/
-```
-
-## Changelog
-
-### 2026-10-13
-
-- Replaced the monolithic inline scene with focused ES modules.
-- Added real textures, loading progress, CSS labels, click-to-learn cards and a transparent flat Saturn ring.
-- Added axial tilt, self-rotation, moons, asteroid belt, time controls, tour, quiz and scale modes.
-- Added responsive design tokens, accessibility affordances, reduced-motion handling and deployment documentation.
-
-## Roadmap
-
-- Add a dedicated Earth night-light/cloud texture pair.
-- Add a richer compare view for two selected worlds.
-- Add optional post-processing bloom when the experience grows beyond static hosting constraints.
+- index.html — document metadata and app mount
+- css/styles.css — visual system, responsive layouts, and motion preferences
+- js/main.js — mode state, input, loading, dialogs, and playback integration
+- js/ui.js — landing page, explorer shell, education, comparison, and help views
+- js/scene.js — rendering, scene hierarchy, camera tracking, labels, quality, and picking
+- js/physics.ts — typed orbital and distance calculations
+- js/timeController.js — shared simulation clock
+- js/tour.js — cinematic chapters, seeking, and optional narration
+- js/quiz.js — question flow, feedback, and score
+- js/data/ — original planet facts plus educational metadata
+- tests/ — mathematical/state regression tests and browser checks

@@ -1,107 +1,27 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#050816">
-  <title>3D Solar System | An interactive field guide</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
-      }
-    }
-  </script>
-</head>
-<body>
-  <header class="hero">
-    <div class="hero__orb" aria-hidden="true"></div>
-    <div class="hero__content">
-      <p class="eyebrow">Interactive field guide · 01</p>
-      <h1>Journey through our solar system.</h1>
-      <p class="hero__lede">Scroll through the neighbourhood around our star, then step into a living 3D model where time, scale and motion become tangible.</p>
-      <a class="button button--primary" href="#sun">Begin the journey <span aria-hidden="true">↓</span></a>
-    </div>
-  </header>
-
-  <main id="planet-sections" class="container"></main>
-  <div id="activation-trigger" class="activation-trigger">
-    <p class="eyebrow">Signature moment</p>
-    <h2>Enter the 3D explorer</h2>
-    <p>Reach the end of the guide to reveal the living model.</p>
-    <button id="enter-3d-button" class="button button--primary" type="button">Launch 3D explorer <span aria-hidden="true">→</span></button>
-  </div>
-
-  <section id="threejs-container" aria-label="Interactive 3D solar system" aria-hidden="true">
-    <div id="loading-screen" class="loading-screen">
-      <div class="loading-card">
-        <p class="eyebrow">Preparing the cosmos</p>
-        <h2>Loading the solar system</h2>
-        <div class="progress-track" aria-label="Loading progress"><span id="loading-progress"></span></div>
-        <p id="loading-label">0%</p>
-      </div>
-    </div>
-    <div id="scene-mount"></div>
-    <div class="space-ui">
-      <div class="space-ui__top">
-        <div class="brand-chip"><span class="brand-chip__dot"></span> 3D Solar System</div>
-        <div class="space-actions">
-          <button id="labels-button" class="icon-button" aria-label="Toggle planet labels">Labels</button>
-          <button id="scale-button" class="icon-button" aria-label="Toggle distance scale">True distances</button>
-          <button id="help-button" class="icon-button" aria-label="Show the explorer guide">Guide</button>
-            <button id="compare-button" class="icon-button" aria-label="Compare two planets">Compare</button>
-          <button id="exit-button" class="icon-button icon-button--quiet" aria-label="Exit 3D view">Exit 3D</button>
-        </div>
-      </div>
-      <div class="space-ui__bottom">
-        <div class="scale-badge">Sizes and distances are compressed for visibility <span id="scale-label">Compressed view</span></div>
-        <div class="time-panel">
-          <button id="time-play" class="button button--small" aria-label="Pause simulation">Pause</button>
-          <button id="time-reset" class="button button--small button--ghost" aria-label="Reset simulation time">Reset</button>
-          <label for="time-speed">Simulation speed <output id="time-speed-value">1 hour/sec</output></label>
-          <input id="time-speed" type="range" min="1" max="8760" value="1" step="1" aria-label="Simulation speed in hours per second">
-          <label class="day-editor" for="time-day">Jump to day <input id="time-day" type="number" min="0" max="1000000" step="1" value="0" inputmode="numeric" aria-label="Simulation day"></label>
-          <button id="time-apply" class="button button--small button--ghost" aria-label="Set simulation day">Set day</button>
-          <output id="elapsed-time">Day 0 · Year 0</output>
-        </div>
-      </div>
-    </div>
-    <div id="instructions" class="glass-panel instructions">
-      <strong>Controls</strong>
-      <span>Drag to orbit · Scroll to zoom · Click a planet to learn</span>
-      <span>WASD mode is available from the control toggle</span>
-    </div>
-    <button id="toggle-control" class="control-toggle button button--small">Switch to WASD</button>
-    <div id="planet-card" class="glass-panel planet-card" aria-live="polite" hidden></div>
-    <div id="tour-panel" class="glass-panel tour-panel" hidden></div>
-    <div id="quiz-panel" class="glass-panel quiz-panel" hidden></div>
-    <div id="compare-panel" class="glass-panel compare-panel" hidden></div>
-    <div id="help-panel" class="glass-panel help-panel" hidden>
-      <button class="close-button" data-close-help aria-label="Close help">×</button>
-      <p class="eyebrow">Explorer guide</p>
-      <h2>Learn while it moves</h2>
-      <p>Planet labels and information cards stay attached to the moving system. Click a world to fly closer, then keep reading while its orbit continues.</p>
-      <p><kbd>Esc</kbd> exit · <kbd>L</kbd> labels · <kbd>T</kbd> start tour · <kbd>Space</kbd> pause time · <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> fly mode</p>
-    </div>
-    <div id="welcome-panel" class="glass-panel welcome-panel">
-      <button class="close-button" data-close-welcome aria-label="Close welcome panel">×</button>
-      <p class="eyebrow">Your first orbit</p>
-      <h2>Explore at a glance</h2>
-      <p>Drag to orbit, scroll to zoom, and click any world for its story. The guide stays available while planets move, so you can learn without pausing the simulation.</p>
-      <div class="welcome-steps"><span><b>01</b> Look around</span><span><b>02</b> Select a planet</span><span><b>03</b> Change time</span></div>
-      <button class="button button--primary" data-start-exploring>Start exploring</button>
-    </div>
-    <div class="explorer-tools">
-      <button id="tour-button" class="button button--small">Start tour</button>
-      <button id="quiz-button" class="button button--small button--ghost">Quiz mode</button>
-    </div>
-  </section>
-
-  <script type="module" src="js/main.js?v=5"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#080b10" />
+    <meta
+      name="description"
+      content="A small window into an extraordinary solar system. Explore in 3D, understand the science, or settle into a cinematic journey through eight worlds."
+    />
+    <title>Orbit — A solar observatory</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23080b10'/%3E%3Ccircle cx='20' cy='20' r='6' fill='%23e9bd85'/%3E%3Cellipse cx='20' cy='20' rx='17' ry='10' transform='rotate(-35 20 20)' fill='none' stroke='%23e9bd85'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div id="app"></div>
+    <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
+    <script type="module" src="/js/main.js"></script>
+  </body>
 </html>
