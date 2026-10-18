@@ -1,3 +1,4 @@
+import { orbitPath } from "../utils/orbits.js";
 import { FrameSampler } from "./quality.js";
 import * as THREE from "three";
 import {
@@ -6,7 +7,7 @@ import {
 } from "three/addons/renderers/CSS2DRenderer.js";
 import { BODIES } from "../data/catalog.js";
 import { textureURL } from "../utils/assets.js";
-import { orbitalAngle, TAU } from "../utils/physics.ts";
+import { positionAu, TAU } from "../utils/physics.ts";
 import { createControls } from "./controls.js";
 
 export class SolarScene {
@@ -346,17 +347,36 @@ export class SolarScene {
     this.bodies.get(parent).anchor.add(mesh);
     this.moons.push({ mesh, distance, period, phase });
   }
+  updatePaths() {
+    for (const b of this.bodies.values())
+      if (b.orbit) {
+        const factor = this.proportional
+          ? 11
+          : b.data.orbit / b.data.distanceAu;
+        b.orbit.geometry.dispose();
+        b.orbit.geometry = new THREE.BufferGeometry().setFromPoints(
+          orbitPath(b.data.id, this.days).map(
+            (p) => new THREE.Vector3(p.x * factor, p.y * factor, p.z * factor),
+          ),
+        );
+        b.orbit.scale.setScalar(1);
+      }
+  }
   tickSimulation(days) {
     if (this.days !== days) this.dirty = true;
     this.days = days;
+    if (this.pathDay === undefined || Math.abs(days - this.pathDay) > 365) {
+      this.pathDay = days;
+      this.updatePaths();
+    }
     for (const { data, anchor, mesh } of this.bodies.values()) {
-      const angle = orbitalAngle(data, days),
-        radius = this.proportional ? data.distanceAu * 11 : data.orbit;
-      anchor.position.set(
-        Math.cos(angle) * radius,
-        0,
-        -Math.sin(angle) * radius,
-      );
+      const p = positionAu(data, days),
+        factor = this.proportional
+          ? 11
+          : data.distanceAu
+            ? data.orbit / data.distanceAu
+            : 1;
+      anchor.position.set(p.x * factor, p.y * factor, p.z * factor);
       // Tilt > 90 degrees already produces retrograde rotation; do not reverse twice.
       mesh.rotation.y = ((days / data.dayDays) % 1) * TAU;
     }
@@ -530,6 +550,7 @@ export class SolarScene {
         b.orbit.scale.setScalar(value ? b.data.distanceAu * 11 : b.data.orbit);
     }
     this.belt.visible = !value && this.mode !== "video";
+    this.updatePaths();
     this.tickSimulation(this.days);
     this.focus(this.selected);
   }

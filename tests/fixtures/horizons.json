@@ -1,0 +1,57 @@
+{
+  "retrieved": "2026-10-18",
+  "frame": "J2000 ecliptic, heliocentric, geometric, TDB",
+  "note": "Planet barycenters; tolerances account for the approximate Keplerian model, not solver precision. Neptune tolerance is 0.01 AU: source Table 1 differs from DE441 by about 0.00735 AU at J2000 in this check. This is an empirical regression bound for these dates, not a guarantee over the date range.",
+  "fixtures": [
+    {
+      "id": "earth",
+      "jd": 2451545,
+      "eclipticAu": [
+        -0.1771587841839055, 0.9672193524609504, -0.000001139275508446145
+      ],
+      "toleranceAu": 0.0002,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%273%27&CENTER=%27500%4010%27&EPHEM_TYPE=%27VECTORS%27&TLIST=%272451545.0%2C2462502.5%27&OUT_UNITS=%27AU-D%27&REF_PLANE=%27ECLIPTIC%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&OBJ_DATA=%27NO%27"
+    },
+    {
+      "id": "earth",
+      "jd": 2462502.5,
+      "eclipticAu": [
+        -0.173871615880004, 0.967836613837388, -0.00006496211954734581
+      ],
+      "toleranceAu": 0.0002,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%273%27&CENTER=%27500%4010%27&EPHEM_TYPE=%27VECTORS%27&TLIST=%272451545.0%2C2462502.5%27&OUT_UNITS=%27AU-D%27&REF_PLANE=%27ECLIPTIC%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&OBJ_DATA=%27NO%27"
+    },
+    {
+      "id": "mars",
+      "jd": 2451545,
+      "eclipticAu": [
+        1.390715921746287, -0.01341631815233992, -0.03446766277585426
+      ],
+      "toleranceAu": 0.001,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%274%27&CENTER=%27500%4010%27&EPHEM_TYPE=%27VECTORS%27&TLIST=%272451545.0%2C2462502.5%27&OUT_UNITS=%27AU-D%27&REF_PLANE=%27ECLIPTIC%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&OBJ_DATA=%27NO%27"
+    },
+    {
+      "id": "mars",
+      "jd": 2462502.5,
+      "eclipticAu": [
+        1.278622087587906, -0.5212680377263021, -0.04227172872509243
+      ],
+      "toleranceAu": 0.001,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%274%27&CENTER=%27500%4010%27&EPHEM_TYPE=%27VECTORS%27&TLIST=%272451545.0%2C2462502.5%27&OUT_UNITS=%27AU-D%27&REF_PLANE=%27ECLIPTIC%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&OBJ_DATA=%27NO%27"
+    },
+    {
+      "id": "neptune",
+      "jd": 2451545,
+      "eclipticAu": [16.81204696805288, -24.99176288928469, 0.1272228799202476],
+      "toleranceAu": 0.01,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%278%27&CENTER=%27500%4010%27&EPHEM_TYPE=%27VECTORS%27&TLIST=%272451545.0%2C2462502.5%27&OUT_UNITS=%27AU-D%27&REF_PLANE=%27ECLIPTIC%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&OBJ_DATA=%27NO%27"
+    },
+    {
+      "id": "neptune",
+      "jd": 2462502.5,
+      "eclipticAu": [29.40629536121284, 5.101590097906583, -0.7828150339167019],
+      "toleranceAu": 0.01,
+      "source": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%278%27&CENTER=%27500%4010%27&EPHEM_TYPE=%27VECTORS%27&TLIST=%272451545.0%2C2462502.5%27&OUT_UNITS=%27AU-D%27&REF_PLANE=%27ECLIPTIC%27&VEC_TABLE=%272%27&CSV_FORMAT=%27YES%27&OBJ_DATA=%27NO%27"
+    }
+  ]
+}

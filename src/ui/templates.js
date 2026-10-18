@@ -274,7 +274,7 @@ export function inspectorHTML(id, mode, tab, compareId) {
 }
 function labHTML(p) {
   return (
-    '<section class="lab-section"><p class="eyebrow">MOVE THROUGH TIME</p><h3>A day can change your perspective.</h3><form id="day-form"><label for="day-input">Jump to simulation day</label><div class="input-row"><input id="day-input" type="number" min="0" max="1000000" step="any" value="0" required><button class="button secondary" type="submit">Go ' +
+    '<section class="lab-section"><p class="eyebrow">MOVE THROUGH TIME</p><h3>Watch the planets move</h3><p>One orbit is one trip around the Sun. A rotation is one spin of a planet.</p><form id="date-form"><label for="date-input">Choose a date</label><div class="input-row"><input id="date-input" type="date" min="1800-01-01" max="2050-12-31" required><button class="button secondary" type="submit">Show date</button></div><p id="date-error" role="status"></p></form><p>Showing: <strong id="current-date"></strong></p><p class="data-note">Dates use UTC, a shared world clock. Positions are calculated estimates.</p><form id="day-form"><label for="day-input">Days passed since the starting date</label><div class="input-row"><input id="day-input" type="number" min="0" max="1000000" step="any" value="0" required><button class="button secondary" type="submit">Go ' +
     icon("arrow") +
     '</button></div><p id="day-error" class="field-error" role="alert"></p></form><div class="time-jumps"><button data-jump="1">+1 day</button><button data-jump="30">+30 days</button><button data-jump="365.25">+1 year</button></div><div class="lab-readout"><span>Elapsed Earth years</span><strong id="elapsed-years">0.000</strong></div><div class="lab-readout"><span>' +
     p.name +
@@ -287,13 +287,13 @@ function labHTML(p) {
         fmt(orbitalSpeed(p.distanceAu, p.orbitalDays), 2) +
         " km/s.") +
     "</p></section>" +
-    '<section class="lab-section"><p class="eyebrow">THE SPACE BETWEEN</p><h3>How far is far?</h3><div class="distance-selects"><label>From<select id="distance-from">' +
+    '<section class="lab-section"><p class="eyebrow">THE SPACE BETWEEN</p><h3>Measure the distance</h3><div class="distance-selects"><label>From<select id="distance-from">' +
     options(p.id) +
     "</select></label><span>" +
     icon("arrow") +
     '</span><label>To<select id="distance-to">' +
     options(p.id === "earth" ? "mars" : "earth") +
-    '</select></label></div><div class="distance-result"><strong id="distance-km">—</strong><span>million kilometres</span><div><span id="distance-au">— AU</span><span id="light-time">— light-minutes</span></div></div><details><summary>How this is calculated</summary><p>Each body moves around a circle at its mean Sun distance. Its angle advances by 360° × elapsed days ÷ orbital period, from an illustrative starting position.</p><code>d = √((x₂ − x₁)² + (z₂ − z₁)²)</code><p>1 AU = 149,597,870.7 km.<br>Light time = distance ÷ 299,792.458 km/s.</p></details><p class="data-note">This is an educational estimate, not today’s sky or a spacecraft navigation calculation. Real orbits are elliptical and tilted.</p></section><a class="source-link" href="' +
+    '</select></label></div><div class="distance-result"><strong id="distance-km">—</strong><span>million kilometres</span><div><span id="distance-au">— AU</span><span id="light-time">— light-minutes</span></div></div><details><summary>How this is calculated</summary><p>Planet positions use NASA/JPL orbital elements. Their paths are ellipses (slightly stretched circles), tilted at different angles.</p><code>d = √((x₂ − x₁)² + (y₂ − y₁)² + (z₂ − z₁)²)</code><p>1 AU = 149,597,870.7 km.<br>Light time = distance ÷ 299,792.458 km/s.</p></details><p class="data-note">AU is a distance unit: 1 AU is about the average distance from Earth to the Sun. A light-minute is the distance light travels in one minute. These positions are approximate, not suitable for spacecraft navigation.</p></section><a class="source-link" href="' +
     SCIENCE_SOURCE +
     '" target="_blank" rel="noopener">NASA planetary reference ' +
     icon("arrow") +
@@ -393,7 +393,7 @@ export function helpHTML(quality, motion, scale) {
 }
 export function aboutHTML() {
   return (
-    '<p class="eyebrow">ABOUT THIS LEARNING TOOL</p><h2 id="dialog-title">Learn what this model shows</h2><p>Orbit is a free, non-profit educational model of the Sun and eight planets, with Earth’s Moon and four illustrative Jovian moons.</p><h3>What the simulation shows</h3><p>Shared elapsed time drives planet rotation and circular orbits. Planetary tilt is independent of orbital position. Moon orbits are independent of the parent’s spin.</p><h3>What is simplified</h3><p>Day zero uses illustrative starting angles, not a real date. Orbits are circular and coplanar. Overview distances are compressed. Proportional mode uses mean Sun distances in AU, but body sizes remain enlarged. Surface colors and lighting favor legibility; the Jovian moons share a lunar texture.</p><h3>Learning from the numbers</h3><p>Distances and light times are calculated from this model. Temperature and gravity are rounded reference values; giant planets have no solid surface. A sidereal rotation and a solar day are different measures.</p><a class="source-link" href="' +
+    '<p class="eyebrow">ABOUT THIS LEARNING TOOL</p><h2 id="dialog-title">Learn what this model shows</h2><p>Orbit is a free, non-profit educational model of the Sun and eight planets, with Earth’s Moon and four illustrative Jovian moons.</p><h3>What the simulation shows</h3><p>One simulation clock drives planet rotation and date-based elliptical orbits. Planetary tilt is independent of orbital position. Moon orbits are independent of the parent’s spin.</p><h3>What is simplified</h3><p>Planet positions use NASA/JPL J2000 elements and rates for 1800–2050. Earth represents the Earth–Moon centre of mass. UTC approximates the source’s dynamical time; time-scale corrections are omitted. Spins and moon positions remain illustrative. Overview distances are compressed. Proportional mode uses mean Sun distances in AU, but body sizes remain enlarged. Surface colors and lighting favor legibility; the Jovian moons share a lunar texture.</p><p><a class="source-link" href="https://ssd.jpl.nasa.gov/planets/approx_pos.html" target="_blank" rel="noopener">JPL orbital data and accuracy</a></p><h3>Learning from the numbers</h3><p>Distances and light times are calculated from this model. Temperature and gravity are rounded reference values; giant planets have no solid surface. A sidereal rotation and a solar day are different measures.</p><a class="source-link" href="' +
     SCIENCE_SOURCE +
     '" target="_blank" rel="noopener">NASA planetary fact sheets ' +
     icon("arrow") +

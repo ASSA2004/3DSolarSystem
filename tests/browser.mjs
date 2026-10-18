@@ -72,12 +72,15 @@ try {
   await page.locator("#distance-from").selectOption("sun");
   await page.locator("#distance-to").selectOption("earth");
   check(
-    "Sun-Earth distance reads one AU",
-    (await page.locator("#distance-au").textContent()) === "1 AU",
+    "Sun-Earth distance follows its elliptical orbit",
+    Math.abs(parseFloat(await page.locator("#distance-au").textContent()) - 1) <
+      0.02,
   );
   check(
-    "One-AU light time is approximately 8.32 minutes",
-    (await page.locator("#light-time").textContent()).includes("8.32"),
+    "Earth-Sun light time is about eight minutes",
+    Math.abs(
+      parseFloat(await page.locator("#light-time").textContent()) - 8.32,
+    ) < 0.2,
   );
   await screenshot("details-desktop");
   await page.locator('[data-detail-tab="compare"]').click();

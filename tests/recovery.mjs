@@ -66,6 +66,11 @@ try {
   await failed.locator('.error-actions [data-action="home"]').click();
   assert.ok(await failed.locator("#home").isVisible());
   results.push("WebGL failure provides recovery and a working return home");
+  await failed.locator('.hero [data-open="normal"]').click();
+  await failed.locator('[data-action="flat-view"]').click();
+  await failed.locator('.flat-planet[aria-label="Learn about Mars"]').click();
+  assert.match(await failed.locator("#inspector h2").textContent(), /Mars/);
+  results.push("WebGL-unavailable devices can learn and select planets in 2D");
   await failed.close();
 
   const missing = await browser.newPage();

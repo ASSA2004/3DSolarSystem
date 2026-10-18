@@ -1,12 +1,14 @@
+import { keplerPosition } from "./orbits.js";
 export const AU_KM = 149597870.7;
 export const LIGHT_KM_S = 299792.458;
 export const TAU = Math.PI * 2;
 export type OrbitBody = {
+  id?: string;
   distanceAu: number;
   orbitalDays: number;
   phase?: number;
 };
-// Illustrative circular, coplanar orbits. Day zero is not an ephemeris date.
+// Circular reference helpers teach orbital periods. Planet positions use JPL elements.
 export function orbitalAngle(body: OrbitBody, days: number): number {
   return (
     (body.phase ?? 0) +
@@ -16,9 +18,11 @@ export function orbitalAngle(body: OrbitBody, days: number): number {
 export function positionAu(
   body: OrbitBody,
   days: number,
-): { x: number; z: number } {
+): { x: number; y: number; z: number } {
+  if (body.id) return keplerPosition(body.id, days);
   const angle = orbitalAngle(body, days);
   return {
+    y: 0,
     x: Math.cos(angle) * body.distanceAu,
     z: -Math.sin(angle) * body.distanceAu,
   };
@@ -26,7 +30,7 @@ export function positionAu(
 export function separationAu(a: OrbitBody, b: OrbitBody, days: number): number {
   const p = positionAu(a, days),
     q = positionAu(b, days);
-  return Math.hypot(p.x - q.x, p.z - q.z);
+  return Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
 }
 export function lightMinutes(distanceAu: number): number {
   return (distanceAu * AU_KM) / LIGHT_KM_S / 60;

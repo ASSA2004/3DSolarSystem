@@ -29,3 +29,13 @@ Production build generates a versioned cache-first service worker. All essential
 Validation: production build and offline browser test pass (initial online visit, network disabled, reload, open 3D and select Earth). Entire generated dist is 1,353,366 bytes at this checkpoint, before transport compression. Offline caching adds background transfers; the earlier initial-load timings must be remeasured with this feature enabled. No new physical-device FPS claim.
 
 Repeat: npm run build; npm run preview; node tests/offline.mjs. Development mode intentionally does not register a service worker.
+
+## Orbital positions and old-PC fallback checkpoint
+
+Changed: src/data/orbits.json; src/utils/orbits.js, dates.js, physics.ts; src/core/timeController.js, scene.js, flatScene.js; main/UI templates; orbital fixtures and tests.
+
+JPL Table 1 elements and rates now drive inclined elliptical positions. Data rows were parsed from the official source to preserve signs. UTC date selection covers 1800–2050. The video advances the same clock. Days passed remains distinct from the displayed calendar date. Moon phases and surface spin remain illustrative.
+
+17 unit tests pass, including six independent Horizons positions at J2000 and 2030. The Neptune J2000 discrepancy is about 0.00735 AU (~1.1 million km); the regression bound is 0.01 AU and is not an all-date accuracy guarantee. UTC-to-TDB corrections are omitted. Earth is the Earth–Moon barycenter. Sources and exact API requests are stored beside data/fixtures.
+
+33 browser checks and 8 recovery checks pass, including WebGL-disabled 2D selection. Standard main JS is 88.42 KB raw / 42.84 KB gzip; scene JS 589.47 KB raw / 147.48 KB gzip; fallback 1.72 KB raw / 0.89 KB gzip. Load time and physical-device FPS need a fresh final run; earlier measurements are not reused as current results.

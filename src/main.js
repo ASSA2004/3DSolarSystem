@@ -1,3 +1,4 @@
+import { julianToDate } from "./utils/dates.js";
 import { setupOffline } from "./core/offline.js";
 import { readSetting, saveSetting } from "./utils/storage.js";
 import { recommendLite } from "./core/quality.js";
@@ -216,7 +217,7 @@ function showSceneError(message) {
   $("#loading").innerHTML =
     '<div class="loading-orbit">' +
     icon("orbit") +
-    '</div><p class="eyebrow">LET’S TRY THAT AGAIN</p><h2>Your observatory<br>needs a moment.</h2><p id="scene-error"></p><div class="error-actions"><button class="button primary" data-action="retry">Reload explorer</button><button class="button secondary" data-action="home">Return home</button></div>';
+    '</div><p class="eyebrow">YOU CAN STILL LEARN</p><h2>3D is unavailable on this device.</h2><p id="scene-error"></p><div class="error-actions"><button class="button primary" data-action="flat-view">Use 2D classroom view</button><button class="button primary" data-action="retry">Reload explorer</button><button class="button secondary" data-action="home">Return home</button></div>';
   $("#scene-error").textContent = message;
 }
 async function open(mode, planet = null) {
@@ -312,15 +313,14 @@ function updatePlayback() {
 }
 function frame(delta) {
   if ($("#dialog").open) {
-    scene.tickSimulation(time.elapsedDays);
+    scene.tickSimulation(time.orbitalDays);
     return;
   }
   if (state.mode === "video") {
     tour.update(delta);
-    if (tour.playing)
-      time.elapsedDays = Math.min(1000000, time.elapsedDays + delta / 24);
+    if (tour.playing) time.advance(delta, 1);
   } else time.update(delta);
-  scene.tickSimulation(time.elapsedDays);
+  scene.tickSimulation(time.orbitalDays);
   scene.cinematicPlaying = tour.playing;
   uiElapsed += delta;
   if (uiElapsed > 0.15) {
@@ -329,6 +329,9 @@ function frame(delta) {
   }
 }
 function updateReadouts() {
+  if ($("#current-date"))
+    $("#current-date").textContent =
+      julianToDate(time.julianDate).toISOString().slice(0, 10) + " UTC";
   document.querySelectorAll("[data-day]").forEach((el) => {
     el.textContent = fmt(time.elapsedDays, 2);
   });
@@ -340,7 +343,7 @@ function updateReadouts() {
     $("#orbit-progress-bar").style.width = progress + "%";
     const a = bodyById($("#distance-from").value),
       b = bodyById($("#distance-to").value);
-    const au = separationAu(a, b, time.elapsedDays);
+    const au = separationAu(a, b, time.orbitalDays);
     $("#distance-km").textContent = fmt((au * AU_KM) / 1e6, 3);
     $("#distance-au").textContent = fmt(au, 4) + " AU";
     $("#light-time").textContent = fmt(lightMinutes(au), 2) + " light-minutes";
@@ -403,7 +406,7 @@ app.addEventListener("click", async (event) => {
   }
   if (d.jump) {
     time.setDays(time.elapsedDays + Number(d.jump));
-    scene?.tickSimulation(time.elapsedDays);
+    scene?.tickSimulation(time.orbitalDays);
     updateReadouts();
     if ($("#day-input")) $("#day-input").value = time.elapsedDays.toFixed(2);
     return;
@@ -415,6 +418,23 @@ app.addEventListener("click", async (event) => {
     return;
   }
   switch (d.action) {
+    case "flat-view": {
+      const { FlatScene } = await import("./core/flatScene.js");
+      scene?.dispose();
+      scene = new FlatScene({
+        mount: $("#scene-mount"),
+        onSelect: selectPlanet,
+      });
+      scenePromise = Promise.resolve(scene);
+      loadingError = false;
+      $("#loading").hidden = true;
+      scene.setScale(state.scale);
+      scene.setMode(state.mode);
+      scene.start(frame);
+      selectPlanet(state.selected || "earth");
+      announce("2D classroom view is ready.");
+      break;
+    }
     case "lite":
       state.quality = "low";
       saveSetting("quality", "low");
@@ -435,7 +455,7 @@ app.addEventListener("click", async (event) => {
       break;
     case "reset":
       time.reset();
-      scene?.tickSimulation(0);
+      scene?.tickSimulation(time.orbitalDays);
       updateReadouts();
       announce("Simulation reset to day zero.");
       break;
@@ -579,14 +599,26 @@ app.addEventListener("input", (event) => {
   }
 });
 app.addEventListener("submit", (event) => {
+  if (event.target.id === "date-form") {
+    event.preventDefault();
+    if (time.setDate($("#date-input").value)) {
+      scene?.tickSimulation(time.orbitalDays);
+      updateReadouts();
+      $("#date-error").textContent = "";
+      announce("Date changed.");
+    } else $("#date-error").textContent = "Choose a date from 1800 to 2050.";
+    return;
+  }
   if (event.target.id !== "day-form") return;
   event.preventDefault();
   if (time.setDays($("#day-input").value)) {
     $("#day-error").textContent = "";
-    scene?.tickSimulation(time.elapsedDays);
+    scene?.tickSimulation(time.orbitalDays);
     updateReadouts();
     announce("Simulation moved to day " + fmt(time.elapsedDays, 2));
-  } else $("#day-error").textContent = "Enter a day between 0 and 1,000,000.";
+  } else
+    $("#day-error").textContent =
+      "Enter a positive number of days that keeps the date within 1800–2050.";
 });
 addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
