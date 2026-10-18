@@ -19,3 +19,13 @@ Validation: lint, build, 9 Vitest tests, 33 browser checks and 7 recovery checks
 Environment: headless Chrome, Intel Iris Xe GPU, 390×844 viewport at DPR 2, emulated 4 Mbps down / 1 Mbps up / 150 ms latency, cold cache, no CPU throttling. Single runs, not physical-phone certification. Local hosting excludes public server latency. First usable 3D excludes later on-demand moons. The complete original imagery inventory was 6.47 MB; this is not a like-for-like initial transfer comparison.
 
 Remaining: real phone/old-PC measurements, 2D fallback, further lifecycle and GPU-memory validation, complete reading-size/contrast audit. KTX2 is deferred until measurements show that decoder and maintenance costs are justified.
+
+## Offline checkpoint
+
+Changed: scripts/pwa.mjs, src/core/offline.js, public/manifest.webmanifest, generated install icons, vite.config.js, index.html, src/main.js, tests/offline.mjs.
+
+Production build generates a versioned cache-first service worker. All essential build assets are saved before the offline-ready label appears. Updates wait for an explicit Update now action. Static resources use scope-relative URLs for Pages deployments.
+
+Validation: production build and offline browser test pass (initial online visit, network disabled, reload, open 3D and select Earth). Entire generated dist is 1,353,366 bytes at this checkpoint, before transport compression. Offline caching adds background transfers; the earlier initial-load timings must be remeasured with this feature enabled. No new physical-device FPS claim.
+
+Repeat: npm run build; npm run preview; node tests/offline.mjs. Development mode intentionally does not register a service worker.

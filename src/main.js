@@ -1,3 +1,4 @@
+import { setupOffline } from "./core/offline.js";
 import { readSetting, saveSetting } from "./utils/storage.js";
 import { recommendLite } from "./core/quality.js";
 import { bodyById } from "./data/catalog.js";
@@ -634,3 +635,6 @@ addEventListener("pagehide", () => {
   tour.stop();
   scene?.stop();
 });
+
+if (document.readyState === "complete") setupOffline();
+else addEventListener("load", setupOffline, { once: true });
