@@ -10,6 +10,9 @@ try {
     viewport: { width: 1280, height: 800 },
     reducedMotion: "reduce",
   });
+  await page.addLocatorHandler(page.locator("#lite-offer"), async () => {
+    await page.locator('[data-action="dismiss-lite"]').click();
+  });
   await page.goto("http://127.0.0.1:5173/");
   await page.locator('[data-action="about"]').click();
   await page.locator('[data-action="close-dialog"]').click();

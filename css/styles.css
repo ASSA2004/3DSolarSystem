@@ -2921,6 +2921,9 @@ kbd {
   background: #17202b;
   box-shadow: 0 12px 60px #0009;
 }
+.explorer-open .lite-offer {
+  bottom: 110px;
+}
 .lite-offer p {
   font-size: 16px;
   line-height: 1.6;

@@ -32,6 +32,7 @@ jobs:
           for i in $(seq 1 30); do curl --silent --fail http://127.0.0.1:5173/ > /dev/null && break; sleep 1; done
           npm run test:browser
           npm run test:recovery
+          node tests/lite-offer.mjs
           node tests/classroom.mjs
           node tests/languages.mjs
           node tests/accessibility.mjs

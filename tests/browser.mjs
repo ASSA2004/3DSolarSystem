@@ -21,6 +21,9 @@ const check = (name, value) => {
 const screenshot = (name) =>
   page.screenshot({ path: ".qa/" + name + ".png", fullPage: true });
 try {
+  await page.addLocatorHandler(page.locator("#lite-offer"), async () => {
+    await page.locator('[data-action="dismiss-lite"]').click();
+  });
   await page.goto(process.env.PREVIEW_URL || "http://127.0.0.1:5173/");
   check(
     "Landing page has no horizontal overflow",

@@ -34,6 +34,9 @@ try {
       if (/[A-Za-z]{3}/.test(text) && !known.has(text.toLowerCase()))
         missing.add(text);
   };
+  await page.addLocatorHandler(page.locator("#lite-offer"), async () => {
+    await page.locator('[data-action="dismiss-lite"]').click();
+  });
   await page.goto("http://127.0.0.1:5173/");
   await collect();
   for (const lang of ["ta", "hi"]) {
