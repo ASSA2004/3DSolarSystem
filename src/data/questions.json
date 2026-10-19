@@ -1,0 +1,50 @@
+[
+  {
+    "question": "quiz.0.question",
+    "answer": "Uranus",
+    "options": ["Mars", "Uranus", "Venus"],
+    "hint": "quiz.0.hint"
+  },
+  {
+    "question": "quiz.1.question",
+    "answer": "Mercury",
+    "options": ["Mercury", "Earth", "Neptune"],
+    "hint": "quiz.1.hint"
+  },
+  {
+    "question": "quiz.2.question",
+    "answer": "Saturn",
+    "options": ["Jupiter", "Saturn", "Uranus"],
+    "hint": "quiz.2.hint"
+  },
+  {
+    "question": "quiz.3.question",
+    "answer": "Jupiter",
+    "options": ["Jupiter", "Mars", "Venus"],
+    "hint": "quiz.3.hint"
+  },
+  {
+    "question": "quiz.4.question",
+    "answer": "Venus",
+    "options": ["Venus", "Earth", "Mars"],
+    "hint": "quiz.4.hint"
+  },
+  {
+    "question": "quiz.5.question",
+    "answer": "Earth",
+    "options": ["Earth", "Neptune", "Saturn"],
+    "hint": "quiz.5.hint"
+  },
+  {
+    "question": "quiz.6.question",
+    "answer": "Neptune",
+    "options": ["Neptune", "Mercury", "Jupiter"],
+    "hint": "quiz.6.hint"
+  },
+  {
+    "question": "quiz.7.question",
+    "answer": "Mars",
+    "options": ["Mars", "Venus", "Uranus"],
+    "hint": "quiz.7.hint"
+  }
+]

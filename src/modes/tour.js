@@ -1,3 +1,4 @@
+import { translate, currentLanguage } from "../i18n/index.js";
 import { BODIES } from "../data/catalog.js";
 export const CHAPTER_DURATION = 22;
 export class Tour {
@@ -73,8 +74,11 @@ export class Tour {
     this.cancelSpeech();
     const body = BODIES[this.index];
     const utterance = new SpeechSynthesisUtterance(
-      body.name + ". " + body.tour,
+      translate(body.name) + ". " + translate(body.tour),
     );
+    utterance.lang = { en: "en-IN", ta: "ta-IN", hi: "hi-IN" }[
+      currentLanguage()
+    ];
     utterance.rate = 0.95;
     speechSynthesis.speak(utterance);
   }

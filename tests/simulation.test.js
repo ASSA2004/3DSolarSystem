@@ -89,7 +89,7 @@ test("quiz locks each answer and safely handles input after completion", () => {
   assert.equal(quiz.active, false);
   assert.equal(quiz.score, QUIZ_QUESTIONS.length);
   assert.doesNotThrow(() => quiz.answer("Earth"));
-  assert.match(quiz.html(), /Journey complete/);
+  assert.match(quiz.html(), /You finished the quiz/);
   quiz.reset();
   assert.equal(quiz.score, 0);
   assert.equal(quiz.index, 0);

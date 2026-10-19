@@ -1,0 +1,83 @@
+[
+  {
+    "id": "meet",
+    "title": "lesson.meet.title",
+    "minutes": 5,
+    "curriculum": "lesson.meet.curriculum",
+    "source": "https://ncert.nic.in/textbook/pdf/fecu112.pdf",
+    "steps": [
+      {
+        "planet": "sun",
+        "title": "lesson.meet.0.title",
+        "question": "lesson.meet.0.question",
+        "explanation": "lesson.meet.0.explanation"
+      },
+      {
+        "planet": "earth",
+        "title": "lesson.meet.1.title",
+        "question": "lesson.meet.1.question",
+        "explanation": "lesson.meet.1.explanation"
+      },
+      {
+        "planet": "neptune",
+        "title": "lesson.meet.2.title",
+        "question": "lesson.meet.2.question",
+        "explanation": "lesson.meet.2.explanation"
+      }
+    ]
+  },
+  {
+    "id": "motion",
+    "title": "lesson.motion.title",
+    "minutes": 7,
+    "curriculum": "lesson.motion.curriculum",
+    "source": "https://ncert.nic.in/textbook/pdf/fecu112.pdf",
+    "steps": [
+      {
+        "planet": "earth",
+        "title": "lesson.motion.0.title",
+        "question": "lesson.motion.0.question",
+        "explanation": "lesson.motion.0.explanation"
+      },
+      {
+        "planet": "mercury",
+        "title": "lesson.motion.1.title",
+        "question": "lesson.motion.1.question",
+        "explanation": "lesson.motion.1.explanation"
+      },
+      {
+        "planet": "neptune",
+        "title": "lesson.motion.2.title",
+        "question": "lesson.motion.2.question",
+        "explanation": "lesson.motion.2.explanation"
+      }
+    ]
+  },
+  {
+    "id": "distance",
+    "title": "lesson.distance.title",
+    "minutes": 5,
+    "curriculum": "lesson.distance.curriculum",
+    "source": "https://science.nasa.gov/solar-system/",
+    "steps": [
+      {
+        "planet": "earth",
+        "title": "lesson.distance.0.title",
+        "question": "lesson.distance.0.question",
+        "explanation": "lesson.distance.0.explanation"
+      },
+      {
+        "planet": "earth",
+        "title": "lesson.distance.1.title",
+        "question": "lesson.distance.1.question",
+        "explanation": "lesson.distance.1.explanation"
+      },
+      {
+        "planet": "neptune",
+        "title": "lesson.distance.2.title",
+        "question": "lesson.distance.2.question",
+        "explanation": "lesson.distance.2.explanation"
+      }
+    ]
+  }
+]
