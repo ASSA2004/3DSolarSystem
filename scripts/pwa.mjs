@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 export function offlinePlugin() {
   return { name: 'orbit-offline', apply: 'build', async closeBundle() {
     const assets = (await readdir('dist/assets')).map(name => 'assets/' + name);
-    const files = ['index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', ...assets];
+    const files = ['index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'about.html', ...assets];
     const version = createHash('sha256').update(await readFile('dist/index.html')).digest('hex').slice(0,12);
     const source = `const CACHE = 'orbit-${version}';
 const FILES = ${JSON.stringify(files)};
@@ -19,7 +19,7 @@ self.addEventListener('fetch', event => {
   if(request.method !== 'GET' || !request.url.startsWith(self.registration.scope)) return;
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
-    if(request.mode === 'navigate') return (await cache.match(url('index.html'))) || fetch(request);
+    if(request.mode === 'navigate') return (await cache.match(request, {ignoreSearch:true, ignoreVary:true})) || (await cache.match(url('index.html'))) || fetch(request);
     const saved = await cache.match(request, { ignoreVary: true });
     if(saved) return saved;
     const response = await fetch(request);

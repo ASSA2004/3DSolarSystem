@@ -1,6 +1,9 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
-const browser = await chromium.launch({ channel: "chrome", headless: true });
+const browser = await chromium.launch({
+  channel: process.env.CI ? undefined : "chrome",
+  headless: true,
+});
 try {
   const context = await browser.newContext();
   const page = await context.newPage();
