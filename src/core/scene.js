@@ -7,7 +7,7 @@ import {
 } from "three/addons/renderers/CSS2DRenderer.js";
 import { BODIES } from "../data/catalog.js";
 import { textureURL } from "../utils/assets.js";
-import { positionAu, TAU } from "../utils/physics.ts";
+import { positionAu, TAU, AU_KM } from "../utils/physics.ts";
 import { createControls } from "./controls.js";
 
 export class SolarScene {
@@ -41,7 +41,7 @@ export class SolarScene {
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.03, 5000);
     this.camera.position.set(100, 130, 165);
     this.renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: quality !== "low",
       alpha: true,
       powerPreference: "high-performance",
     });
@@ -63,6 +63,9 @@ export class SolarScene {
     });
     mount.append(this.labels.domElement);
     this.controls = createControls(this.camera, this.renderer.domElement);
+    this.controls.addEventListener("start", () => {
+      this.tween = null;
+    });
     this.controls.addEventListener("change", () => {
       this.dirty = true;
     });
@@ -93,7 +96,13 @@ export class SolarScene {
         time: performance.now(),
       };
     });
-    this.renderer.domElement.addEventListener("pointerup", (e) => this.pick(e));
+    this.renderer.domElement.addEventListener("pointerup", (e) => {
+      this.pick(e);
+      this.pointerStart = null;
+    });
+    this.renderer.domElement.addEventListener("pointercancel", () => {
+      this.pointerStart = null;
+    });
     this.renderer.domElement.addEventListener("webglcontextlost", (e) => {
       e.preventDefault();
       this.stop();
@@ -227,7 +236,7 @@ export class SolarScene {
         this.scene.add(orbit);
       }
       this.bodies.set(data.id, { data, anchor, tilt, mesh, label, orbit });
-      if (data.id === "sun") this.addGlow(mesh);
+      if (data.id === "sun" && this.quality !== "low") this.addGlow(mesh);
       if (
         this.quality !== "low" &&
         ["earth", "venus", "uranus", "neptune"].includes(data.id)
@@ -269,6 +278,13 @@ export class SolarScene {
       }),
       1100,
     );
+    belt.count = 0;
+    this.belt = belt;
+    this.scene.add(belt);
+    this.extrasTimer = setTimeout(() => this.loadExtras(), 2000);
+  }
+  loadExtras() {
+    if (this.quality === "low" || this.beltReady || !this.belt) return;
     const dummy = new THREE.Object3D();
     for (let i = 0; i < 1100; i++) {
       const a = Math.random() * TAU,
@@ -280,11 +296,12 @@ export class SolarScene {
       );
       dummy.scale.setScalar(0.5 + Math.random() * 1.5);
       dummy.updateMatrix();
-      belt.setMatrixAt(i, dummy.matrix);
+      this.belt.setMatrixAt(i, dummy.matrix);
     }
-    belt.count = this.quality === "low" ? 0 : 1100;
-    this.belt = belt;
-    this.scene.add(belt);
+    this.belt.count = 1100;
+    this.belt.instanceMatrix.needsUpdate = true;
+    this.beltReady = true;
+    this.dirty = true;
   }
   addAtmosphere(mesh, data) {
     const atmosphere = new THREE.Mesh(
@@ -324,7 +341,8 @@ export class SolarScene {
     mesh.add(glow);
   }
   loadMoons() {
-    if (this.moons.length || this.quality === "low") return;
+    if (this.moons.length || this.quality === "low" || this.proportional)
+      return;
     this.addMoon("Moon", "earth", 0.27, 3.3, 27.3217, 0);
     [
       ["Io", 0.18, 5.3, 1.769],
@@ -440,7 +458,7 @@ export class SolarScene {
           ((object.data.size * scale * (id === "saturn" ? 2.25 : 1.1)) /
             Math.sin(field)) *
             1.12,
-          0.5,
+          this.proportional ? 0.00001 : 0.5,
         )
       : overviewRadius;
     this.controls.maxDistance = Math.max(1200, overviewRadius * 1.4);
@@ -457,8 +475,12 @@ export class SolarScene {
       duration: immediate || this.reducedMotion ? 0 : 1.35,
     };
     this.lastTarget.copy(target);
+    this.camera.near = object
+      ? Math.max((object.data.size * scale) / 100, 0.0000001)
+      : 0.03;
+    this.camera.updateProjectionMatrix();
     this.controls.minDistance = object
-      ? Math.max(object.data.size * scale * 1.35, 0.3)
+      ? Math.max(object.data.size * scale * 1.35, 0.000001)
       : 3;
     for (const b of this.bodies.values()) {
       b.anchor.visible = this.mode !== "video" || b.data.id === id;
@@ -544,8 +566,12 @@ export class SolarScene {
   }
   setScale(value) {
     this.proportional = value;
+    for (const moon of this.moons)
+      moon.mesh.visible = !value && this.quality !== "low";
     for (const b of this.bodies.values()) {
-      b.anchor.scale.setScalar(value ? (b.data.id === "sun" ? 0.08 : 0.12) : 1);
+      b.anchor.scale.setScalar(
+        value ? ((b.data.diameterKm / 2 / AU_KM) * 11) / b.data.size : 1,
+      );
       if (b.orbit)
         b.orbit.scale.setScalar(value ? b.data.distanceAu * 11 : b.data.orbit);
     }
@@ -569,8 +595,15 @@ export class SolarScene {
         b.mesh.material.map = this.texture(b.data.texture);
         for (const child of b.mesh.children) child.visible = quality !== "low";
       }
-      for (const moon of this.moons) moon.mesh.visible = quality !== "low";
-      if (this.belt) this.belt.count = quality === "low" ? 0 : 1100;
+      for (const moon of this.moons)
+        moon.mesh.visible = quality !== "low" && !this.proportional;
+      if (this.belt) {
+        if (quality === "low") this.belt.count = 0;
+        else {
+          this.loadExtras();
+          this.belt.count = this.beltReady ? 1100 : 0;
+        }
+      }
     }
     this.renderer.setPixelRatio(
       quality === "low"
@@ -580,6 +613,26 @@ export class SolarScene {
           : Math.min(devicePixelRatio, innerWidth < 700 ? 1.25 : 1.6),
     );
     if (this.mount) this.resize();
+  }
+  setJourney(progress, target) {
+    this.tween = null;
+    this.selected = null;
+    this.controls.enabled = false;
+    const point = new THREE.Vector3(
+      target.x,
+      target.y,
+      target.z,
+    ).multiplyScalar(11 * progress);
+    const direction = new THREE.Vector3(
+      target.x,
+      target.y,
+      target.z,
+    ).normalize();
+    this.camera.position.copy(point).addScaledVector(direction, -0.15);
+    this.camera.position.y += 0.08;
+    this.controls.target.copy(point).addScaledVector(direction, 0.1);
+    this.camera.lookAt(this.controls.target);
+    this.dirty = true;
   }
   zoom(factor) {
     this.tween = null;
@@ -616,6 +669,7 @@ export class SolarScene {
   dispose() {
     this.stop();
     this.abort.abort();
+    clearTimeout(this.extrasTimer);
     this.resizeObserver.disconnect();
     this.controls.dispose();
     this.scene.traverse((object) => {

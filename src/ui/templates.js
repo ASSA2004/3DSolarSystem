@@ -44,7 +44,7 @@ export function homeHTML() {
   return (
     '<div id="home"><header class="home-header"><a href="#home" class="brand" aria-label="Orbit home">' +
     logo +
-    '</a><span class="header-note">LEARN ABOUT OUR SOLAR SYSTEM</span><button class="text-button" data-open="normal">Explore the planets ' +
+    '</a><button class="text-button" data-action="classroom">For teachers and students</button><span class="header-note">LEARN ABOUT OUR SOLAR SYSTEM</span><button class="text-button" data-open="normal">Explore the planets ' +
     icon("arrow") +
     "</button></header>" +
     '<main id="main"><section class="hero"><div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> SCIENCE FOR CLASSES 6–8</p><h1>Meet our<br><em>solar system.</em></h1><p class="hero-description">The Sun is a star. Eight planets travel around it.<br>Choose a planet to begin.</p><div class="hero-actions"><button class="button primary" data-open="normal">Explore the solar system ' +
@@ -91,7 +91,7 @@ export function homeHTML() {
       )
       .join("") +
     "</div></section></main>" +
-    '<footer class="home-footer"><span>A free, non-profit learning tool.</span><span>An illustrative model · <button class="text-button" data-action="about">About the science ' +
+    '<footer class="home-footer"><a class="text-button" href="./about.html">About Orbit</a><span>A free, non-profit learning tool.</span><span>An illustrative model · <button class="text-button" data-action="about">About the science ' +
     icon("info") +
     "</button></span></footer></div>"
   );
@@ -113,7 +113,7 @@ export function shellHTML() {
           "</span></button>",
       )
       .join("") +
-    '</nav><div class="header-tools"><span class="live-indicator"><i></i> OBSERVATORY</span><button class="icon-button" data-action="help" aria-label="Open controls and settings" title="Controls and settings">' +
+    '</nav><div class="header-tools"><button class="icon-button" data-action="classroom" aria-label="Lessons, quiz and Scale Journey" title="Lessons and activities"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 4h7l2 2 2-2h7v15h-7l-2 2-2-2H3zM12 6v15"/></svg></button><span class="live-indicator"><i></i> OBSERVATORY</span><button class="icon-button" data-action="help" aria-label="Open controls and settings" title="Controls and settings">' +
     icon("settings") +
     '</button><button class="icon-button fullscreen-button" data-action="fullscreen" aria-label="Enter fullscreen" title="Fullscreen">' +
     icon("expand") +
@@ -133,7 +133,7 @@ export function shellHTML() {
         String(p.index).padStart(2, "0") +
         "</span></button>",
     ).join("") +
-    '</nav><div class="scene-heading"><p class="eyebrow" id="view-eyebrow">THE BIG PICTURE</p><h1 id="view-title" tabindex="-1">Our solar system</h1><p id="view-description">A familiar star. Eight extraordinary worlds.</p></div><div class="scene-tools"><button class="icon-button" data-action="zoom-in" aria-label="Zoom in" title="Zoom in">' +
+    '</nav><div class="scene-heading"><p class="eyebrow" id="view-eyebrow">THE BIG PICTURE</p><h1 id="view-title" tabindex="-1">Our solar system</h1><p id="view-description">Our star and eight planets.</p></div><div class="scene-tools"><button class="icon-button" data-action="zoom-in" aria-label="Zoom in" title="Zoom in">' +
     icon("plus") +
     '</button><button class="icon-button" data-action="zoom-out" aria-label="Zoom out" title="Zoom out">' +
     icon("minus") +
@@ -145,7 +145,7 @@ export function shellHTML() {
     '<aside id="inspector" class="inspector" aria-label="Planet information"></aside><div class="scene-hint">' +
     icon("orbit") +
     '<span>Drag to orbit <i>·</i> Scroll to zoom <i>·</i> Select a world</span></div><div class="scale-note" id="scale-note">Illustrative scale · sizes & distances compressed</div>' +
-    '<section id="cinema" hidden aria-label="Cinematic journey"><div class="film-label"><span class="status-dot"></span> ORBIT ORIGINAL <span> / </span> A JOURNEY OUTWARD</div><div class="film-caption"><p class="eyebrow" id="chapter-number">CHAPTER 01 / 09</p><h2 id="chapter-title">The light at the center.</h2><p id="chapter-caption"></p></div><div class="film-bottom"><nav class="chapter-list" aria-label="Video chapters">' +
+    '<section id="cinema" hidden aria-label="Cinematic journey"><div class="film-label"><span class="status-dot"></span> GUIDED TOUR <span> / </span> A JOURNEY OUTWARD</div><div class="film-caption"><p class="eyebrow" id="chapter-number">CHAPTER 01 / 09</p><h2 id="chapter-title">The light at the center.</h2><p id="chapter-caption"></p></div><div class="film-bottom"><nav class="chapter-list" aria-label="Video chapters">' +
     BODIES.map(
       (p, i) =>
         '<button data-chapter="' +
@@ -167,14 +167,14 @@ export function shellHTML() {
     '</button><button class="caption-button" data-action="captions" aria-pressed="true" aria-label="Show captions">CC</button></div><p class="film-footnote">A live 3D film · illustrative motion · optional device narration</p></div></section>' +
     '<div id="loading" class="loading-overlay" hidden><div class="loading-orbit">' +
     icon("orbit") +
-    '</div><p class="eyebrow">OPENING A WINDOW TO SPACE</p><h2>Some things are worth<br>a little perspective.</h2><progress id="load-progress" max="100" value="0" aria-label="Loading solar system"></progress><span id="load-message">Preparing your observatory…</span></div></div>' +
+    '</div><p class="eyebrow">LOADING THE SOLAR SYSTEM</p><h2>Your planets are loading</h2><progress id="load-progress" max="100" value="0" aria-label="Loading solar system"></progress><span id="load-message">Preparing the 3D view…</span></div></div>' +
     '<footer class="simulation-bar"><div class="simulation-status"><span class="status-dot"></span><div><span class="eyebrow">SIMULATION TIME</span><strong>Day <span data-day>0.00</span></strong></div></div><div class="playback"><button class="icon-button" data-action="reset" aria-label="Reset simulation to day zero" title="Reset time">' +
     icon("reset") +
     '</button><button class="play-button" data-action="pause" aria-label="Pause simulation">' +
     icon("pause") +
     '</button><div class="speed-field"><label for="speed">TIME SPEED</label><select id="speed"><option value="1">1 hour / sec</option><option value="24" selected>1 day / sec</option><option value="168">1 week / sec</option><option value="720">30 days / sec</option><option value="8760">1 year / sec</option></select></div></div><div class="footer-actions"><button class="text-button" data-action="scale" aria-pressed="false">' +
     icon("orbit") +
-    '<span id="scale-button-text">Proportional distances</span></button><button class="text-button" data-action="quiz">' +
+    '<span id="scale-button-text">True scale</span></button><button class="text-button" data-action="quiz">' +
     icon("book") +
     "<span>Test your knowledge</span></button></div></footer></section>" +
     '<dialog id="dialog" aria-labelledby="dialog-title"><button class="dialog-close icon-button" data-action="close-dialog" aria-label="Close dialog">' +
@@ -188,7 +188,7 @@ export function inspectorHTML(id, mode, tab, compareId) {
   const p = bodyById(id);
   if (!p)
     return (
-      '<div class="inspector-inner overview-card"><span class="eyebrow">YOUR FRONT-ROW SEAT</span><h2>A little space<br>to be curious.</h2><p>Select a planet to get closer. Every world has a story worth discovering.</p><div class="overview-facts"><span><b>8</b>planets</span><span><b>1</b>star</span><span><b>∞</b>perspectives</span></div><button class="button secondary" data-planet="earth">Start with home ' +
+      '<div class="inspector-inner overview-card"><span class="eyebrow">START HERE</span><h2>Choose a planet<br>to begin.</h2><p>Select a planet from the list or its label. Drag to look around. Use + and − to move closer or farther away.</p><div class="overview-facts"><span><b>8</b>planets</span><span><b>1</b>star</span><span><b>3</b>views</span></div><button class="button secondary" data-planet="earth">Start with Earth ' +
       icon("arrow") +
       '</button><div class="small-note">' +
       icon("info") +
@@ -218,9 +218,9 @@ export function inspectorHTML(id, mode, tab, compareId) {
         p.distanceAu ? p.distanceAu + " AU" : "At the center",
       ) +
       fact("One orbit", p.orbital) +
-      '</dl><div class="discovery-note"><span class="eyebrow">A MOMENT OF WONDER</span><p>' +
+      '</dl><div class="discovery-note"><span class="eyebrow">DID YOU KNOW?</span><p>' +
       p.wow +
-      '</p></div><button class="button secondary full" data-mode="details">Look a little closer ' +
+      '</p></div><button class="button secondary full" data-mode="details">Learn more ' +
       icon("arrow") +
       '</button><button class="text-button full back-view" data-action="overview">Back to full view</button></div>'
     );
@@ -365,7 +365,7 @@ function compareHTML(a, b) {
     ) +
     row("Tilt", a.tilt + "°", b.tilt + "°") +
     row("Gravity", a.gravity + " m/s²", b.gravity + " m/s²") +
-    '</tbody></table><div class="discovery-note"><span class="eyebrow">PUT IT IN PERSPECTIVE</span><p>' +
+    '</tbody></table><div class="discovery-note"><span class="eyebrow">COMPARE THE SIZES</span><p>' +
     a.name +
     " has " +
     fmt(a.diameterKm / b.diameterKm, 3) +
@@ -384,16 +384,16 @@ export function helpHTML(quality, motion, scale) {
     (quality === "low" ? " selected" : "") +
     '>Lite Mode</option></select></div><label class="settings-row">Reduce camera motion<input id="reduce-motion" type="checkbox"' +
     (motion ? " checked" : "") +
-    '></label><div class="settings-actions"><button class="button secondary" data-action="scale" aria-pressed="' +
+    '></label><div class="settings-actions"><button class="button secondary" data-action="classroom">Lessons and activities</button><button class="button secondary" data-action="share">Share this view</button><button class="button secondary" data-action="scale" aria-pressed="' +
     String(scale) +
-    '">Toggle proportional distances</button><button class="button secondary" data-action="quiz">Test your knowledge</button></div><button class="text-button" data-action="about">About the model & sources ' +
+    '">Switch distance scale</button><button class="button secondary" data-action="quiz">Test your knowledge</button></div><button class="text-button" data-action="about">About the model & sources ' +
     icon("arrow") +
     "</button>"
   );
 }
 export function aboutHTML() {
   return (
-    '<p class="eyebrow">ABOUT THIS LEARNING TOOL</p><h2 id="dialog-title">Learn what this model shows</h2><p>Orbit is a free, non-profit educational model of the Sun and eight planets, with Earth’s Moon and four illustrative Jovian moons.</p><h3>What the simulation shows</h3><p>One simulation clock drives planet rotation and date-based elliptical orbits. Planetary tilt is independent of orbital position. Moon orbits are independent of the parent’s spin.</p><h3>What is simplified</h3><p>Planet positions use NASA/JPL J2000 elements and rates for 1800–2050. Earth represents the Earth–Moon centre of mass. UTC approximates the source’s dynamical time; time-scale corrections are omitted. Spins and moon positions remain illustrative. Overview distances are compressed. Proportional mode uses mean Sun distances in AU, but body sizes remain enlarged. Surface colors and lighting favor legibility; the Jovian moons share a lunar texture.</p><p><a class="source-link" href="https://ssd.jpl.nasa.gov/planets/approx_pos.html" target="_blank" rel="noopener">JPL orbital data and accuracy</a></p><h3>Learning from the numbers</h3><p>Distances and light times are calculated from this model. Temperature and gravity are rounded reference values; giant planets have no solid surface. A sidereal rotation and a solar day are different measures.</p><a class="source-link" href="' +
+    '<p class="eyebrow">ABOUT THIS LEARNING TOOL</p><h2 id="dialog-title">Learn what this model shows</h2><p>Orbit is a free, non-profit educational model of the Sun and eight planets, with Earth’s Moon and four illustrative Jovian moons.</p><h3>What the simulation shows</h3><p>One simulation clock drives planet rotation and date-based elliptical orbits. Planetary tilt is independent of orbital position. Moon orbits are independent of the parent’s spin.</p><h3>What is simplified</h3><p>Planet positions use NASA/JPL J2000 elements and rates for 1800–2050. Earth represents the Earth–Moon centre of mass. UTC approximates the source’s dynamical time; time-scale corrections are omitted. Spins and moon positions remain illustrative. Overview distances are compressed. True scale uses the same physical scale for planetary distances and diameters. Labels remain large enough to select. Surface colors and lighting favor legibility; the Jovian moons share a lunar texture.</p><p><a class="source-link" href="https://ssd.jpl.nasa.gov/planets/approx_pos.html" target="_blank" rel="noopener">JPL orbital data and accuracy</a></p><h3>Learning from the numbers</h3><p>Distances and light times are calculated from this model. Temperature and gravity are rounded reference values; giant planets have no solid surface. A sidereal rotation and a solar day are different measures.</p><a class="source-link" href="' +
     SCIENCE_SOURCE +
     '" target="_blank" rel="noopener">NASA planetary fact sheets ' +
     icon("arrow") +

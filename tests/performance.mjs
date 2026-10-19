@@ -1,6 +1,9 @@
 import { chromium } from "playwright";
 import { writeFile, mkdir } from "node:fs/promises";
-const browser = await chromium.launch({ channel: "chrome", headless: true });
+const browser = await chromium.launch({
+  channel: process.env.CI ? undefined : "chrome",
+  headless: true,
+});
 const results = [];
 try {
   for (const lite of [false, true]) {

@@ -138,7 +138,7 @@ img {
   border-bottom: 1px solid var(--line);
 }
 .header-note {
-  font-size: 9px;
+  font-size: 12px;
   color: var(--dim);
   letter-spacing: 2.5px;
   margin-left: 70px;
@@ -199,7 +199,7 @@ img {
   width: 100%;
 }
 .eyebrow {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 550;
   letter-spacing: 1.8px;
   color: var(--muted);
@@ -244,7 +244,7 @@ img {
   display: flex;
   gap: 10px;
   align-items: center;
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 1.6px;
 }
 .hero h1 {
@@ -278,7 +278,7 @@ img {
   align-items: center;
   margin-top: 44px;
   color: var(--dim);
-  font-size: 10px;
+  font-size: 12px;
 }
 .tiny-orbit {
   width: 11px;
@@ -353,14 +353,14 @@ img {
 }
 .earth-caption b {
   display: block;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 2.6px;
 }
 .earth-caption small {
   display: block;
   color: var(--dim);
-  font-size: 9px;
+  font-size: 12px;
   margin-top: 4px;
 }
 .caption-line {
@@ -388,7 +388,7 @@ img {
   flex-direction: column;
   color: #6b7784;
   font-family: Consolas, monospace;
-  font-size: 8px;
+  font-size: 12px;
   line-height: 2;
   letter-spacing: 1px;
 }
@@ -425,7 +425,7 @@ img {
   top: 30px;
   transform: translateY(20px);
   color: var(--dim);
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1.5px;
 }
 .experience-section {
@@ -439,7 +439,7 @@ img {
 }
 .section-heading .eyebrow {
   color: #9d8060;
-  font-size: 8px;
+  font-size: 12px;
 }
 .section-heading h2 {
   font-size: 26px;
@@ -454,7 +454,7 @@ img {
   right: 0;
   bottom: 34px;
   font-family: Consolas, monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--dim);
 }
 .experience-grid {
@@ -485,7 +485,7 @@ img {
 }
 .card-number {
   font-family: Consolas, monospace;
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 1px;
   color: #8b96a4;
 }
@@ -513,7 +513,7 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 10px;
+  font-size: 12px;
   color: #c3c6c9;
   margin-top: auto;
   padding-top: 18px;
@@ -540,7 +540,7 @@ img {
   border-bottom: 1px solid var(--line);
 }
 .worlds-strip > .eyebrow {
-  font-size: 8px;
+  font-size: 12px;
   white-space: nowrap;
 }
 .worlds-strip > div {
@@ -553,7 +553,7 @@ img {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   min-height: 44px;
 }
@@ -574,7 +574,7 @@ img {
   justify-content: space-between;
   align-items: center;
   color: var(--dim);
-  font-size: 10px;
+  font-size: 12px;
 }
 .home-footer > span:last-child {
   display: flex;
@@ -582,7 +582,7 @@ img {
   gap: 7px;
 }
 .home-footer .text-button {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
 }
 body.explorer-open {
@@ -626,7 +626,7 @@ body.explorer-open {
   align-items: center;
   gap: 9px;
   padding: 9px 16px;
-  font-size: 11px;
+  font-size: 12px;
   border-radius: 4px;
   color: var(--muted);
   min-height: 38px;
@@ -652,7 +652,7 @@ body.explorer-open {
   display: flex;
   gap: 7px;
   align-items: center;
-  font-size: 7px;
+  font-size: 12px;
   color: var(--dim);
   letter-spacing: 1.5px;
   margin-right: 12px;
@@ -732,7 +732,7 @@ body.explorer-open {
   z-index: 2;
 }
 .planet-nav > .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1.4px;
   color: var(--dim);
   margin-bottom: 18px;
@@ -747,7 +747,7 @@ body.explorer-open {
   border: 1px solid transparent;
   border-radius: 5px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   margin: 3px 0;
   text-align: left;
 }
@@ -773,7 +773,7 @@ body.explorer-open {
 .planet-index {
   margin-left: auto;
   color: var(--dim);
-  font-size: 8px;
+  font-size: 12px;
   font-family: Consolas, monospace;
 }
 .nav-orbit {
@@ -798,7 +798,7 @@ body.explorer-open {
   pointer-events: none;
 }
 .scene-heading .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   color: var(--accent);
 }
 .scene-heading h1 {
@@ -807,7 +807,7 @@ body.explorer-open {
   margin-top: 6px;
 }
 .scene-heading > p:last-child {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--dim);
   margin-top: 6px;
 }
@@ -841,7 +841,7 @@ body.explorer-open {
   position: absolute;
   bottom: 27px;
   left: 200px;
-  font-size: 9px;
+  font-size: 12px;
   color: var(--dim);
   pointer-events: none;
 }
@@ -858,14 +858,14 @@ body.explorer-open {
   position: absolute;
   left: 200px;
   bottom: 9px;
-  font-size: 7px;
+  font-size: 12px;
   color: #687582;
   pointer-events: none;
 }
 .planet-label {
   pointer-events: auto;
   color: #c4cbd1;
-  font-size: 9px;
+  font-size: 12px;
   padding: 5px 9px;
   border-radius: 4px;
   background: #080c12bb;
@@ -910,7 +910,7 @@ body.explorer-open {
   padding: 23px;
 }
 .overview-card > .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   color: var(--accent);
 }
 .overview-card h2 {
@@ -920,7 +920,7 @@ body.explorer-open {
   margin-top: 15px;
 }
 .overview-card > p {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   margin-top: 17px;
   line-height: 1.9;
@@ -936,7 +936,7 @@ body.explorer-open {
 .overview-facts span {
   display: flex;
   flex-direction: column;
-  font-size: 8px;
+  font-size: 12px;
   color: var(--dim);
 }
 .overview-facts b {
@@ -948,7 +948,7 @@ body.explorer-open {
 .overview-card .button {
   width: 100%;
   gap: 30px;
-  font-size: 10px;
+  font-size: 12px;
 }
 .small-note {
   display: flex;
@@ -956,7 +956,7 @@ body.explorer-open {
   gap: 9px;
   margin-top: 24px;
   color: var(--dim);
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.8;
 }
 .small-note .icon {
@@ -970,7 +970,7 @@ body.explorer-open {
   align-items: center;
 }
 .profile-heading .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1.2px;
   color: var(--accent);
 }
@@ -994,13 +994,13 @@ body.explorer-open {
 }
 .profile-tagline {
   color: #a9afb7;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 8px;
 }
 .profile-description {
   margin-top: 23px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.9;
 }
 .quick-facts {
@@ -1012,7 +1012,7 @@ body.explorer-open {
   gap: 15px;
   padding: 10px 0;
   border-bottom: 1px solid var(--line);
-  font-size: 10px;
+  font-size: 12px;
 }
 .fact dt {
   color: var(--muted);
@@ -1033,19 +1033,19 @@ body.explorer-open {
   margin: 21px 0;
 }
 .discovery-note .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   color: var(--accent);
 }
 .discovery-note p {
   color: #b8b8b4;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.8;
   margin-top: 8px;
 }
 .back-view {
   justify-content: center;
   margin-top: 10px;
-  font-size: 9px;
+  font-size: 12px;
   color: var(--dim);
 }
 .sheet-handle {
@@ -1068,7 +1068,7 @@ body.explorer-open {
   margin-top: 24px;
 }
 .detail-tabs button {
-  font-size: 9px;
+  font-size: 12px;
   color: var(--muted);
   padding: 11px 0;
   border-bottom: 1px solid transparent;
@@ -1082,7 +1082,7 @@ body.explorer-open {
   margin: 20px 0;
 }
 .science-facts .fact {
-  font-size: 10px;
+  font-size: 12px;
 }
 .science-facts .fact dt {
   max-width: 46%;
@@ -1094,11 +1094,11 @@ body.explorer-open {
 }
 .lesson p {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.9;
 }
 .data-note {
-  font-size: 9px;
+  font-size: 12px;
   color: var(--dim);
   line-height: 1.8;
   margin-top: 12px;
@@ -1108,7 +1108,7 @@ body.explorer-open {
   align-items: center;
   justify-content: space-between;
   color: var(--accent);
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 18px;
   gap: 15px;
 }
@@ -1125,7 +1125,7 @@ body.explorer-open {
   border-bottom: 1px solid var(--line);
 }
 .lab-section > .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   color: var(--accent);
 }
 .lab-section h3 {
@@ -1138,7 +1138,7 @@ body.explorer-open {
 #day-form > label {
   display: block;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   margin-bottom: 7px;
 }
 input:not([type="range"]):not([type="checkbox"]),
@@ -1149,7 +1149,7 @@ select {
   color: var(--ink);
   border: 1px solid var(--line-strong);
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 12px;
 }
 input[type="range"] {
   accent-color: var(--accent);
@@ -1172,11 +1172,11 @@ input[type="checkbox"] {
   min-height: 38px;
   padding: 7px 13px;
   gap: 9px;
-  font-size: 10px;
+  font-size: 12px;
 }
 .field-error {
   color: #eda18a;
-  font-size: 10px;
+  font-size: 12px;
 }
 .time-jumps {
   display: flex;
@@ -1188,7 +1188,7 @@ input[type="checkbox"] {
   border-radius: 4px;
   padding: 7px 9px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 12px;
   flex: 1;
 }
 .time-jumps button:hover {
@@ -1200,7 +1200,7 @@ input[type="checkbox"] {
   justify-content: space-between;
   gap: 12px;
   margin: 9px 0;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
 }
 .lab-readout strong {
@@ -1234,13 +1234,13 @@ input[type="checkbox"] {
 .distance-selects label {
   flex: 1;
   min-width: 0;
-  font-size: 9px;
+  font-size: 12px;
   color: var(--muted);
 }
 .distance-selects select {
   width: 100%;
   margin-top: 5px;
-  font-size: 10px;
+  font-size: 12px;
 }
 .distance-result {
   background: #060b1255;
@@ -1259,12 +1259,12 @@ input[type="checkbox"] {
 }
 .distance-result > span {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .distance-result > div {
   display: flex;
   justify-content: space-between;
-  font-size: 8px;
+  font-size: 12px;
   color: var(--dim);
   border-top: 1px solid var(--line);
   padding-top: 10px;
@@ -1272,13 +1272,13 @@ input[type="checkbox"] {
 }
 details {
   margin-top: 17px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
 }
 summary {
   cursor: pointer;
   color: #c1c7cc;
-  font-size: 10px;
+  font-size: 12px;
   min-height: 35px;
 }
 details p {
@@ -1287,14 +1287,14 @@ details p {
 }
 details code {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   color: var(--accent-light);
   padding: 8px 0;
 }
 .compare-label {
   display: block;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 20px;
 }
 .compare-label select {
@@ -1325,7 +1325,7 @@ details code {
   box-shadow: inset -15px -4px 25px #0007;
 }
 .size-comparison b {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   color: #c9cdd2;
 }
@@ -1336,7 +1336,7 @@ details code {
   width: 100%;
   margin-top: 22px;
   border-collapse: collapse;
-  font-size: 9px;
+  font-size: 12px;
   table-layout: fixed;
 }
 .comparison-table th,
@@ -1353,7 +1353,7 @@ details code {
 }
 .comparison-table thead th {
   color: var(--accent);
-  font-size: 9px;
+  font-size: 12px;
 }
 .simulation-bar {
   height: 88px;
@@ -1377,7 +1377,7 @@ details code {
   min-width: 160px;
 }
 .simulation-status .eyebrow {
-  font-size: 7px;
+  font-size: 12px;
   color: var(--dim);
   display: block;
   letter-spacing: 1.2px;
@@ -1423,7 +1423,7 @@ details code {
   margin-left: 8px;
 }
 .speed-field label {
-  font-size: 7px;
+  font-size: 12px;
   color: var(--dim);
   letter-spacing: 1px;
   line-height: 1.4;
@@ -1434,7 +1434,7 @@ details code {
   background: transparent;
   border: 0;
   color: #d1d4d7;
-  font-size: 11px;
+  font-size: 12px;
 }
 select option {
   background: #111821;
@@ -1446,7 +1446,7 @@ select option {
   gap: 25px;
 }
 .footer-actions .text-button {
-  font-size: 9px;
+  font-size: 12px;
   gap: 8px;
 }
 .footer-actions svg {
@@ -1481,7 +1481,7 @@ select option {
   letter-spacing: -0.8px;
 }
 .loading-overlay .eyebrow {
-  font-size: 8px;
+  font-size: 12px;
   color: var(--accent);
 }
 .loading-overlay progress {
@@ -1499,7 +1499,7 @@ select option {
 }
 #load-message,
 #scene-error {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   max-width: 400px;
 }
@@ -1550,7 +1550,7 @@ select option {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 8px;
+  font-size: 12px;
   color: #a3abb4;
   letter-spacing: 1.8px;
 }
@@ -1566,7 +1566,7 @@ select option {
 }
 .film-caption > .eyebrow {
   color: var(--accent);
-  font-size: 8px;
+  font-size: 12px;
 }
 .film-caption h2 {
   font-size: clamp(32px, 3.5vw, 55px);
@@ -1599,14 +1599,14 @@ select option {
   flex: 1;
   min-width: 72px;
   text-align: left;
-  font-size: 9px;
+  font-size: 12px;
   color: var(--muted);
   padding: 11px 0;
   border-top: 2px solid #ffffff15;
 }
 .chapter-list button span {
   display: block;
-  font-size: 7px;
+  font-size: 12px;
   color: var(--dim);
   margin-bottom: 4px;
   font-family: Consolas, monospace;
@@ -1635,7 +1635,7 @@ select option {
 #film-time {
   color: var(--muted);
   font-family: Consolas, monospace;
-  font-size: 10px;
+  font-size: 12px;
   white-space: nowrap;
 }
 .caption-button {
@@ -1643,7 +1643,7 @@ select option {
   height: 25px;
   border: 1px solid var(--dim);
   border-radius: 3px;
-  font-size: 9px;
+  font-size: 12px;
   padding: 0;
   color: var(--muted);
 }
@@ -1654,7 +1654,7 @@ select option {
 .film-footnote {
   margin-top: 14px;
   text-align: center;
-  font-size: 8px;
+  font-size: 12px;
   color: var(--dim);
 }
 dialog {
@@ -1679,7 +1679,7 @@ dialog::backdrop {
   right: 12px;
 }
 #dialog-content > .eyebrow {
-  font-size: 8px;
+  font-size: 12px;
   color: var(--accent);
   margin-bottom: 18px;
   padding-right: 20px;
@@ -1705,7 +1705,7 @@ dialog::backdrop {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 13px 20px;
-  font-size: 11px;
+  font-size: 12px;
   margin: 26px 0;
 }
 .help-grid span {
@@ -1721,14 +1721,14 @@ kbd {
   border: 1px solid var(--line-strong);
   border-radius: 3px;
   color: var(--accent);
-  font-size: 10px;
+  font-size: 12px;
 }
 .settings-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-  font-size: 11px;
+  font-size: 12px;
   border-top: 1px solid var(--line);
   padding: 15px 0;
 }
@@ -1748,7 +1748,7 @@ kbd {
 }
 .quiz-answer span {
   color: var(--dim);
-  font-size: 10px;
+  font-size: 12px;
   font-family: Consolas, monospace;
 }
 .quiz-answer:hover:not(:disabled) {
@@ -1848,10 +1848,10 @@ kbd {
     gap: 16px;
   }
   .hero-actions .text-button {
-    font-size: 10px;
+    font-size: 12px;
   }
   .hero-actions .button {
-    font-size: 11px;
+    font-size: 12px;
     padding-inline: 17px;
     gap: 13px;
   }
@@ -1917,7 +1917,7 @@ kbd {
     left: 155px;
   }
   .scene-hint {
-    font-size: 8px;
+    font-size: 12px;
   }
   [data-mode="details"] .inspector {
     width: 320px;
@@ -1932,14 +1932,14 @@ kbd {
     gap: 14px;
   }
   .footer-actions .text-button {
-    font-size: 8px;
+    font-size: 12px;
   }
   .simulation-bar {
     gap: 12px;
     padding-inline: 23px;
   }
   .science-facts .fact {
-    font-size: 9px;
+    font-size: 12px;
   }
 }
 @media (max-width: 900px) {
@@ -1963,7 +1963,7 @@ kbd {
     font-size: 12px;
   }
   .hero-copy > .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
   }
   .hero-actions {
     flex-direction: column;
@@ -1972,7 +1972,7 @@ kbd {
   }
   .hero-footnote {
     margin-top: 20px;
-    font-size: 9px;
+    font-size: 12px;
   }
   .coordinates,
   .moon-caption,
@@ -1983,10 +1983,10 @@ kbd {
     padding: 20px;
   }
   .experience-card > p {
-    font-size: 11px;
+    font-size: 12px;
   }
   .card-number {
-    font-size: 7px;
+    font-size: 12px;
   }
   .card-top .icon {
     width: 15px;
@@ -2047,7 +2047,7 @@ kbd {
   }
   .scale-note {
     left: 90px;
-    font-size: 7px;
+    font-size: 12px;
   }
   [data-mode="details"] #scene-mount {
     right: 305px;
@@ -2065,16 +2065,16 @@ kbd {
     font-size: 30px;
   }
   .profile-description {
-    font-size: 10px;
+    font-size: 12px;
   }
   .fact {
-    font-size: 9px;
+    font-size: 12px;
   }
   .discovery-note {
     padding: 12px;
   }
   .discovery-note p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .simulation-bar {
     height: 80px;
@@ -2118,7 +2118,7 @@ kbd {
     display: none;
   }
   .home-header .text-button {
-    font-size: 9px;
+    font-size: 12px;
     gap: 7px;
   }
   .hero {
@@ -2150,17 +2150,17 @@ kbd {
   .hero-actions .button {
     min-height: 45px;
     padding: 10px 15px;
-    font-size: 10px;
+    font-size: 12px;
     gap: 9px;
   }
   .hero-actions .text-button {
-    font-size: 9px;
+    font-size: 12px;
     gap: 6px;
     white-space: nowrap;
   }
   .hero-footnote {
     margin-top: 24px;
-    font-size: 9px;
+    font-size: 12px;
   }
   .hero-art {
     height: 340px;
@@ -2213,7 +2213,7 @@ kbd {
   }
   .section-index {
     bottom: 30px;
-    font-size: 8px;
+    font-size: 12px;
   }
   .experience-grid {
     grid-template-columns: 1fr;
@@ -2238,10 +2238,10 @@ kbd {
     width: 19px;
   }
   .card-number {
-    font-size: 8px;
+    font-size: 12px;
   }
   .card-action {
-    font-size: 11px;
+    font-size: 12px;
     padding-top: 15px;
   }
   .worlds-strip {
@@ -2259,7 +2259,7 @@ kbd {
     gap: 16px;
   }
   .worlds-strip button {
-    font-size: 9px;
+    font-size: 12px;
   }
   .worlds-strip img {
     width: 32px;
@@ -2267,7 +2267,7 @@ kbd {
   }
   .home-footer {
     display: block;
-    font-size: 9px;
+    font-size: 12px;
     padding-top: 20px;
   }
   .home-footer > span:last-child {
@@ -2311,7 +2311,7 @@ kbd {
     justify-content: center;
     padding: 7px 8px;
     min-height: 32px;
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
   }
   .mode-switch button .icon {
@@ -2348,7 +2348,7 @@ kbd {
   }
   .planet-nav-item > span:not(.planet-index) {
     display: block;
-    font-size: 8px;
+    font-size: 12px;
     line-height: 1.4;
   }
   .planet-nav-item img {
@@ -2380,7 +2380,7 @@ kbd {
     font-size: 19px;
   }
   .scene-heading .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
   }
   .scene-heading > p:last-child {
     display: none;
@@ -2406,7 +2406,7 @@ kbd {
     left: 18px;
     bottom: 140px;
     right: 60px;
-    font-size: 6px;
+    font-size: 12px;
     line-height: 1.5;
   }
   .inspector,
@@ -2451,14 +2451,14 @@ kbd {
     margin-top: 3px;
   }
   .profile-heading .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
   }
   .profile-heading .icon-button {
     margin-top: -3px;
     margin-right: -5px;
   }
   .profile-tagline {
-    font-size: 9px;
+    font-size: 12px;
     margin-top: 4px;
   }
   .profile-description {
@@ -2466,13 +2466,13 @@ kbd {
     margin-top: 20px;
   }
   .fact {
-    font-size: 11px;
+    font-size: 12px;
   }
   .discovery-note p {
     font-size: 12px;
   }
   .science-facts .fact {
-    font-size: 11px;
+    font-size: 12px;
   }
   .lesson p {
     font-size: 12px;
@@ -2481,13 +2481,13 @@ kbd {
     font-size: 14px;
   }
   .detail-tabs button {
-    font-size: 10px;
+    font-size: 12px;
   }
   .data-note {
-    font-size: 10px;
+    font-size: 12px;
   }
   .comparison-table {
-    font-size: 10px;
+    font-size: 12px;
   }
   .overview-card {
     padding: 16px 18px;
@@ -2500,12 +2500,12 @@ kbd {
     display: none;
   }
   .overview-card > p {
-    font-size: 10px;
+    font-size: 12px;
     margin-top: 5px;
     max-width: 75%;
   }
   .overview-card > .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
   }
   .overview-card .overview-facts,
   .overview-card .small-note {
@@ -2533,7 +2533,7 @@ kbd {
     gap: 7px;
   }
   .simulation-status .eyebrow {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 0.7px;
   }
   .simulation-status strong {
@@ -2558,10 +2558,10 @@ kbd {
     margin-left: 3px;
   }
   .speed-field label {
-    font-size: 6px;
+    font-size: 12px;
   }
   .speed-field select {
-    font-size: 10px;
+    font-size: 12px;
     padding-right: 15px;
     max-width: 102px;
   }
@@ -2569,14 +2569,14 @@ kbd {
     display: none;
   }
   .planet-label {
-    font-size: 8px;
+    font-size: 12px;
     padding: 4px 7px;
   }
   .film-label {
     top: 20px;
     left: 20px;
     gap: 9px;
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .film-label .status-dot {
@@ -2597,10 +2597,10 @@ kbd {
     letter-spacing: -1px;
   }
   .film-caption > .eyebrow {
-    font-size: 7px;
+    font-size: 12px;
   }
   .film-caption > p:last-child {
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.7;
     margin-top: 11px;
   }
@@ -2615,7 +2615,7 @@ kbd {
   }
   .chapter-list button {
     min-width: 61px;
-    font-size: 8px;
+    font-size: 12px;
     padding-block: 9px;
   }
   .film-controls {
@@ -2640,11 +2640,11 @@ kbd {
     margin-left: auto;
   }
   #film-time {
-    font-size: 9px;
+    font-size: 12px;
     margin-left: 7px;
   }
   .film-footnote {
-    font-size: 6px;
+    font-size: 12px;
     margin-top: 11px;
   }
   dialog {
@@ -2655,11 +2655,11 @@ kbd {
     font-size: 27px;
   }
   .help-grid {
-    font-size: 10px;
+    font-size: 12px;
     gap: 12px;
   }
   .settings-row {
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 @media (max-width: 370px) {
@@ -2670,18 +2670,18 @@ kbd {
     gap: 11px;
   }
   .hero-actions .button {
-    font-size: 9px;
+    font-size: 12px;
     padding-inline: 10px;
   }
   .hero-actions .text-button {
-    font-size: 8px;
+    font-size: 12px;
   }
   .hero-footnote {
-    font-size: 8px;
+    font-size: 12px;
   }
   .mode-switch button {
     gap: 5px;
-    font-size: 9px;
+    font-size: 12px;
   }
   .simulation-bar {
     padding-inline: 10px;
@@ -2746,7 +2746,7 @@ kbd {
     margin-bottom: 10px;
   }
   .film-caption > p:last-child {
-    font-size: 11px;
+    font-size: 12px;
     max-width: 380px;
   }
 }
@@ -2758,7 +2758,7 @@ kbd {
     font-size: 25px;
   }
   .film-caption > p:last-child {
-    font-size: 10px;
+    font-size: 12px;
     max-width: 280px;
   }
   .film-label {
@@ -2800,10 +2800,10 @@ kbd {
   margin: 10px 0;
 }
 .settings-actions .button {
-  font-size: 11px;
+  font-size: 12px;
 }
 .planet-nav-item {
-  font-size: 11px;
+  font-size: 12px;
 }
 .profile-description,
 .lesson p,
@@ -2812,26 +2812,26 @@ kbd {
 }
 .fact,
 .science-facts .fact {
-  font-size: 11px;
+  font-size: 12px;
 }
 .profile-tagline {
-  font-size: 11px;
+  font-size: 12px;
 }
 .detail-tabs button {
-  font-size: 10px;
+  font-size: 12px;
 }
 .data-note,
 .source-link {
-  font-size: 10px;
+  font-size: 12px;
 }
 .footer-actions .text-button {
-  font-size: 10px;
+  font-size: 12px;
 }
 .scene-heading > p:last-child {
-  font-size: 11px;
+  font-size: 12px;
 }
 .scene-hint {
-  font-size: 10px;
+  font-size: 12px;
 }
 .scene-tools .icon-button {
   width: 34px;
@@ -2839,11 +2839,11 @@ kbd {
 }
 @media (max-width: 650px) {
   .profile-tagline {
-    font-size: 10px;
+    font-size: 12px;
   }
   .fact,
   .science-facts .fact {
-    font-size: 11px;
+    font-size: 12px;
   }
   .scene-tools .icon-button {
     width: 34px;
@@ -2875,14 +2875,14 @@ kbd {
   font-size: 15px;
 }
 .detail-tabs button {
-  font-size: 11px;
+  font-size: 12px;
 }
 .mode-switch button {
   font-size: 12px;
 }
 @media (max-width: 650px) {
   .mode-switch button {
-    font-size: 10px;
+    font-size: 12px;
   }
   .hero-description {
     font-size: 13px;
@@ -3021,5 +3021,180 @@ kbd {
 @media (max-width: 900px) {
   .flat-scene {
     padding: 90px 8px 160px;
+  }
+}
+.learning-panel {
+  position: fixed;
+  z-index: 60;
+  right: 24px;
+  top: 120px;
+  width: 350px;
+  max-height: calc(100dvh - 230px);
+  overflow: auto;
+  background: #121922f5;
+  border: 1px solid #ffffff24;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 10px 40px #0005;
+}
+.learning-panel h2 {
+  font-size: 24px;
+  line-height: 1.25;
+  margin: 14px 0;
+}
+.learning-panel p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 12px 0;
+}
+.learning-panel summary {
+  cursor: pointer;
+  font-size: 15px;
+  padding: 12px 0;
+  color: var(--accent-light);
+}
+.learning-panel .data-note {
+  font-size: 13px;
+}
+.lesson-top,
+.lesson-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.lesson-top .eyebrow {
+  font-size: 12px;
+}
+.lesson-actions {
+  margin: 18px 0;
+}
+.lesson-list {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+}
+.lesson-choice {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  text-align: left;
+  background: #ffffff04;
+}
+.lesson-choice strong {
+  font-size: 17px;
+}
+.lesson-choice span {
+  font-size: 14px;
+  color: var(--muted);
+}
+.learning-active #inspector {
+  display: none;
+}
+.journey-readouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+.journey-readouts strong {
+  display: block;
+  font-size: 23px;
+  color: var(--accent-light);
+}
+.journey-readouts span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+}
+#journey-seek {
+  width: 100%;
+  margin: 16px 0;
+}
+@media (max-width: 650px) {
+  .home-header {
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 18px 20px;
+  }
+  .home-header > .text-button {
+    font-size: 12px;
+  }
+  .learning-panel {
+    top: auto;
+    bottom: 110px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-height: 44dvh;
+    padding: 16px;
+  }
+  .learning-panel h2 {
+    font-size: 21px;
+  }
+}
+.language-picker select {
+  max-width: 110px;
+  min-height: 40px;
+  font-size: 14px;
+  padding: 6px 9px;
+  background: #151d27;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+}
+html[lang="ta"] body,
+html[lang="hi"] body {
+  font-family: system-ui, "Nirmala UI", sans-serif;
+}
+html[lang="ta"] .eyebrow,
+html[lang="hi"] .eyebrow {
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+html[lang="ta"] .hero h1,
+html[lang="hi"] .hero h1 {
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.35;
+}
+html[lang="ta"] .hero h1 em,
+html[lang="hi"] .hero h1 em {
+  font-family: inherit;
+  font-style: normal;
+}
+@media (max-width: 650px) {
+  .header-tools .language-picker select {
+    max-width: 78px;
+    font-size: 12px;
+    padding: 4px;
+  }
+  .header-tools {
+    gap: 4px;
+  }
+  .app-header {
+    gap: 6px;
+  }
+  .header-tools .live-indicator {
+    display: none;
+  }
+  html[lang="ta"] .mode-switch button,
+  html[lang="hi"] .mode-switch button {
+    padding: 6px;
+    font-size: 11px;
+  }
+}
+html[lang="ta"] .planet-nav-item,
+html[lang="hi"] .planet-nav-item {
+  min-width: max-content;
+  flex-shrink: 0;
+}
+@media (max-width: 650px) {
+  html[lang="ta"] .planet-nav-item,
+  html[lang="hi"] .planet-nav-item {
+    min-width: 92px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }

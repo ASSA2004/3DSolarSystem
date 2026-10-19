@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 await mkdir(".qa", { recursive: true });
 const browser = await chromium.launch({
-  channel: process.env.BROWSER_CHANNEL || "chrome",
+  channel: process.env.CI ? undefined : process.env.BROWSER_CHANNEL || "chrome",
   headless: true,
 });
 const context = await browser.newContext({
@@ -94,9 +94,9 @@ try {
   await screenshot("compare-desktop");
   await page.locator('[data-action="scale"]').click();
   check(
-    "Proportional scale states its body-size limitation",
+    "True scale explains its visibility markers",
     (await page.locator("#scale-note").textContent()).includes(
-      "sizes enlarged",
+      "labels mark tiny planets",
     ),
   );
   await page.locator('[data-action="scale"]').click();

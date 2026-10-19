@@ -1,8 +1,13 @@
+import { setupLanguages } from "./i18n/index.js";
+import { readSharedState, shareURL } from "./utils/share.js";
+import { classroomHTML, lessonHTML, lessons } from "./modes/classroom.js";
+import { ScaleJourney, journeyHTML } from "./modes/journey.js";
 import { julianToDate } from "./utils/dates.js";
 import { setupOffline } from "./core/offline.js";
 import { readSetting, saveSetting } from "./utils/storage.js";
 import { recommendLite } from "./core/quality.js";
-import { bodyById } from "./data/catalog.js";
+import { textureURL } from "./utils/assets.js";
+import { BODIES, bodyById } from "./data/catalog.js";
 import { TimeController } from "./core/timeController.js";
 import { Tour } from "./modes/tour.js";
 import { Quiz } from "./modes/quiz.js";
@@ -51,13 +56,24 @@ function offerLite() {
     $("#lite-offer").hidden = false;
 }
 if (recommendLite() && !readSetting("quality")) offerLite();
+app.insertAdjacentHTML(
+  "beforeend",
+  `<aside id="lesson-panel" class="learning-panel" hidden aria-label="Guided lesson"></aside><aside id="journey-panel" class="learning-panel" hidden aria-label="Scale Journey"></aside>`,
+);
+let activeLesson = null,
+  lessonIndex = 0,
+  focusLocked = true,
+  journey = null,
+  learningSnapshot = null;
+let releaseTimer;
 let scene,
   scenePromise,
   lastOpener,
   dialogOpener,
   dialogPaused,
   uiElapsed = 0,
-  loadingError = false;
+  loadingError = false,
+  textureWarning = false;
 const announce = (text) => {
   $("#announcer").textContent = text;
 };
@@ -141,10 +157,21 @@ function updateSelection() {
   $("#view-title").textContent = body ? body.name : "Our solar system";
   $("#view-description").textContent = body
     ? body.tagline
-    : "A familiar star. Eight extraordinary worlds.";
+    : "Our star and eight planets.";
   renderInspector();
 }
 function selectPlanet(id, shouldFocus = true) {
+  if (
+    activeLesson &&
+    focusLocked &&
+    id !== activeLesson.steps[lessonIndex].planet
+  ) {
+    announce(
+      "Focus is locked for this lesson step. Uncheck Keep focus to explore another planet.",
+    );
+    return;
+  }
+  if (journey) return;
   state.selected = id === "overview" ? null : id;
   if (state.selected && !bodyById(state.selected)) return;
   if (shouldFocus) scene?.focus(state.selected);
@@ -159,6 +186,12 @@ async function ensureScene() {
   if (scenePromise) return scenePromise;
   $("#loading").hidden = false;
   loadingError = false;
+  // Begin textures alongside the lazy engine download, only after entering 3D.
+  for (const body of BODIES) {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.src = textureURL(body.texture, state.quality === "low");
+  }
   scenePromise = (async () => {
     const { SolarScene } = await import("./core/scene.js");
     scene = new SolarScene({
@@ -167,7 +200,7 @@ async function ensureScene() {
       onSlow: offerLite,
       reducedMotion: state.reduced,
       onProgress: (value) => {
-        if (!loadingError) {
+        if (!loadingError && $("#load-progress")) {
           $("#load-progress").value = value;
           $("#load-message").textContent = "Loading planets · " + value + "%";
         }
@@ -191,6 +224,7 @@ async function ensureScene() {
       }),
     ]).finally(() => clearTimeout(timeout));
     $("#loading").hidden = true;
+    textureWarning = Boolean(failed);
     if (failed) {
       $("#scale-note").textContent =
         "Some textures could not load. Reload to retry.";
@@ -221,6 +255,7 @@ function showSceneError(message) {
   $("#scene-error").textContent = message;
 }
 async function open(mode, planet = null) {
+  clearTimeout(releaseTimer);
   lastOpener = document.activeElement;
   state.open = true;
   $(".skip-link").setAttribute("href", "#observatory");
@@ -233,6 +268,7 @@ async function open(mode, planet = null) {
   const instance = await ensureScene();
   if (!instance || !state.open) return;
   instance.setMode(state.mode);
+  updateScaleNote();
   instance.start(frame);
   if (state.mode === "video") {
     tour.lastIndex = -1;
@@ -244,7 +280,15 @@ async function open(mode, planet = null) {
   updatePlayback();
 }
 function home() {
+  endLearning();
   state.open = false;
+  releaseTimer = setTimeout(() => {
+    if (!state.open) {
+      scene?.dispose();
+      scene = null;
+      scenePromise = null;
+    }
+  }, 60000);
   $(".skip-link").setAttribute("href", "#main");
   tour.stop();
   scene?.stop();
@@ -256,6 +300,7 @@ function home() {
   lastOpener?.focus({ preventScroll: true });
 }
 function setMode(mode, run = true) {
+  if ((activeLesson || journey) && mode !== "normal") endLearning();
   if (!["normal", "details", "video"].includes(mode)) return;
   if (state.mode === "video" && mode !== "video") tour.stop();
   state.mode = mode;
@@ -264,7 +309,7 @@ function setMode(mode, run = true) {
     $("#inspector").classList.add("expanded");
   $("#observatory").dataset.mode = mode;
   document
-    .querySelectorAll("[data-mode]")
+    .querySelectorAll("button[data-mode]")
     .forEach((button) =>
       button.setAttribute("aria-pressed", String(button.dataset.mode === mode)),
     );
@@ -290,6 +335,13 @@ function setMode(mode, run = true) {
   );
 }
 function updatePlayback() {
+  document
+    .querySelectorAll(
+      '[data-action="pause"], [data-action="reset"], [data-action="scale"], #speed',
+    )
+    .forEach((control) => {
+      control.disabled = Boolean(journey);
+    });
   const running = time.running;
   const play = $('[data-action="pause"]');
   play.innerHTML = icon(running ? "pause" : "play");
@@ -316,7 +368,10 @@ function frame(delta) {
     scene.tickSimulation(time.orbitalDays);
     return;
   }
-  if (state.mode === "video") {
+  if (journey) {
+    journey.update(delta);
+    updateJourney();
+  } else if (state.mode === "video") {
     tour.update(delta);
     if (tour.playing) time.advance(delta, 1);
   } else time.update(delta);
@@ -327,6 +382,17 @@ function frame(delta) {
     updateReadouts();
     uiElapsed = 0;
   }
+}
+function updateScaleNote() {
+  $("#scale-button-text").textContent = state.scale
+    ? "Compressed distances"
+    : "True scale";
+  if (!loadingError)
+    $("#scale-note").textContent = textureWarning
+      ? "Some textures could not load. Reload to retry."
+      : state.scale
+        ? "True scale · labels mark tiny planets"
+        : "Illustrative scale · sizes & distances compressed";
 }
 function updateReadouts() {
   if ($("#current-date"))
@@ -388,6 +454,26 @@ app.addEventListener("click", async (event) => {
   const button = event.target.closest("button");
   if (!button) return;
   const d = button.dataset;
+  if (d.lesson) {
+    const lesson = lessons.find((l) => l.id === d.lesson);
+    if (!lesson) return;
+    endLearning();
+    learningSnapshot = {
+      running: dialogPaused?.running ?? time.running,
+      scale: state.scale,
+    };
+    if (dialogPaused) dialogPaused.running = false;
+    $("#dialog").close();
+    if (!state.open) await open("normal");
+    else setMode("normal");
+    activeLesson = lesson;
+    lessonIndex = 0;
+    focusLocked = true;
+    time.running = false;
+    renderLesson();
+    updatePlayback();
+    return;
+  }
   if (d.open) return open(d.open);
   if (d.homePlanet) return open("normal", d.homePlanet);
   if (d.mode) return setMode(d.mode);
@@ -418,6 +504,92 @@ app.addEventListener("click", async (event) => {
     return;
   }
   switch (d.action) {
+    case "share": {
+      const url = shareURL(location.href, {
+        planet: state.selected,
+        date: julianToDate(time.julianDate).toISOString().slice(0, 10),
+        scale: state.scale,
+        view: state.mode,
+      });
+      history.pushState(null, "", url);
+      showDialog(
+        `<h2 id="dialog-title">Share this view</h2><p>This link keeps the planet, date and viewing mode.</p><label for="share-link">Link</label><input id="share-link" type="url" readonly><button class="button primary" data-action="copy-link">Copy link</button><p id="copy-status" role="status"></p>`,
+        "share",
+      );
+      $("#share-link").value = url;
+      break;
+    }
+    case "copy-link":
+      try {
+        await navigator.clipboard.writeText($("#share-link").value);
+        $("#copy-status").textContent = "Link copied.";
+      } catch {
+        $("#share-link").select();
+        $("#copy-status").textContent = "Select and copy the link above.";
+      }
+      break;
+    case "classroom":
+      showDialog(classroomHTML(), "classroom");
+      break;
+    case "reset-progress":
+      showDialog(
+        `<h2 id="dialog-title">Reset quiz progress?</h2><p>This removes scores saved on this device.</p><button class="button primary" data-action="confirm-reset">Reset progress</button><button class="button secondary" data-action="classroom">Keep my progress</button>`,
+        "classroom",
+      );
+      break;
+    case "confirm-reset":
+      saveSetting("progress", { attempts: 0, best: 0 });
+      showDialog(classroomHTML(), "classroom");
+      break;
+    case "lesson-back":
+      lessonIndex = Math.max(0, lessonIndex - 1);
+      renderLesson();
+      break;
+    case "lesson-next":
+      if (lessonIndex + 1 >= activeLesson.steps.length) {
+        endLearning();
+        announce("Lesson finished. Try the quiz or explore another planet.");
+      } else {
+        lessonIndex++;
+        renderLesson();
+      }
+      break;
+    case "end-lesson":
+      endLearning();
+      break;
+    case "journey": {
+      endLearning();
+      learningSnapshot = {
+        running: dialogPaused?.running ?? time.running,
+        scale: state.scale,
+      };
+      if (dialogPaused) dialogPaused.running = false;
+      $("#dialog").close();
+      if (!state.open) await open("normal");
+      else setMode("normal");
+      time.running = false;
+      state.scale = true;
+      updateScaleNote();
+      scene?.setScale(true);
+      state.selected = null;
+      scene?.focus(null, true);
+      document.body.classList.add("learning-active");
+      journey = new ScaleJourney(time.orbitalDays);
+      $("#journey-panel").innerHTML = journeyHTML();
+      $("#journey-panel").hidden = false;
+      $("#journey-seek").focus();
+      updateJourney();
+      updatePlayback();
+      break;
+    }
+    case "journey-play":
+      if (journey.progress === 1) journey.seek(0);
+      journey.playing = !journey.playing;
+      updateJourney();
+      break;
+    case "end-journey":
+      endLearning();
+      break;
     case "flat-view": {
       const { FlatScene } = await import("./core/flatScene.js");
       scene?.dispose();
@@ -483,13 +655,15 @@ app.addEventListener("click", async (event) => {
         );
       $("#scale-button-text").textContent = state.scale
         ? "Compressed distances"
-        : "Proportional distances";
-      $("#scale-note").textContent = state.scale
-        ? "Distances proportional to AU · body sizes enlarged"
-        : "Illustrative scale · sizes & distances compressed";
+        : "True scale";
+      $("#scale-note").textContent = textureWarning
+        ? "Some textures could not load. Reload to retry."
+        : state.scale
+          ? "True scale · labels mark tiny planets"
+          : "Illustrative scale · sizes & distances compressed";
       announce(
         state.scale
-          ? "Proportional orbital distances. Planet sizes remain enlarged."
+          ? "True distances and sizes. Labels help you find tiny planets."
           : "Compressed overview distances.",
       );
       break;
@@ -580,6 +754,7 @@ app.addEventListener("change", (event) => {
     renderInspector();
     $("#compare-with").focus();
   }
+  if (target.id === "focus-lock") focusLocked = target.checked;
   if (target.id === "quality") {
     state.quality = target.value;
     saveSetting("quality", state.quality);
@@ -592,6 +767,10 @@ app.addEventListener("change", (event) => {
   if (target.id.startsWith("distance-")) updateReadouts();
 });
 app.addEventListener("input", (event) => {
+  if (event.target.id === "journey-seek" && journey) {
+    journey.seek(event.target.value);
+    updateJourney();
+  }
   if (event.target.id === "film-seek") {
     tour.seek(event.target.value);
     updatePlayback();
@@ -643,7 +822,7 @@ addEventListener("keydown", (event) => {
   if (event.code === "Space" && !/BUTTON|A/.test(event.target.tagName)) {
     event.preventDefault();
     if (state.mode === "video") tour.toggle();
-    else time.toggle();
+    else if (!journey) time.toggle();
     updatePlayback();
   }
   if (event.key.toLowerCase() === "l" && state.mode !== "video")
@@ -652,6 +831,10 @@ addEventListener("keydown", (event) => {
     selectPlanet("overview");
 });
 document.addEventListener("visibilitychange", () => {
+  if (document.hidden && journey) {
+    journey.playing = false;
+    updateJourney();
+  }
   if (document.hidden && tour.playing) {
     tour.stop();
     updatePlayback();
@@ -663,10 +846,96 @@ document.addEventListener("fullscreenchange", () => {
     document.fullscreenElement ? "Exit fullscreen" : "Enter fullscreen",
   );
 });
-addEventListener("pagehide", () => {
+addEventListener("pagehide", (event) => {
   tour.stop();
   scene?.stop();
+  if (!event.persisted) {
+    scene?.dispose();
+    scene = null;
+    scenePromise = null;
+  }
+});
+addEventListener("pageshow", (event) => {
+  if (event.persisted && state.open) scene?.start(frame);
 });
 
-if (document.readyState === "complete") setupOffline();
-else addEventListener("load", setupOffline, { once: true });
+// Let the first scene download finish before offline precaching competes for bandwidth.
+const scheduleOffline = () => setTimeout(setupOffline, 4000);
+if (document.readyState === "complete") scheduleOffline();
+else addEventListener("load", scheduleOffline, { once: true });
+
+function renderLesson() {
+  document.body.classList.add("learning-active");
+  const panel = $("#lesson-panel");
+  panel.hidden = false;
+  panel.innerHTML = lessonHTML(activeLesson, lessonIndex, focusLocked);
+  selectPlanet(activeLesson.steps[lessonIndex].planet);
+  $("#lesson-title").focus();
+}
+function updateJourney() {
+  scene?.setJourney?.(journey.progress, journey.target);
+  $("#journey-au").textContent = fmt(journey.au, 2) + " AU";
+  const minutes = journey.minutes;
+  $("#journey-time").textContent =
+    Math.floor(minutes / 60) + " h " + fmt(minutes % 60, 1) + " min";
+  if (document.activeElement !== $("#journey-seek"))
+    $("#journey-seek").value = journey.progress;
+  $('[data-action="journey-play"]').textContent = journey.playing
+    ? "Pause journey"
+    : journey.progress === 1
+      ? "Replay journey"
+      : "Play journey";
+  const place =
+    journey.au < 1
+      ? "Earth is about 1 AU from the Sun."
+      : journey.au < 5.2
+        ? "Jupiter is about 5.2 AU from the Sun."
+        : journey.au < 9.6
+          ? "Saturn is about 9.6 AU from the Sun."
+          : journey.au < 19.2
+            ? "Uranus is about 19.2 AU from the Sun."
+            : "Neptune is about 30 AU from the Sun.";
+  if ($("#journey-place").textContent !== place)
+    $("#journey-place").textContent = place;
+}
+function endLearning() {
+  if (!activeLesson && !journey) return;
+  document.body.classList.remove("learning-active");
+  activeLesson = null;
+  journey = null;
+  $("#lesson-panel").hidden = true;
+  $("#journey-panel").hidden = true;
+  if (learningSnapshot) {
+    time.running = learningSnapshot.running;
+    state.scale = learningSnapshot.scale;
+    scene?.setScale(state.scale);
+  }
+  scene?.setMode(state.mode);
+  scene?.focus(state.selected, true);
+  learningSnapshot = null;
+  updateScaleNote();
+  updatePlayback();
+}
+
+async function restoreSharedState() {
+  const shared = readSharedState(location.search);
+  if (!shared.hasState) {
+    if (state.open) home();
+    return;
+  }
+  endLearning();
+  if (shared.date) time.setDate(shared.date);
+  state.scale = shared.scale;
+  await open(shared.view, shared.planet);
+  scene?.setScale(shared.scale);
+  updateScaleNote();
+  updateReadouts();
+}
+addEventListener("popstate", restoreSharedState);
+restoreSharedState();
+
+setupLanguages();
+document.addEventListener("languagechange", () => {
+  tour.cancelSpeech();
+  if (tour.playing && tour.narrating) tour.speak();
+});
