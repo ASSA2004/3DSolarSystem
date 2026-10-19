@@ -59,6 +59,7 @@ try {
 
   const failed = await browser.newPage();
   await failed.addInitScript(() => {
+    Object.defineProperty(navigator, "hardwareConcurrency", { get: () => 2 });
     const original = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function (type, ...args) {
       if (/webgl/.test(type)) return null;
@@ -69,6 +70,7 @@ try {
   await failed.locator('.hero [data-open="normal"]').click();
   await failed.locator("#scene-error").waitFor();
   assert.ok(await failed.locator('[data-action="retry"]').isVisible());
+  assert.equal(await failed.locator("#lite-offer").isVisible(), false);
   await failed.locator('.error-actions [data-action="home"]').click();
   assert.ok(await failed.locator("#home").isVisible());
   results.push("WebGL failure provides recovery and a working return home");

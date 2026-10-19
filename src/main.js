@@ -247,6 +247,7 @@ async function ensureScene() {
 }
 function showSceneError(message) {
   loadingError = true;
+  $("#lite-offer").hidden = true;
   $("#loading").hidden = false;
   $("#loading").innerHTML =
     '<div class="loading-orbit">' +
