@@ -1,0 +1,46 @@
+import type { LabContent } from "./schema";
+export default {
+  id: "plane",
+  title: "Mensuration 2D",
+  hook: "Build a shape. Discover its area.",
+  subject: "AREA & PERIMETER",
+  prediction: "If every length doubles, what happens to the area?",
+  predictions: [
+    "It becomes four times as large",
+    "It becomes twice as large",
+    "It stays the same",
+  ],
+  note: "One grid interval is one unit. Area uses square units; perimeter uses units.",
+  steps: [
+    {
+      title: "Count the surface",
+      concept: "Area tells us how much flat space a shape covers.",
+      action: "Choose Rectangle and turn on Count squares.",
+      why: "A 4 by 3 rectangle has 3 rows of 4 unit squares: 12 square units.",
+      check: "Which unit measures area?",
+      choices: ["Square units", "Units"],
+      answer: 0,
+      target: "count",
+    },
+    {
+      title: "Slide, do not stretch",
+      concept: "The perpendicular height matters, even when the sides lean.",
+      action: "Choose Parallelogram and change the slant.",
+      why: "A triangle cut from one end fits the other. The area stays base × perpendicular height.",
+      check: "Does slant alone change the area?",
+      choices: ["No", "Yes"],
+      answer: 0,
+      target: "slant",
+    },
+    {
+      title: "Rearrange a circle",
+      concept: "Thin sectors can be rearranged to reveal a familiar area rule.",
+      action: "Choose Circle and press Show derivation.",
+      why: "As sectors become thinner, the arrangement approaches a rectangle with base πr and height r. Base × height gives πr². The 16-sector picture is an approximation.",
+      check: "What is the area of a circle?",
+      choices: ["πr²", "2πr"],
+      answer: 0,
+      target: "derive",
+    },
+  ],
+} satisfies LabContent;
