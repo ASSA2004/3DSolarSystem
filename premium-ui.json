@@ -1,0 +1,32 @@
+{
+  "profile": "product-admin",
+  "sourceRoots": [
+    "src"
+  ],
+  "locale": "en-IN",
+  "canonicalMap": "UX-CONTRACT.md",
+  "requiredCapabilities": [
+    "Select/Listbox",
+    "Date",
+    "Form",
+    "Scrollbar",
+    "Toast"
+  ],
+  "ownership": {
+    "Select/Listbox": "native",
+    "Date": "native"
+  },
+  "requiredCommands": [
+    "unit",
+    "e2e",
+    "accessibility"
+  ],
+  "commands": {
+    "unit": "npm test",
+    "e2e": "node tests/labs.mjs",
+    "accessibility": "node tests/labs-accessibility.mjs"
+  },
+  "evidence": {
+    "failurePaths": "tests/labs.mjs"
+  }
+}
