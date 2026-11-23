@@ -1,10 +1,20 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 export function offlinePlugin() {
-  return { name: 'orbit-offline', apply: 'build', async closeBundle() {
-    const assets = (await readdir('dist/assets')).map(name => 'assets/' + name);
-    const files = ['index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'about.html', ...assets];
-    const version = createHash('sha256').update(await readFile('dist/index.html')).digest('hex').slice(0,12);
+  return { name: 'orbit-offline', apply: 'build', async writeBundle() {
+    async function inventory(directory, prefix = '') {
+      const files=[];
+      for(const entry of await readdir(directory,{withFileTypes:true})) {
+        const name=prefix+entry.name;
+        if(entry.isDirectory()) files.push(...await inventory(directory+'/'+entry.name,name+'/'));
+        else if(entry.name!=='sw.js') files.push(name);
+      }
+      return files;
+    }
+    const files = (await inventory('dist')).sort();
+    const digest = createHash('sha256');
+    for(const file of files) digest.update(await readFile('dist/'+file));
+    const version = digest.digest('hex').slice(0,12);
     const source = `const CACHE = 'orbit-${version}';
 const FILES = ${JSON.stringify(files)};
 const url = path => new URL(path, self.registration.scope).href;
