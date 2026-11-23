@@ -3201,3 +3201,24 @@ html[lang="hi"] .planet-nav-item {
     padding-right: 10px;
   }
 }
+
+/* Keep the experiment visible while children read on a phone. */
+@media (max-width: 650px) {
+  .inspector.expanded {
+    max-height: 52dvh;
+    height: auto;
+  }
+  .lab-return {
+    font-size: 12px !important;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+.lab-return {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  font-size: 14px;
+}

@@ -1,3 +1,6 @@
+import { initialTheme, setTheme } from "./lab-ui/tokens.js";
+import { solarLearning } from "./lab-ui/solar-learning.js";
+initialTheme();
 import { setupLanguages } from "./i18n/index.js";
 import { readSharedState, shareURL } from "./utils/share.js";
 import { classroomHTML, lessonHTML, lessons } from "./modes/classroom.js";
@@ -139,6 +142,10 @@ function renderInspector() {
     );
   }
   if ($("#day-input")) $("#day-input").value = time.elapsedDays.toFixed(2);
+  if ($("#date-input"))
+    $("#date-input").value = julianToDate(time.julianDate)
+      .toISOString()
+      .slice(0, 10);
   updateReadouts();
 }
 function updateSelection() {
@@ -940,3 +947,33 @@ document.addEventListener("languagechange", () => {
   tour.cancelSpeech();
   if (tour.playing && tour.narrating) tour.speak();
 });
+
+const themeButton = document.createElement("button");
+themeButton.className = "text-button";
+themeButton.textContent = "Change theme";
+themeButton.setAttribute("aria-label", "Change theme");
+themeButton.addEventListener("click", () =>
+  setTheme(
+    document.documentElement.dataset.theme === "dark" ? "light" : "dark",
+  ),
+);
+document.querySelector(".home-header").append(themeButton);
+const labTheme = themeButton.cloneNode(true);
+labTheme.className = "icon-button solar-theme";
+labTheme.textContent = "◐";
+labTheme.addEventListener("click", () => themeButton.click());
+document.querySelector(".header-tools").append(labTheme);
+if (new URLSearchParams(location.search).has("learning")) {
+  await open("normal");
+  solarLearning({
+    show: setMode,
+    run: () => {
+      time.running = true;
+      updatePlayback();
+    },
+    read: () => {
+      const sun = bodyById("sun");
+      return `Earth: ${separationAu(sun, bodyById("earth"), time.orbitalDays).toFixed(3)} AU. Mars: ${separationAu(sun, bodyById("mars"), time.orbitalDays).toFixed(3)} AU. Mars is farther from the Sun.`;
+    },
+  });
+}

@@ -1,3 +1,5 @@
+import { PRODUCT_NAME } from "../brand.ts";
+import { mark } from "../lab-ui/logo.js";
 import { BODIES, bodyById, SCIENCE_SOURCE } from "../data/catalog.js";
 import { illustration } from "../utils/assets.js";
 import { icon } from "./icons.js";
@@ -32,8 +34,10 @@ export const fmt = (value, digits = 0) =>
   Number(value).toLocaleString("en-US", { maximumFractionDigits: digits });
 export const logo =
   '<span class="logo-mark">' +
-  icon("orbit") +
-  '</span><span>orbit<span class="logo-period">.</span></span>';
+  mark +
+  "</span><span>" +
+  PRODUCT_NAME +
+  "</span>";
 const sourceLink = (body) =>
   '<a class="source-link" href="' +
   body.source +
@@ -42,7 +46,7 @@ const sourceLink = (body) =>
   "</a>";
 export function homeHTML() {
   return (
-    '<div id="home"><header class="home-header"><a href="#home" class="brand" aria-label="Orbit home">' +
+    '<div id="home"><header class="home-header"><a href="#home" class="brand" aria-label="Solar System home">' +
     logo +
     '</a><button class="text-button" data-action="classroom">For teachers and students</button><span class="header-note">LEARN ABOUT OUR SOLAR SYSTEM</span><button class="text-button" data-open="normal">Explore the planets ' +
     icon("arrow") +
@@ -91,14 +95,14 @@ export function homeHTML() {
       )
       .join("") +
     "</div></section></main>" +
-    '<footer class="home-footer"><a class="text-button" href="./about.html">About Orbit</a><span>A free, non-profit learning tool.</span><span>An illustrative model · <button class="text-button" data-action="about">About the science ' +
+    '<footer class="home-footer"><a class="text-button" href="./about.html">About the labs</a><span>A free, non-profit learning tool.</span><span>An illustrative model · <button class="text-button" data-action="about">About the science ' +
     icon("info") +
     "</button></span></footer></div>"
   );
 }
 export function shellHTML() {
   return (
-    '<section id="observatory" hidden tabindex="-1" aria-label="Solar observatory"><header class="app-header"><button class="brand" data-action="home" aria-label="Return to Orbit home">' +
+    '<section id="observatory" hidden tabindex="-1" aria-label="Solar observatory"><header class="app-header"><button class="brand" data-action="home" aria-label="Return to Solar System home">' +
     logo +
     '</button><nav class="mode-switch" aria-label="Viewing mode">' +
     modes
@@ -113,7 +117,7 @@ export function shellHTML() {
           "</span></button>",
       )
       .join("") +
-    '</nav><div class="header-tools"><button class="icon-button" data-action="classroom" aria-label="Lessons, quiz and Scale Journey" title="Lessons and activities"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 4h7l2 2 2-2h7v15h-7l-2 2-2-2H3zM12 6v15"/></svg></button><span class="live-indicator"><i></i> OBSERVATORY</span><button class="icon-button" data-action="help" aria-label="Open controls and settings" title="Controls and settings">' +
+    '</nav><div class="header-tools"><a class="lab-return" href="./?return=solar" aria-label="Return to all labs">All labs</a><button class="icon-button" data-action="classroom" aria-label="Lessons, quiz and Scale Journey" title="Lessons and activities"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 4h7l2 2 2-2h7v15h-7l-2 2-2-2H3zM12 6v15"/></svg></button><span class="live-indicator"><i></i> OBSERVATORY</span><button class="icon-button" data-action="help" aria-label="Open controls and settings" title="Controls and settings">' +
     icon("settings") +
     '</button><button class="icon-button fullscreen-button" data-action="fullscreen" aria-label="Enter fullscreen" title="Fullscreen">' +
     icon("expand") +

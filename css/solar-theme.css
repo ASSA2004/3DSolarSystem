@@ -1,0 +1,162 @@
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6fbef;
+  --panel: #fff;
+  --ink: #0e2a22;
+  --muted: #49685d;
+  --dim: #4d6e62;
+  --line: #cbd9cd;
+  --line-strong: #9db9a9;
+  --accent: #007f72;
+  --accent-light: #00685e;
+}
+[data-theme="light"] .app-header,
+[data-theme="light"] .home-header,
+[data-theme="light"] .simulation-bar,
+[data-theme="light"] .planet-nav,
+[data-theme="light"] .inspector,
+[data-theme="light"] .inspector.expanded,
+[data-theme="light"] .sheet-handle,
+[data-theme="light"] dialog,
+[data-theme="light"] .learning-panel,
+[data-theme="light"] .lite-offer {
+  background: #f6fbef;
+  color: #0e2a22;
+}
+[data-theme="light"] .stage {
+  background: radial-gradient(ellipse at center, #e9f1e2, #f6fbef);
+}
+[data-theme="light"] .scene-vignette {
+  background: none;
+}
+[data-theme="light"] .mode-switch,
+[data-theme="light"] select,
+[data-theme="light"] input,
+[data-theme="light"] .detail-tab,
+[data-theme="light"] .fact-row,
+[data-theme="light"] .data-box,
+[data-theme="light"] .lab-controls {
+  background: #fff;
+  color: #0e2a22;
+}
+[data-theme="light"] .planet-label {
+  background: #fff;
+  color: #0e2a22;
+  border-color: #a2b5a5;
+}
+[data-theme="light"] .cinema {
+  background: none;
+}
+[data-theme="light"] .film-caption,
+[data-theme="light"] .film-bottom {
+  color: #0e2a22;
+}
+[data-theme="light"] .planet-nav-item[aria-pressed="true"] {
+  background: #e0eee0;
+}
+[data-theme="light"] .profile-heading,
+[data-theme="light"] .profile-description,
+[data-theme="light"] .film-caption p {
+  color: #0e2a22;
+}
+.solar-learning {
+  position: absolute;
+  right: 24px;
+  top: 170px;
+  z-index: 8;
+  width: 340px;
+  max-height: calc(100dvh - 280px);
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 22px;
+  color: var(--ink);
+}
+.solar-learning p,
+.solar-learning h2,
+.solar-learning h3 {
+  margin-bottom: 14px;
+}
+.solar-learning button,
+.solar-learning-switch button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  margin: 4px;
+}
+.solar-learning .guided-action {
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+}
+.solar-learning-switch {
+  position: absolute;
+  right: 24px;
+  top: 108px;
+  z-index: 9;
+  display: flex;
+  gap: 4px;
+  background: var(--panel);
+  border-radius: 12px;
+}
+.solar-learning-switch button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--bg);
+}
+@media (max-width: 650px) {
+  .header-tools {
+    gap: 3px;
+  }
+  .app-header .brand {
+    font-size: 20px;
+  }
+  .lab-return {
+    padding: 6px;
+    font-size: 11px !important;
+  }
+  .solar-theme {
+    width: 30px !important;
+    min-width: 30px;
+  }
+  .solar-learning {
+    right: 12px;
+    left: 12px;
+    top: auto;
+    bottom: 100px;
+    width: auto;
+    max-height: 43dvh;
+  }
+  .solar-learning-switch {
+    right: 12px;
+    top: 190px;
+  }
+  .solar-learning-switch button {
+    font-size: 13px;
+    padding: 5px 8px;
+  }
+  .inspector.expanded {
+    max-height: 48dvh;
+  }
+}
+
+[data-theme="light"] .home-header .text-button,
+[data-theme="light"] .section-heading > .eyebrow {
+  color: var(--ink);
+}
+
+#observatory:not([data-mode="normal"]) .solar-learning,
+#observatory:not([data-mode="normal"]) .solar-learning-switch {
+  display: none;
+}
+@media (max-width: 650px) {
+  .app-header .brand > span:last-child {
+    display: none;
+  }
+  .app-header .brand {
+    flex: 0 0 32px;
+  }
+  .lab-return {
+    white-space: nowrap;
+  }
+}
