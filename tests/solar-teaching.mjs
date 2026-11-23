@@ -7,6 +7,12 @@ const p = await b.newPage({
   viewport: { width: 360, height: 800 },
   reducedMotion: "reduce",
 });
+await p.addInitScript(() =>
+  Object.defineProperty(navigator, "hardwareConcurrency", { get: () => 2 }),
+);
+await p.addLocatorHandler(p.locator("#lite-offer"), async () => {
+  await p.locator('[data-action="dismiss-lite"]').click();
+});
 try {
   await p.goto(
     (process.env.PREVIEW_URL || "http://127.0.0.1:5173/solar.html") +
