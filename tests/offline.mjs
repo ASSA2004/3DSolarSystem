@@ -49,7 +49,11 @@ try {
   await page.waitForTimeout(1100);
   assert.equal(await page.locator("#film-time").textContent(), paused);
   await page.locator('[data-action="tour-play"]').click();
-  await page.waitForTimeout(1100);
+  await page.waitForFunction(
+    (previous) => document.querySelector("#film-time").textContent !== previous,
+    paused,
+    { timeout: 10000 },
+  );
   assert.notEqual(await page.locator("#film-time").textContent(), paused);
   await page.locator('[data-action="home"]').click();
   await page.reload();

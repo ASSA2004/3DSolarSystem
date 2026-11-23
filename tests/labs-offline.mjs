@@ -6,7 +6,13 @@ const browser = await chromium.launch({
 });
 try {
   const context = await browser.newContext({ reducedMotion: "reduce" });
+  await context.addInitScript(() =>
+    Object.defineProperty(navigator, "hardwareConcurrency", { get: () => 2 }),
+  );
   const page = await context.newPage();
+  await page.addLocatorHandler(page.locator("#lite-offer"), async () => {
+    await page.locator('[data-action="dismiss-lite"]').click();
+  });
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto(base);
