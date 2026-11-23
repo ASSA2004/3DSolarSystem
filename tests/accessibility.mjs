@@ -45,6 +45,13 @@ try {
   await page.locator('.mode-switch [data-mode="details"]').click();
   await page.locator('[data-detail-tab="lab"]').click();
   await scan("details");
+  await page.locator('[data-detail-tab="profile"]').click();
+  await scan("planet measurements");
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.locator('.mode-switch [data-mode="details"]').click();
+  await page.locator(".fact dd").first().scrollIntoViewIfNeeded();
+  await scan("mobile planet measurements");
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.locator('.header-tools [data-action="classroom"]').click();
   await scan("classroom dialog");
   await page.locator('[data-lesson="meet"]').click();

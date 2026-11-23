@@ -166,3 +166,17 @@
 [data-theme="light"] #lite-offer [data-action="dismiss-lite"] {
   color: var(--ink);
 }
+[data-theme="light"] .fact dd,
+[data-theme="light"] .overview-facts b {
+  color: var(--ink);
+}
+[data-theme="light"] .profile-tagline {
+  color: var(--muted);
+}
+[data-theme="light"] .scene-tools {
+  background: #ffffff;
+  border-color: var(--line-strong);
+}
+[data-theme="light"] .scene-tools .icon-button {
+  color: var(--ink);
+}
