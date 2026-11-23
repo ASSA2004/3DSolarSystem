@@ -17,7 +17,9 @@ try {
       Object.defineProperty(navigator, "hardwareConcurrency", { get: () => 2 }),
     );
     const page = await context.newPage();
-    await page.goto(process.env.PREVIEW_URL || "http://127.0.0.1:5173/");
+    await page.goto(
+      process.env.PREVIEW_URL || "http://127.0.0.1:5173/solar.html",
+    );
     assert.ok(await page.locator("#lite-offer").isVisible());
     await page.locator('.hero [data-open="normal"]').click();
     await page.locator("#loading").waitFor({ state: "hidden" });

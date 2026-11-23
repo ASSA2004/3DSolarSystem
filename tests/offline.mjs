@@ -15,7 +15,9 @@ try {
   await page.addLocatorHandler(page.locator("#lite-offer"), async () => {
     await page.locator('[data-action="dismiss-lite"]').click();
   });
-  await page.goto(process.env.PREVIEW_URL || "http://127.0.0.1:4173/");
+  await page.goto(
+    process.env.PREVIEW_URL || "http://127.0.0.1:4173/solar.html",
+  );
   await page.waitForFunction(() =>
     document
       .querySelector(".offline-status")

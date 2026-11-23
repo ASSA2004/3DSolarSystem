@@ -36,13 +36,18 @@ jobs:
           node tests/classroom.mjs
           node tests/languages.mjs
           node tests/accessibility.mjs
+          node tests/labs.mjs
+          node tests/labs-teaching.mjs
+          node tests/labs-accessibility.mjs
       - name: Offline Pages build
         run: |
           node node_modules/vite/bin/vite.js preview --host 127.0.0.1 > /tmp/orbit-preview.log 2>&1 &
           for i in $(seq 1 30); do curl --silent --fail http://127.0.0.1:4173/3DSolarSystem/ > /dev/null && break; sleep 1; done
           node tests/offline.mjs
+          node tests/labs-offline.mjs
         env:
-          PREVIEW_URL: http://127.0.0.1:4173/3DSolarSystem/
+          PREVIEW_URL: http://127.0.0.1:4173/3DSolarSystem/solar.html
+          LAB_URL: http://127.0.0.1:4173/3DSolarSystem/
           PAGES_BASE: /3DSolarSystem/
       - uses: actions/upload-pages-artifact@v3
         with:

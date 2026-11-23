@@ -14,7 +14,7 @@ try {
   await page.addLocatorHandler(page.locator("#lite-offer"), async () => {
     await page.locator('[data-action="dismiss-lite"]').click();
   });
-  await page.goto("http://127.0.0.1:5173/");
+  await page.goto("http://127.0.0.1:5173/solar.html");
   await page.locator('.home-header [data-action="classroom"]').click();
   await page.locator('[data-lesson="meet"]').click();
   await page.locator("#lesson-title").waitFor();
@@ -34,7 +34,7 @@ try {
   await page.screenshot({ path: ".qa/journey-desktop.png" });
   await page.locator('[data-action="end-journey"]').click();
   await page.goto(
-    "http://127.0.0.1:5173/?planet=mars&date=2030-01-01&mode=true-scale&view=details",
+    "http://127.0.0.1:5173/solar.html?planet=mars&date=2030-01-01&mode=true-scale&view=details",
   );
   await page.locator("#loading").waitFor({ state: "hidden" });
   assert.equal(await page.locator("#view-title").textContent(), "Mars");

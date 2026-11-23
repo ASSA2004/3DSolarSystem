@@ -37,7 +37,7 @@ try {
   await page.addLocatorHandler(page.locator("#lite-offer"), async () => {
     await page.locator('[data-action="dismiss-lite"]').click();
   });
-  await page.goto("http://127.0.0.1:5173/");
+  await page.goto("http://127.0.0.1:5173/solar.html");
   await collect();
   for (const lang of ["ta", "hi"]) {
     await page.locator(".home-header [data-language]").selectOption(lang);

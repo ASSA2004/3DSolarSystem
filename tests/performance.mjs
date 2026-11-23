@@ -30,7 +30,7 @@ try {
       transferred += e.encodedDataLength;
     });
     const start = Date.now();
-    await page.goto("http://127.0.0.1:4173/");
+    await page.goto("http://127.0.0.1:4173/solar.html");
     const landingMs = Date.now() - start;
     await page.locator('.hero [data-open="normal"]').click();
     await page.locator("#loading").waitFor({ state: "hidden" });

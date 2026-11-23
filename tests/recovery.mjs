@@ -13,7 +13,7 @@ try {
   await page.addLocatorHandler(page.locator("#lite-offer"), async () => {
     await page.locator('[data-action="dismiss-lite"]').click();
   });
-  await page.goto("http://127.0.0.1:5173/");
+  await page.goto("http://127.0.0.1:5173/solar.html");
   await page.locator('[data-action="about"]').click();
   await page.locator('[data-action="close-dialog"]').click();
   await page.locator('.hero [data-open="normal"]').click();
@@ -66,7 +66,7 @@ try {
       return original.call(this, type, ...args);
     };
   });
-  await failed.goto("http://127.0.0.1:5173/");
+  await failed.goto("http://127.0.0.1:5173/solar.html");
   await failed.locator('.hero [data-open="normal"]').click();
   await failed.locator("#scene-error").waitFor();
   assert.ok(await failed.locator('[data-action="retry"]').isVisible());
@@ -85,7 +85,7 @@ try {
   await missing.route("**/textures/standard/2k_mars.webp", (route) =>
     route.abort(),
   );
-  await missing.goto("http://127.0.0.1:5173/");
+  await missing.goto("http://127.0.0.1:5173/solar.html");
   await missing.locator('.hero [data-open="normal"]').click();
   await missing.locator("#loading").waitFor({ state: "hidden" });
   assert.match(

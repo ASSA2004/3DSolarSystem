@@ -55,3 +55,6 @@ Inherited image provenance is documented in ../ASSETS.md. Do not relicense inher
 | images/webp/Sun.webp | 230 × 219 | Solar illustration |
 | images/webp/Uranus.webp | 225 × 225 | Solar illustration |
 | images/webp/Venus.webp | 225 × 225 | Solar illustration |
+
+
+New assets: original procedural Three geometry and SVG Prayog mark (project MIT). Self-hosted Bricolage Grotesque, Figtree and JetBrains Mono variable fonts from https://github.com/google/fonts/tree/main/ofl, with each OFL license beside the WOFF2 file. Latin subsets retain variation tables; regenerate with fontTools/Brotli as described in scripts/fonts.mjs. No Google font request occurs at runtime. Icons and social preview are generated from the local mark by scripts/brand-assets.mjs.

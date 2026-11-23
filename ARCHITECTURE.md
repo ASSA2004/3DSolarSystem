@@ -94,3 +94,27 @@ Browser viewport emulation is not physical-device certification. Performance
 records identify the network profile, hardware and measurement method. Translation
 coverage and pedagogical wording need classroom review; do not infer approval by
 NCERT or CBSE from a curriculum link. See `docs/performance.md` for measurements.
+
+
+## Five-lab extension
+
+```mermaid
+flowchart LR
+  Gateway[index.html / lab-app] --> Shared[Shared learning shell]
+  Shared --> Content[Typed content and curriculum config]
+  Shared --> Engine[Pure optics / matter / measurement engines]
+  Shared --> Stage[Three Stage lifecycle]
+  Stage --> Lab[Lazy lab scene]
+  Gateway --> Solar[solar.html / existing Solar app]
+  Solar --> Clock[Single Solar simulation clock]
+  Cache[Versioned full offline inventory] --> Gateway
+  Cache --> Solar
+```
+
+The Solar document retains ownership of its existing clock, camera and listeners. The gateway redirects old planet/date/view links to that entry. The learning adapter adds Teach/Experiment without replacing Normal/Details/Video. Learning panels are confined to Normal view to avoid obscuring Details and Video controls.
+
+New labs use typed content in src/content, testable pure functions in src/engine, and one disposable Stage per mounted lab. Stage owns animation, visibility, resize, drag picking, orbit controls and GPU cleanup. Matter uses energy as state with separate latent-heat intervals. Geometry derivation moves actual pieces; the finite circle sectors approach the rectangle limit. Sphere gores remain approximate.
+
+Hardware concurrency/memory hints select lower pixel ratio and particle count. FPS sampling can further reduce graphics; tab hiding stops rendering. Device hints are not a hardware benchmark. Shared tokens feed CSS and Three materials; Solar keeps a compatibility theme stylesheet. All fonts are local OFL variable fonts.
+
+The service worker precaches every built entry, lazy chunk and local asset. A content digest changes the cache on release; the existing update prompt controls activation. Offline readiness is separate from first interactive load, and the UI reports readiness only after cache installation. Cache-first navigation ignores query strings while app routing reads them. Notebook values are escaped and capped at 20 rows; storage denial leaves the current session usable.
