@@ -11,6 +11,9 @@ try {
     viewport: { width: 1440, height: 1000 },
     reducedMotion: "reduce",
   });
+  await context.addInitScript(() =>
+    Object.defineProperty(navigator, "hardwareConcurrency", { get: () => 2 }),
+  );
   const page = await context.newPage();
   const scan = async (name) => {
     const report = await new AxeBuilder({ page })

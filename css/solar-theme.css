@@ -160,3 +160,9 @@
     white-space: nowrap;
   }
 }
+[data-theme="light"] #lite-offer [data-action="lite"] {
+  color: #ffffff;
+}
+[data-theme="light"] #lite-offer [data-action="dismiss-lite"] {
+  color: var(--ink);
+}

@@ -61,7 +61,9 @@ export function solarLearning({ read, show, run }) {
       panel.innerHTML = `<h2>${t("predict")}</h2><p>${content.prediction}</p><label for="solar-prediction">${t("choose")}</label><select id="solar-prediction"><option value="">${t("choose")}</option>${content.predictions.map((c, i) => `<option value="${i}" ${prediction === i ? "selected" : ""}>${c}</option>`).join("")}</select><button data-solar-test ${prediction === null ? "disabled" : ""}>${t("test")}</button>${tested ? `<h3>${t("explain")}</h3><p>${read()}</p><p>${prediction === 1 ? t("match") : t("different")}</p><button data-solar-record>${t("record")}</button>` : ""}<h3>${t("notebook")}</h3><table><tbody>${records.map((r, i) => `<tr><th>${i + 1}</th><td>${escape(r)}</td></tr>`).join("")}</tbody></table><button data-solar-clear>${t("clear")}</button>`;
   };
   document.addEventListener("click", (e) => {
-    const b = e.target.closest("button");
+    const b = e
+      .composedPath()
+      .find((node) => node instanceof HTMLButtonElement);
     if (!b) return;
     if (b.dataset.solarMode) {
       mode = b.dataset.solarMode;
