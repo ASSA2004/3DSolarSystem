@@ -932,7 +932,10 @@ async function restoreSharedState() {
     return;
   }
   endLearning();
-  if (shared.date) time.setDate(shared.date);
+  if (shared.date) {
+    time.setDate(shared.date);
+    time.running = false;
+  }
   state.scale = shared.scale;
   await open(shared.view, shared.planet);
   scene?.setScale(shared.scale);

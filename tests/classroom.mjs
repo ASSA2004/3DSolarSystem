@@ -38,7 +38,11 @@ try {
   );
   await page.locator("#loading").waitFor({ state: "hidden" });
   assert.equal(await page.locator("#view-title").textContent(), "Mars");
-  await page.locator('[data-action="pause"]').click();
+  assert.equal(
+    await page.locator('[data-action="pause"]').getAttribute("aria-label"),
+    "Resume simulation",
+  );
+  await page.waitForTimeout(1200);
   await page.locator('[data-detail-tab="lab"]').click();
   assert.match(await page.locator("#current-date").textContent(), /2030-01-01/);
   await page.locator("#date-input").fill("2000-01-01");
