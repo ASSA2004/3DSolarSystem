@@ -1,0 +1,63 @@
+.release-status {
+  font-variant-numeric: tabular-nums;
+}
+.release-check {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+.release-check:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.update-notice {
+  position: fixed;
+  z-index: 2000;
+  right: 16px;
+  bottom: 16px;
+  width: min(420px, calc(100vw - 32px));
+  padding: 18px;
+  border: 1px solid var(--lab-primary, #007f72);
+  border-radius: 12px;
+  background: var(--lab-surface, #fff);
+  color: var(--lab-ink, #0e2a22);
+  box-shadow: 0 8px 30px #0003;
+  font:
+    16px/1.5 system-ui,
+    sans-serif;
+}
+.update-notice[hidden] {
+  display: none;
+}
+.update-notice p {
+  margin: 0 0 12px;
+}
+.update-notice div {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.update-notice button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--lab-primary, #007f72);
+  border-radius: 8px;
+  background: var(--lab-surface, #fff);
+  color: var(--lab-ink, #0e2a22);
+  font: inherit;
+  cursor: pointer;
+}
+.update-notice [data-reload] {
+  background: var(--lab-primary, #007f72);
+  color: var(--lab-background, #fff);
+}
+.update-notice button:focus-visible,
+.release-check:focus-visible {
+  outline: 3px solid #e49a17;
+  outline-offset: 3px;
+}
