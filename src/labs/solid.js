@@ -1,7 +1,18 @@
+import {
+  dimensionViews,
+  dimensionControls,
+  mountDimensionAdapter,
+} from "./dimensions.js";
 import { THREE, mesh, label } from "./stage.js";
 import { solid3D, coneNet } from "../engine/measurement.ts";
 import { t } from "../lab-ui/i18n.js";
+export const views = dimensionViews;
 export const defaults = {
+  view: "spatial",
+  x: 0,
+  y: 0,
+  z: 0,
+  angle: 0,
   shape: "cube",
   width: 3,
   height: 4,
@@ -11,6 +22,7 @@ export const defaults = {
   heightChanged: false,
 };
 export const controls = [
+  ...dimensionControls,
   {
     key: "shape",
     label: "shape",
@@ -25,6 +37,7 @@ export const tools = [
   { key: "fill", label: "fill" },
 ];
 export function change(s, key, value) {
+  if (["net", "fill"].includes(key)) s.view = "measure";
   if (key === "net" || key === "fill") {
     s[key] = !s[key];
     if (s[key]) s[key === "net" ? "fill" : "net"] = false;
@@ -63,7 +76,7 @@ export function achieved(s, target) {
       ? s.shape === "cuboid" && s.net
       : s.shape === "cone" && s.heightChanged;
 }
-export function create(stage, s, onChange) {
+function createMeasurement(stage, s, onChange) {
   if (!stage) return { update() {} };
   let transition = 0,
     solid,
@@ -248,4 +261,15 @@ export function create(stage, s, onChange) {
             : s.height) * transition;
   };
   return { update };
+}
+
+export function create(stage, s, change, notify) {
+  return mountDimensionAdapter(
+    stage,
+    s,
+    change,
+    notify,
+    createMeasurement,
+    true,
+  );
 }

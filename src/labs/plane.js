@@ -1,7 +1,18 @@
+import {
+  dimensionViews,
+  dimensionControls,
+  mountDimensionAdapter,
+} from "./dimensions.js";
 import { THREE, mesh, label } from "./stage.js";
 import { shape2D } from "../engine/measurement.ts";
 import { t } from "../lab-ui/i18n.js";
+export const views = dimensionViews;
 export const defaults = {
+  view: "flat",
+  x: 0,
+  y: 0,
+  z: 0,
+  angle: 0,
   shape: "rectangle",
   width: 4,
   height: 3,
@@ -11,6 +22,7 @@ export const defaults = {
   slantChanged: false,
 };
 export const controls = [
+  ...dimensionControls,
   {
     key: "shape",
     label: "shape",
@@ -33,6 +45,10 @@ export const tools = [
   { key: "flat", label: "flat" },
 ];
 export function change(s, key, value) {
+  if (
+    !["view", "x", "y", "z", "angle", "width", "height", "shape"].includes(key)
+  )
+    s.view = "measure";
   if (key === "count" || key === "derive") s[key] = !s[key];
   else {
     s[key] = value;
@@ -43,6 +59,15 @@ export function result(s) {
   const r = shape2D(s.shape, s.width, s.height, s.slant);
   return {
     rows: [
+      ...(s.view === "spatial"
+        ? [
+            [
+              "Extruded volume",
+              (r.area * (s.shape === "square" ? s.width : 3)).toFixed(2) +
+                " units³",
+            ],
+          ]
+        : []),
       [t("area"), r.area.toFixed(2) + " units²"],
       [t("perimeter"), r.perimeter.toFixed(2) + " units"],
     ],
@@ -74,7 +99,7 @@ function contains(x, y, points) {
   }
   return yes;
 }
-export function create(stage, s, onChange) {
+function createMeasurement(stage, s, onChange) {
   if (!stage) return { update() {} };
   let progress = 0,
     shapeMesh,
@@ -251,4 +276,15 @@ export function create(stage, s, onChange) {
     }
   };
   return { update };
+}
+
+export function create(stage, s, change, notify) {
+  return mountDimensionAdapter(
+    stage,
+    s,
+    change,
+    notify,
+    createMeasurement,
+    false,
+  );
 }
