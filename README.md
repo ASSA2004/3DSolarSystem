@@ -114,3 +114,7 @@ Run the browser tests against a stable production preview by setting `LAB_URL` t
 Scientific limits are visible under **Model and sources**. Water particle trajectories and escape rates are qualitative, oxygen electron density is schematic, and lens images use the paraxial thin-lens model. Blender is not required: the vessel, optical surfaces and dimension objects are procedural geometry connected directly to experiment parameters. No nuclear-fission experiment is presented; heating water must not imply a nuclear reaction.
 
 See [decisions](docs/DECISIONS.md), [design](DESIGN.md), [interaction ownership](UX-CONTRACT.md) and [architecture](ARCHITECTURE.md). School-specific chapter mapping and native-language teacher review remain rollout tasks. New-lab Tamil content remains an explicitly marked English fallback; this release does not claim completed translation.
+
+## If the site looks unchanged
+
+The footer shows **Version 2026.11.24.2**. A cached older tab may need one reload after the update downloads. New versions provide **Check for updates** and **Reload latest version**; reloading restarts the current experiment but keeps saved notebooks. Updates do not force an active class to reload. The release-upgrade regression is `node tests/update-browser.mjs` after a production build.

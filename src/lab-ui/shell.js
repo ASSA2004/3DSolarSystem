@@ -282,9 +282,13 @@ export async function mountLab(root, content, mode, onMode) {
         }
         if (["view", "flat", "top"].includes(key)) {
           if (key === "top" && stage) {
+            change("view", "rays");
             stage.camera.position.set(0, 0, 32);
             stage.controls.target.set(0, 0, 0);
             stage.controls.update();
+          } else if (key === "flat" && mod.views) {
+            change("view", "flat");
+            view?.resetCamera?.();
           } else if (view?.resetCamera) view.resetCamera();
           else stage?.reset(key !== "view");
           return;
@@ -302,6 +306,8 @@ export async function mountLab(root, content, mode, onMode) {
               $("#value-" + c.key).textContent = s[c.key] + " " + c.unit;
           }
           view?.update();
+          if (view?.resetCamera) view.resetCamera();
+          else stage?.reset();
           readouts();
           learning();
           return;

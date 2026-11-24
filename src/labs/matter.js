@@ -28,7 +28,7 @@ export const views = [
     id: "atomic",
     label: "Atoms",
     description:
-      "Structure of an atom in the same water sample. Electron clouds show probability, not paths. The nucleus is enlarged enormously. Heating water does not split its atoms.",
+      "Structure of an atom in the same water sample. Electron clouds show probability, not paths. Red particles are protons; blue particles are neutrons. The nucleus is enlarged enormously. Heating water does not split its atoms.",
   },
 ];
 export const controls = [
@@ -79,9 +79,12 @@ export function result(s) {
   return {
     rows: [
       [t("temperature"), p.temperature.toFixed(1) + " °C"],
-      ["Specific enthalpy", s.energy.toFixed(0) + " kJ/kg"],
+      ["Energy per kg", s.energy.toFixed(0) + " kJ/kg"],
       ["State", p.phase],
-      ["Water remaining", ((1 - s.escaped) * 100).toFixed(1) + "%"],
+      [
+        "Liquid + ice remaining",
+        ((1 - s.escaped) * (p.solid + p.liquid) * 100).toFixed(1) + "%",
+      ],
     ],
     answer: 0,
     explanation: p.plateau ? t("plateau") : t("warming"),

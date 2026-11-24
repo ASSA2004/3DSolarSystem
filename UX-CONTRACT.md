@@ -17,4 +17,9 @@ Teach explanations unlock after a model action; a check question precedes the ne
 
 
 ## Static scanner limitations
-The premium static scanner reports eight actionless-button findings because it does not resolve delegated `data-*` event handlers. The buttons are owned by the click handlers in src/lab-app.js, src/lab-ui/shell.js, src/lab-ui/solar-learning.js and src/main.js. Playwright checks exercise these actions, teaching gates, navigation, notebook operations and classroom controls. No inline event-handler workaround is used.
+The premium static scanner reports seven actionless-button findings because it does not resolve delegated `data-*` event handlers. The buttons are owned by the click handlers in src/lab-app.js, src/lab-ui/shell.js, src/lab-ui/solar-learning.js and src/main.js. Playwright checks exercise these actions, teaching gates, navigation, notebook operations and classroom controls. No inline event-handler workaround is used.
+
+## Update and reset recovery
+The shared offline owner publishes a visible release version and Check for updates action in both documents. A downloaded worker activates without reloading the lesson; the active document offers Reload latest version or Later. Two previous cached releases remain available for already-open lazy imports. A reload uses the new document and preserves local notebooks. Failed updates retain the existing working offline copy. tests/update-browser.mjs verifies legacy migration, active lesson preservation, old chunks, update notices, notebook retention and disconnected reload.
+
+Ray diagram opens Ray view; Flat view selects XY and enforces zero rendered depth. Reset experiment resets both parameters and camera; Reset view preserves experiment parameters. tests/science-browser.mjs covers these outcomes on desktop and mobile. Static scanner action warnings remain false positives for delegated handlers and are covered by runtime tests; the new updater has direct action handlers.

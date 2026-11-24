@@ -36,3 +36,11 @@ Initial code audit confirms missing coupled macroscopic/molecular/atomic water v
 - Sources: [phase change](https://openstax.org/books/physics/pages/11-3-phase-change-and-latent-heat), [refraction](https://openstax.org/books/university-physics-volume-3/pages/1-3-refraction), [thin lenses](https://openstax.org/books/university-physics-volume-3/pages/2-4-thin-lenses), [atomic probability](https://openstax.org/books/chemistry-2e/pages/6-3-development-of-quantum-theory), and the existing NASA/JPL orbital data citations.
 
 Browser checks use actual WebGL simulations in desktop Chrome and mobile/touch emulation. They do not certify physical phones, Safari or school hardware. Native-language classroom review remains necessary.
+
+## Live-site follow-up — version 2026.11.24.2
+
+The user's in-app browser reproduced the old animated gateway although GitHub Pages had the new release. The old cache-first worker kept serving its installed HTML, and the asynchronous offline-ready message could overwrite the update offer. The worker now fully caches and activates new releases without automatically reloading an ongoing lesson. New documents expose a version, an explicit update check and a dismissible reload notice. The upgrade test covers legacy workers as well as the current updater, saved notebooks and disconnected reuse.
+
+A second interaction review corrected Ray diagram (now switches to rays), Flat view (now selects the actual XY representation), and experiment reset (also resets the camera). Water's percentage now explicitly means liquid plus ice remaining, avoiding a nonzero vessel reading when only gas remains. Atomic copy explains proton/neutron colors, and lens-bench components have visible supports. Readouts use plain names (Energy per kg, Object distance, Image size and Image type) while signed optics equations remain in Model and sources. These are behavior and teaching corrections within the supplied brief.
+
+Verification: tests/update-browser.mjs, tests/science-browser.mjs, existing Solar/lab/teaching/offline/accessibility suites, unit tests, lint, formatting and production build. The static design scanner has seven known false positives on delegated actions; runtime tests verify those controls. Physical-device classroom review is still outside browser emulation coverage.

@@ -144,9 +144,15 @@ export function result(s) {
   const r = optics(s.element, s.distance, s.focal);
   return {
     rows: [
-      ["u", r.u + " cm"],
-      ["v", r.v === null ? "∞" : r.v.toFixed(2) + " cm"],
-      ["m", r.m === null ? "—" : r.m.toFixed(2) + "×"],
+      ["Object distance", Math.abs(r.u) + " cm"],
+      ["Image distance", r.v === null ? "∞" : Math.abs(r.v).toFixed(2) + " cm"],
+      ["Image size", r.m === null ? "—" : Math.abs(r.m).toFixed(2) + "×"],
+      [
+        "Image type",
+        r.infinity
+          ? "At infinity"
+          : `${t(r.real ? "real" : "virtual")} · ${t(r.upright ? "upright" : "inverted")}`,
+      ],
     ],
     answer: r.infinity ? 2 : r.real ? 0 : 1,
     explanation: r.infinity
@@ -209,6 +215,11 @@ export function create(stage, s, change) {
         ],
         0xb2c6c2,
       );
+    mesh(root, new THREE.CylinderGeometry(0.12, 0.12, 2.3, 12), 0x809798, [
+      u,
+      -1.15,
+      0,
+    ]);
     const candle = mesh(
       root,
       new THREE.CylinderGeometry(0.18, 0.2, 1.5, 16),
@@ -286,7 +297,7 @@ export function create(stage, s, change) {
       move: (p) =>
         change("position", Math.max(-12, Math.min(12, Math.round(p.x * 4)))),
     };
-    mesh(root, new THREE.BoxGeometry(0.18, 2, 0.18), 0x809798, [x, 0.8, 0]);
+    mesh(root, new THREE.BoxGeometry(0.18, 2.3, 0.18), 0x809798, [x, -1.15, 0]);
     for (const sign of [-1, 1])
       for (const factor of [1, 2]) {
         const fx = x + sign * factor * s.focal * 0.25;
@@ -676,14 +687,17 @@ export function create(stage, s, change) {
     if (beam) beam.visible = s.view === "rays";
     if (lastView !== s.view + s.element) {
       lastView = s.view + s.element;
-      stage.camera.position.set(
-        s.view === "human" ? (s.element === "plane-mirror" ? -24 : 12) : 0,
-        s.view === "human" ? 8 : 0,
-        s.view === "human" && s.element === "plane-mirror" ? 14 : 32,
-      );
-      stage.controls.target.set(0, 0, 0);
-      stage.controls.update();
+      resetCamera();
     }
+  }
+  function resetCamera() {
+    stage.camera.position.set(
+      s.view === "human" ? (s.element === "plane-mirror" ? -24 : 12) : 0,
+      s.view === "human" ? 8 : 0,
+      s.view === "human" && s.element === "plane-mirror" ? 14 : 32,
+    );
+    stage.controls.target.set(0, 0, 0);
+    stage.controls.update();
   }
   const rebuild = () => {
     update();
@@ -711,5 +725,5 @@ export function create(stage, s, change) {
       beam.position.x = (s.position - s.distance + s.distance * clock) * 0.25;
     }
   };
-  return { update: rebuild };
+  return { update: rebuild, resetCamera };
 }

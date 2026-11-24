@@ -43,6 +43,15 @@ try {
     await p.locator('[data-tool="pause"]').click();
     await p.goto(base + "?lab=optics");
     await p.locator("#lab-scene canvas").waitFor();
+    await p.locator('[data-tool="top"]').click();
+    assert.equal(
+      await p
+        .locator('[data-science-view="rays"]')
+        .getAttribute("aria-pressed"),
+      "true",
+      "Ray diagram opens actual rays",
+    );
+    await p.locator('[data-tool="reset"]').click();
     for (const element of [
       "convex-lens",
       "concave-lens",
@@ -141,7 +150,14 @@ try {
       path: `.qa/science-dimensions-3d-${width}.png`,
       fullPage: true,
     });
-    await p.locator('[data-science-view="flat"]').click();
+    await p.locator('[data-tool="flat"]').click();
+    assert.equal(
+      await p
+        .locator('[data-science-view="flat"]')
+        .getAttribute("aria-pressed"),
+      "true",
+      "Flat view enforces XY mode",
+    );
     assert.equal(await p.locator("#control-x").inputValue(), "2");
     assert.equal(await p.locator("#control-y").inputValue(), "3");
     await p.screenshot({

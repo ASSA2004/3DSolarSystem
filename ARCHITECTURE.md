@@ -82,8 +82,7 @@ WebGL hardware; the 2D fallback retains planet selection and learning controls.
 ## Offline and privacy
 
 The build generates a content-versioned service worker. It caches the small
-production asset set before announcing offline readiness. Updates wait for the
-user; classroom sessions are not automatically reloaded. URLs are scoped to the
+production asset set before announcing offline readiness. New caches activate after a complete download; classroom documents are never automatically reloaded. A visible notice lets the user choose when to reload. URLs are scoped to the
 deployment base. No accounts, analytics or server-stored student records are used.
 Quiz progress and preferences are stored only in localStorage, with storage
 exceptions handled. Source links require a connection and are not cached.
@@ -117,7 +116,7 @@ New labs use typed content in src/content, testable pure functions in src/engine
 
 Hardware concurrency/memory hints select lower pixel ratio and particle count. FPS sampling can further reduce graphics; tab hiding stops rendering. Device hints are not a hardware benchmark. Shared tokens feed CSS and Three materials; Solar keeps a compatibility theme stylesheet. All fonts are local OFL variable fonts.
 
-The service worker precaches every built entry, lazy chunk and local asset. A content digest changes the cache on release; the existing update prompt controls activation. Offline readiness is separate from first interactive load, and the UI reports readiness only after cache installation. Cache-first navigation ignores query strings while app routing reads them. Notebook values are escaped and capped at 20 rows; storage denial leaves the current session usable.
+The service worker precaches every built entry, lazy chunk and local asset. A content digest changes the cache on release; activation is automatic while document reload remains a user action. Two previous caches retain chunks needed by open lessons. Offline readiness is separate from first interactive load, and the UI reports readiness only after cache installation. Cache-first navigation ignores query strings while app routing reads them. Notebook values are escaped and capped at 20 rows; storage denial leaves the current session usable.
 
 ## Scientific views (24 November 2026)
 
@@ -130,3 +129,6 @@ Matter advances specific enthalpy on the Stage clock. The same phase fractions d
 `engine/dimensions.ts` enforces Z=0 for XY. `labs/dimensions.js` uses ShapeGeometry for planar views and true solid geometry in XYZ, preserving coordinates when toggling. A drag plane at the object's depth preserves the initial grab offset; the Z slider provides depth translation. Camera rotation is disabled in XY and restored in XYZ. Cube/square correspondence is exact; other flat shapes are illustrative faces or projections, not claimed as volumetric solids.
 
 Procedural geometry avoids downloading decorative models and keeps dimensions and optical surfaces aligned with their math. No Blender assets are required. Stage owns visibility pausing, pointer/touch controls, quality limits and disposal; Solar retains its separate existing clock and renderer.
+
+## Release updates
+Bump src/data/release.json for each published release. The build embeds this version in the app and service worker and emits dist/release.json. Worker installation completes the full offline cache before activation. Activation notifies clients; the shared offline controller compares worker and document versions without allowing the readiness promise to erase update feedback. Check for updates bypasses the browser's service-worker script cache. Both Solar and the gateway expose the version and update action. The bounded cache retention supports old open documents; no localStorage is cleared during updates.
