@@ -91,12 +91,12 @@ try {
       );
     const page = await context.newPage();
     const start = Date.now();
-    await page.goto("http://127.0.0.1:4175/3DSolarSystem/");
+    await page.goto("http://127.0.0.1:4175/3DSolarSystem/?lab=matter");
     const landingMs = Date.now() - start;
-    await page.locator("#universe canvas").waitFor();
+    await page.locator("#lab-scene canvas").waitFor();
     await page.evaluate(() => new Promise(requestAnimationFrame));
     const readyMs = Date.now() - start,
-      first3DBodyBytes = bytes;
+      firstUsableBodyBytes = bytes;
     await page.waitForFunction(
       () =>
         document.querySelector(".offline-status")?.textContent ===
@@ -132,10 +132,11 @@ try {
       return ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : "unavailable";
     });
     results.push({
+      lab: "matter",
       mode: lite ? "lite" : "standard",
       landingMs,
       readyMs,
-      first3DBodyBytes,
+      firstUsableBodyBytes,
       offlineReadyMs,
       offlineBodyBytes,
       cadence,

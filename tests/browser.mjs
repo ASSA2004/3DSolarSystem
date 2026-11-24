@@ -52,6 +52,16 @@ try {
     "Pause freezes simulation time",
     pausedDay === (await page.locator("[data-day]").textContent()),
   );
+  await page.locator(".focus-view-button").click();
+  check(
+    "Solar panels can be hidden",
+    !(await page.locator("#inspector").isVisible()),
+  );
+  await page.locator(".focus-view-button").click();
+  check(
+    "Solar panels can be restored",
+    await page.locator("#inspector").isVisible(),
+  );
   await screenshot("overview-desktop");
   await page.locator('.planet-nav [data-planet="earth"]').click();
   await page.waitForTimeout(250);

@@ -31,7 +31,7 @@ try {
         for (const mode of ["teach", "experiment"]) {
           await page.goto(base + "?lab=" + lab + "&mode=" + mode);
           await page.locator("#controls").waitFor();
-          await page.waitForTimeout(100);
+          await page.locator("#lab-scene canvas").waitFor();
           assert.equal(await page.locator("#lab-scene canvas").count(), 1);
           assert.ok(
             await page.evaluate(
@@ -60,6 +60,14 @@ try {
               true,
             );
           } else {
+            await page
+              .locator(".learning-disclosure summary")
+              .filter({ hasText: "Explain and predict" })
+              .click();
+            await page
+              .locator(".learning-disclosure summary")
+              .filter({ hasText: "Notebook" })
+              .click();
             await page.locator("#prediction").selectOption("0");
             await page.locator('[data-command="test"]').click();
             await page.locator('[data-command="record"]').click();
@@ -69,7 +77,9 @@ try {
             await page.locator('[data-command="undo"]').click();
             assert.ok((await page.locator("#notebook tbody tr").count()) > 0);
           }
-          const slider = page.locator('input[type="range"]').first();
+          const slider = page
+            .locator('input[type="range"]:visible:enabled')
+            .first();
           const before = await slider.inputValue();
           await slider.focus();
           await slider.press("ArrowRight");
@@ -85,7 +95,7 @@ try {
   for (const lab of ["optics", "matter", "plane", "solid"]) {
     await page.goto(base + "?lab=" + lab);
     await page.locator("#controls").waitFor();
-    const select = page.locator("#controls select");
+    const select = page.locator("#controls select:visible:enabled");
     if (await select.count())
       for (const value of await select
         .locator("option")

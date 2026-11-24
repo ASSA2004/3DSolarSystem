@@ -38,6 +38,7 @@ jobs:
           node tests/accessibility.mjs
           node tests/labs.mjs
           node tests/labs-teaching.mjs
+          node tests/science-browser.mjs
           node tests/solar-teaching.mjs
           node tests/labs-accessibility.mjs
       - name: Offline Pages build

@@ -30,7 +30,23 @@ try {
       await page.goto(base + "?lab=" + lab + "&mode=" + mode);
       await page.locator("#controls").waitFor();
       assert.equal(await page.locator("canvas").count(), 1);
+      for (const button of await page.locator("[data-science-view]").all()) {
+        await button.click();
+        assert.equal(await page.locator("#lab-scene canvas").count(), 1);
+      }
+      if (lab === "optics") {
+        for (const element of ["prism", "plane-mirror", "convex-lens"])
+          await page.locator("#control-element").selectOption(element);
+      }
       if (mode === "experiment") {
+        await page
+          .locator(".learning-disclosure summary")
+          .filter({ hasText: "Explain and predict" })
+          .click();
+        await page
+          .locator(".learning-disclosure summary")
+          .filter({ hasText: "Notebook" })
+          .click();
         await page.locator("#prediction").selectOption("0");
         await page.locator('[data-command="test"]').click();
         await page.locator('[data-command="record"]').click();

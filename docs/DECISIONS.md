@@ -25,7 +25,7 @@ No accounts, tracking, cookies, backend or third-party runtime requests. Local t
 8. Review 360px mobile, desktop/projector, both themes, reduced motion, unavailable WebGL, keyboard and repeated scene disposal. Record measurements, not unsupported performance claims.
 
 ## Scientific boundaries
-Optics is a paraxial thin-element model, not full ray refraction. Cartesian x increases to the right: real object u<0; lenses use 1/v−1/u=1/f, m=v/u; mirrors use 1/v+1/u=1/f, m=−v/u. Concave mirror f<0, convex mirror f>0. Infinity is an explicit state.
+Lenses retain a paraxial thin-element model. The 24 November revision adds exact geometric reflection and Snell refraction for the plane mirror and prism. Cartesian x increases to the right: real object u<0; lenses use 1/v−1/u=1/f, m=v/u; mirrors use 1/v+1/u=1/f, m=−v/u. Concave mirror f<0, convex mirror f>0. Infinity is an explicit state.
 Matter uses water at one atmosphere: melting 0°C, boiling 100°C. Energy changes intermolecular arrangement during plateaus, not the covalent bonds inside water molecules. Particle motion is a qualitative kinetic model, not molecular dynamics or a pressure prediction. References: OpenStax Physics 11.3 and University Physics 3 sections 2.2/2.4.
 Sphere has no exact flat net: show gores as an explicitly approximate representation, never a false exact net. Cone net is a sector of radius slant height and arc length 2πr.
 
@@ -34,3 +34,9 @@ Sphere has no exact flat net: show gores as an explicitly approximate representa
 Phone scene panels scroll with the page so controls remain reachable. Solar mobile branding uses the mark to leave room for navigation; learning panels are confined to Normal. Date input starts at the active date. Ray diagram faces the optical plane. Variable font assets now preserve real weight variation. Area derivations move cut pieces and sector arrangements; water fill is inset to avoid coplanar flicker. Theme buttons retain their visible accessible names. Keyboard focus moves to revealed teaching questions.
 
 See README release verification for measured results and test commands. Remaining rollout work: native Tamil content for new labs, teacher validation of school-specific chapter mapping, and testing on physical mid-range phones/old PCs. Automated desktop emulation does not certify those devices. Static design scanner's remaining eight action findings are false positives on delegated handlers, documented in UX-CONTRACT.md. Its capability enum does not include Navigation; navigation ownership is still documented in the map and runtime-tested.
+
+## Revised brief — 24 November 2026
+
+Remove the decorative gateway scene. Keep the five project routes and their working teaching/measurement tools. Give experiments distinct scientific representations driven by the same state. Matter adds vessel, molecular and atomic levels; optics adds prism/mirror geometry and phase-front explanation; dimensions adds constrained XY versus actual XYZ geometry. Positioning an optical element changes its distance to a fixed source, not just the camera composition. Optional text is collapsed, controls stay visible, and reset remains separate from camera reset.
+
+No Blender dependency: these simple parameterized surfaces and containers are generated in Three.js so their visible geometry follows the math. Model limits and sources are recorded in REVISED-SIMULATION-BRIEF.md. This supersedes the earlier decorative gateway direction.

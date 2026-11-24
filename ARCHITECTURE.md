@@ -118,3 +118,15 @@ New labs use typed content in src/content, testable pure functions in src/engine
 Hardware concurrency/memory hints select lower pixel ratio and particle count. FPS sampling can further reduce graphics; tab hiding stops rendering. Device hints are not a hardware benchmark. Shared tokens feed CSS and Three materials; Solar keeps a compatibility theme stylesheet. All fonts are local OFL variable fonts.
 
 The service worker precaches every built entry, lazy chunk and local asset. A content digest changes the cache on release; the existing update prompt controls activation. Offline readiness is separate from first interactive load, and the UI reports readiness only after cache installation. Cache-first navigation ignores query strings while app routing reads them. Notebook values are escaped and capped at 20 rows; storage denial leaves the current session usable.
+
+## Scientific views (24 November 2026)
+
+A lab owns one state object. `view` selects a representation without resetting temperature, enthalpy, optical configuration or shape coordinates. The shared shell renders each module's `views`; optional explanations use native disclosure elements. The gateway has no WebGL scene.
+
+Matter advances specific enthalpy on the Stage clock. The same phase fractions drive the vessel fill, ice, boiling bubbles, mist, molecular motion and numeric readings. Escape monotonically removes sample mass; cooling cannot return escaped vapor. Molecular positions are deterministic teaching trajectories with bounded liquid interactions, lattice vibration and expanding gas. They are not molecular dynamics. Hydrogen density uses a spherical sample; oxygen's envelope is explicitly schematic. Nuclear structure is static and does not respond to heating.
+
+`engine/rays.ts` handles unit-vector reflection, Snell refraction, polygon intersections and total internal reflection. Prism paths carry their refractive index and optical path offset so wavefront spacing and speed change together while frequency remains fixed. The plane mirror uses a real reflection render target in Human view, freed when the scene changes. Thin-lens screen images use the existing lens equation; glass appearance does not claim full camera ray tracing. Virtual images are marked as schematic apparent positions.
+
+`engine/dimensions.ts` enforces Z=0 for XY. `labs/dimensions.js` uses ShapeGeometry for planar views and true solid geometry in XYZ, preserving coordinates when toggling. A drag plane at the object's depth preserves the initial grab offset; the Z slider provides depth translation. Camera rotation is disabled in XY and restored in XYZ. Cube/square correspondence is exact; other flat shapes are illustrative faces or projections, not claimed as volumetric solids.
+
+Procedural geometry avoids downloading decorative models and keeps dimensions and optical surfaces aligned with their math. No Blender assets are required. Stage owns visibility pausing, pointer/touch controls, quality limits and disposal; Solar retains its separate existing clock and renderer.

@@ -15,3 +15,8 @@ Three.js and other packages retain their license notices in their distributions.
 JPL data is transcribed with its source, epoch, units and limitations in
 `src/data/orbits.json`. Lesson text is original; NCERT pages are linked for
 curriculum context and are not bundled or copied into the offline cache.
+
+The revised water vessel, heater, molecules, atomic illustrations, optical bench,
+prism, mirror and dimension objects are generated from original procedural
+Three.js geometry. The plane-mirror reflection uses Three.js's MIT-licensed
+Reflector addon. No downloaded Blender model or generated video is bundled.
