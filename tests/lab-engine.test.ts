@@ -29,6 +29,7 @@ describe("Cartesian optics", () => {
 });
 describe("Water enthalpy", () => {
   it("conserves temperature during both phase changes", () => {
+    expect(phaseFromEnergy(energyAtTemperature(100)).gas).toBe(0);
     expect(phaseFromEnergy(167).temperature).toBe(0);
     expect(phaseFromEnergy(167).liquid).toBe(0.5);
     expect(phaseFromEnergy(752 + 1128).temperature).toBe(100);

@@ -73,7 +73,8 @@ export function phaseFromEnergy(energy: number, data = WATER) {
 }
 export function energyAtTemperature(t: number, data = WATER) {
   if (t < 0) return t * data.solidCapacity;
-  if (t < 100) return data.fusion + t * data.liquidCapacity;
+  // At the boiling point, prepare liquid at the start of vaporization.
+  if (t <= 100) return data.fusion + t * data.liquidCapacity;
   return (
     data.fusion +
     100 * data.liquidCapacity +

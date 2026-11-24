@@ -36,7 +36,8 @@ export default {
     },
     {
       title: "Let particles spread",
-      concept: "Gas particles move freely and fill their container.",
+      concept:
+        "Gas particles move freely, spread apart and escape an open vessel.",
       action: "Set the temperature above 100°C.",
       why: "After boiling finishes, further energy raises the temperature of the gas.",
       check: "Which state fills all the available space?",
