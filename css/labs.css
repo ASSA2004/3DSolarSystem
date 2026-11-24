@@ -752,8 +752,7 @@ html {
     height: 230px;
   }
   .scene-tools {
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-wrap: wrap;
     padding: 8px 0;
   }
   .scene-tools button {
@@ -787,5 +786,86 @@ html {
   }
   .scene-frame {
     height: 200px;
+  }
+}
+
+.science-views {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.science-views button {
+  flex: 1;
+  white-space: nowrap;
+}
+.science-views button[aria-pressed="true"] {
+  background: var(--lab-primary);
+  color: var(--lab-background);
+  border-color: var(--lab-primary);
+}
+.view-caption {
+  font-size: 14px;
+  color: var(--lab-muted);
+  max-width: 80ch;
+  margin: 0 0 12px;
+}
+@media (max-width: 680px) {
+  .science-views button {
+    font-size: 12px;
+    padding: 8px;
+  }
+  .view-caption {
+    font-size: 13px;
+  }
+  .scene-frame {
+    height: 300px;
+  }
+  .measurements {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #controls .field {
+    min-width: 0;
+  }
+  #controls select {
+    width: 100%;
+  }
+}
+
+.learning-disclosure {
+  border-top: 1px solid var(--lab-line);
+  padding-top: 12px;
+}
+.learning-disclosure > summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 44px;
+  padding: 10px 0;
+}
+.learning-disclosure .instrument-panel {
+  margin-top: 6px;
+}
+#controls .field[hidden] {
+  display: none;
+}
+@media (max-width: 680px) {
+  .science-views {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .science-views button {
+    white-space: normal;
+  }
+  .field label {
+    display: block;
+  }
+  .field output {
+    float: none;
+    display: block;
   }
 }

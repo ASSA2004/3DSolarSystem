@@ -11,7 +11,6 @@ import { setupOffline } from "./core/offline.js";
 const labs = [solar, optics, matter, plane, solid];
 const app = document.querySelector("#app");
 let cleanup = null,
-  universe = null,
   selected = "solar",
   generation = 0;
 initialTheme();
@@ -30,8 +29,6 @@ async function route() {
   const version = ++generation;
   cleanup?.();
   cleanup = null;
-  universe?.dispose();
-  universe = null;
   const query = new URLSearchParams(location.search),
     id = query.get("lab"),
     content = labs.find((l) => l.id === id),
@@ -58,22 +55,7 @@ async function route() {
       root.innerHTML = `<div class="fallback"><h1>${t("error")}</h1><button data-retry>${t("retry")}</button><button data-home>${t("allLabs")}</button></div>`;
     }
   } else {
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    root.innerHTML = `<section class="intro"><h1>${t("gatewayTitle")}</h1><p>${t("gatewayIntro")}</p></section><div class="gateway-layout ${reduced ? "gateway-static" : ""}"><div class="universe" id="universe" aria-label="Choose a lab planet"><div class="planet-tabs">${labs.map((l) => `<button data-planet="${l.id}" aria-pressed="${selected === l.id}">${l.title}</button>`).join("")}</div><div class="orbit-caption"><span>${t("orbitHint")}</span><button data-pause>${t("pauseGateway")}</button></div></div><section class="lab-cards" aria-label="${t("selectLab")}">${labs.map((l) => `<article class="lab-card ${selected === l.id ? "is-selected" : ""}" data-card="${l.id}" style="--hue:${labHues[l.id]}"><h2>${l.title}</h2><p>${l.hook}</p><div class="card-actions"><button data-enter="${l.id}" data-learning="teach">${t("teach")}</button><button class="primary" data-enter="${l.id}" data-learning="experiment">${t("experiment")}</button></div></article>`).join("")}</section></div>`;
-    if (!reduced)
-      try {
-        const { createUniverse } = await import("./gateway/universe.js");
-        if (version !== generation) return;
-        universe = createUniverse(
-          document.querySelector("#universe"),
-          labs,
-          select,
-          selected,
-        );
-      } catch (error) {
-        console.info("Using static gateway:", error.message);
-        root.querySelector(".gateway-layout").classList.add("gateway-static");
-      }
+    root.innerHTML = `<section class="intro"><h1>${t("gatewayTitle")}</h1><p>${t("gatewayIntro")}</p></section><div class="gateway-layout gateway-static"><section class="lab-cards" aria-label="${t("selectLab")}">${labs.map((l) => `<article class="lab-card ${selected === l.id ? "is-selected" : ""}" data-card="${l.id}" style="--hue:${labHues[l.id]}"><h2>${l.title}</h2><p>${l.hook}</p><div class="card-actions"><button data-enter="${l.id}" data-learning="teach">${t("teach")}</button><button class="primary" data-enter="${l.id}" data-learning="experiment">${t("experiment")}</button></div></article>`).join("")}</section></div>`;
     if (query.has("return")) {
       selected = query.get("return");
       select(selected);
@@ -86,12 +68,6 @@ async function route() {
 function select(id) {
   if (!labs.some((l) => l.id === id)) return;
   selected = id;
-  universe?.select(id);
-  document
-    .querySelectorAll("[data-planet]")
-    .forEach((b) =>
-      b.setAttribute("aria-pressed", String(b.dataset.planet === id)),
-    );
   document
     .querySelectorAll("[data-card]")
     .forEach((card) =>
@@ -123,14 +99,11 @@ app.addEventListener("click", async (e) => {
   else if (b.dataset.enter) {
     b.disabled = true;
     try {
-      await universe?.dive(b.dataset.enter);
       navigate(b.dataset.enter, b.dataset.learning);
     } finally {
       b.disabled = false;
     }
-  } else if (b.hasAttribute("data-pause"))
-    b.textContent = t(universe?.pause() ? "playGateway" : "pauseGateway");
-  else if (b.hasAttribute("data-retry")) route();
+  } else if (b.hasAttribute("data-retry")) route();
 });
 app.addEventListener("focusin", (e) => {
   if (e.target.dataset.planet) select(e.target.dataset.planet);
@@ -144,7 +117,6 @@ app.addEventListener("change", (e) => {
 addEventListener("popstate", route);
 addEventListener("pagehide", () => {
   cleanup?.();
-  universe?.dispose();
 });
 route();
 setTimeout(setupOffline, 4000);

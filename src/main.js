@@ -980,3 +980,16 @@ if (new URLSearchParams(location.search).has("learning")) {
     },
   });
 }
+
+const focusViewButton = document.createElement("button");
+focusViewButton.className = "focus-view-button";
+focusViewButton.textContent = "Hide panels";
+focusViewButton.setAttribute("aria-expanded", "true");
+focusViewButton.addEventListener("click", () => {
+  const hidden = document
+    .querySelector("#observatory")
+    .classList.toggle("panels-hidden");
+  focusViewButton.textContent = hidden ? "Show panels" : "Hide panels";
+  focusViewButton.setAttribute("aria-expanded", String(!hidden));
+});
+document.querySelector("#observatory").append(focusViewButton);

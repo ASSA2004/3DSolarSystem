@@ -432,10 +432,65 @@ export class SolarScene {
       if (this.dirty || this.tween || this.cinematicPlaying) {
         this.renderer.render(this.scene, this.camera);
         this.labels.render(this.scene, this.camera);
+        this.layoutLabels();
         this.dirty = false;
       }
     }
     if (!document.hidden) this.raf = requestAnimationFrame(this.frame);
+  }
+  layoutLabels() {
+    if (!this.labelsVisible || this.mode === "video") return;
+    const width = this.labels.domElement.clientWidth,
+      height = this.labels.domElement.clientHeight;
+    const occupied = [],
+      point = new THREE.Vector3();
+    for (const body of this.bodies.values()) {
+      const el = body.label.element;
+      el.style.translate = "0px 0px";
+      el.style.setProperty("--leader-length", "0px");
+      body.label.getWorldPosition(point);
+      point.project(this.camera);
+      if (
+        point.z > 1 ||
+        point.z < -1 ||
+        Math.abs(point.x) > 1 ||
+        Math.abs(point.y) > 1
+      )
+        continue;
+      const x = ((point.x + 1) * width) / 2,
+        y = ((1 - point.y) * height) / 2,
+        w = el.offsetWidth || 80,
+        h = el.offsetHeight || 28;
+      let best = null;
+      for (let ring = 0; ring < 9 && !best; ring++)
+        for (const sign of ring ? [1, -1] : [0]) {
+          const cx = Math.max(w / 2 + 8, Math.min(width - w / 2 - 48, x)),
+            cy = Math.max(
+              h / 2 + 8,
+              Math.min(height - h / 2 - 8, y + sign * ring * (h + 6)),
+            );
+          const box = { x: cx - w / 2, y: cy - h / 2, w, h };
+          if (
+            !occupied.some(
+              (b) =>
+                box.x < b.x + b.w + 5 &&
+                box.x + box.w + 5 > b.x &&
+                box.y < b.y + b.h + 5 &&
+                box.y + box.h + 5 > b.y,
+            )
+          ) {
+            best = box;
+            break;
+          }
+        }
+      if (!best) continue;
+      occupied.push(best);
+      const dx = best.x + w / 2 - x,
+        dy = best.y + h / 2 - y;
+      el.style.translate = dx + "px " + dy + "px";
+      el.style.setProperty("--leader-length", Math.hypot(dx, dy) + "px");
+      el.style.setProperty("--leader-angle", Math.atan2(-dy, -dx) + "rad");
+    }
   }
   focus(id, immediate = false) {
     this.selected = id;

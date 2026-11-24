@@ -180,3 +180,50 @@
 [data-theme="light"] .scene-tools .icon-button {
   color: var(--ink);
 }
+
+.focus-view-button {
+  position: absolute;
+  right: 20px;
+  top: 165px;
+  z-index: 12;
+  padding: 8px 12px;
+  min-height: 44px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+}
+.panels-hidden #inspector,
+.panels-hidden .view-heading,
+.panels-hidden .solar-learning,
+.panels-hidden .solar-learning-switch {
+  display: none !important;
+}
+[data-mode="video"] .focus-view-button {
+  display: none;
+}
+@media (max-width: 650px) {
+  .focus-view-button {
+    top: 190px;
+    right: 12px;
+    font-size: 12px;
+  }
+  .solar-learning-switch {
+    top: 240px;
+  }
+}
+
+.planet-label::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--leader-length, 0px);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.4;
+  transform: rotate(var(--leader-angle, 0rad));
+  transform-origin: left center;
+  pointer-events: none;
+  z-index: -1;
+}

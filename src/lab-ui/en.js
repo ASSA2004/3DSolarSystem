@@ -1,4 +1,9 @@
 export default {
+  oxygen: "Oxygen-16",
+  hydrogen: "Hydrogen-1",
+  nucleus: "Oxygen nucleus",
+  prism: "Prism",
+  "plane-mirror": "Plane mirror",
   privacy: "Free for schools. No accounts. No tracking.",
   undo: "Undo clear",
   reading: "Reading",
