@@ -7,6 +7,7 @@ export function release(object) {
     materials = new Set(),
     textures = new Set();
   object.traverse((child) => {
+    if (child.isReflector) child.dispose();
     if (child.geometry) geometries.add(child.geometry);
     for (const m of Array.isArray(child.material)
       ? child.material
@@ -134,6 +135,18 @@ export class Stage {
           .find((h) => h.object.userData.drag);
         if (hit) {
           this.drag = hit.object.userData.drag;
+          this.dragPlane = new THREE.Plane(
+            this.drag.flat
+              ? new THREE.Vector3(0, 1, 0)
+              : new THREE.Vector3(0, 0, 1),
+            -(this.drag.planeOffset || 0),
+          );
+          this.dragOffset = new THREE.Vector3();
+          if (this.drag.origin) {
+            const grab = new THREE.Vector3();
+            if (this.ray.ray.intersectPlane(this.dragPlane, grab))
+              this.dragOffset.copy(grab).sub(this.drag.origin);
+          }
           this.controls.enabled = false;
           this.renderer.domElement.setPointerCapture(e.pointerId);
         }
@@ -146,13 +159,8 @@ export class Stage {
         point(e);
         if (this.drag) {
           const p = new THREE.Vector3();
-          const plane = new THREE.Plane(
-            this.drag.flat
-              ? new THREE.Vector3(0, 1, 0)
-              : new THREE.Vector3(0, 0, 1),
-            0,
-          );
-          if (this.ray.ray.intersectPlane(plane, p)) this.drag.move(p);
+          if (this.ray.ray.intersectPlane(this.dragPlane, p))
+            this.drag.move(p.sub(this.dragOffset));
         } else
           this.hover?.(this.ray.intersectObjects(this.content.children, true));
       },
